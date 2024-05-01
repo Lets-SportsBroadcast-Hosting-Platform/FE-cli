@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View,Image,TouchableOpacity  } from 'react-native';
 import { Button } from 'react-native-paper';
+import { Shadow } from 'react-native-shadow-2';
 
 export default function LoginPage({navigation}) {
   const handleHostPress = () => {
@@ -9,14 +10,16 @@ export default function LoginPage({navigation}) {
         <View style={styles.container}>
 
           <TouchableOpacity onPress={handleHostPress}  style={styles.hostContainer}>
-                <Text style={styles.text}>호스트</Text>
-                <Text style={styles.subtext}>가게에서 모입을 호스팅해요</Text>
+            <Shadow>
+              <Text style={styles.text}>호스트</Text>
+              <Text style={styles.subtext}>가게에서 모임을 호스팅해요.</Text>
+            </Shadow>
           </TouchableOpacity>
 
           <View style={styles.line}></View>
           <TouchableOpacity onPress={()=>{console.log("호스트는 아직")}} style={styles.userContainer}>
                 <Text style={styles.text}>사용자</Text>
-                <Text style={styles.subtext}>가게에서 모입을 호스팅해요</Text>
+                <Text style={styles.subtext}>호스팅 된 모임에 참여해요.</Text>
           </TouchableOpacity>
         </View>
     );
@@ -35,7 +38,6 @@ const styles = StyleSheet.create({
       paddingBottom:20
 
     },
-
     userContainer: {
       height: '50%',
       justifyContent: 'flex-start',
@@ -45,9 +47,17 @@ const styles = StyleSheet.create({
       paddingTop:20
     },
     text : {
-      fontWeight: '800',
-      fontSize: 30,
-      
+      fontWeight: '500',
+      fontSize: 34,
+      fontFamily :'NotoSansKR-Black',
+      color:'black',
+      margin: 20, 
+    },
+    subtext :{
+      color:'black',fontSize: 13,
+      fontFamily :'NotoSansKR-Medium',
+      fontWeight:'100',
+      marginTop: -30,
     },
     line: {
       borderBottomColor: '#ddd',
