@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     image: {
-        width: 130,
-        height: 130,
+        width: 300,
+        height: 300,
     },
 
 });
