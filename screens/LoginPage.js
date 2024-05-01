@@ -110,17 +110,9 @@ export default function LoginPage({navigation}) {
                 <Text style={styles.text1}>Google 로그인</Text>
             </Button>
 
-            <Button mode="contained" onPress={() => console.log('Pressed')} style={styles.kakaoButton}>
+            <Button mode="contained" onPress={signInWithKakao} style={styles.kakaoButton}>
                 <Image source={kakaoIcon} style={styles.naverLogo}/>
-                <Text style={styles.text1}>인스타그램 로그인</Text>
-            </Button>
-            <Button
-                style={styles.button}
-                onPress={() => {
-                signInWithKakao();
-                }}
-            >
-                <Text style={styles.text1}>카카오 로그인</Text>
+                <Text style={styles.text1}>카카오톡 로그인</Text>
             </Button>
 
             <Button  mode="contained" onPress={() => navigation.navigate('ChooseUser')} style={styles.AppleButton}>

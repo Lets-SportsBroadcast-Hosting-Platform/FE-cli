@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View,Image,TouchableOpacity  } from 'react-native';
 import { Button } from 'react-native-paper';
-import { Shadow } from 'react-native-shadow-2';
 
 export default function LoginPage({navigation}) {
   const handleHostPress = () => {
@@ -10,10 +9,8 @@ export default function LoginPage({navigation}) {
         <View style={styles.container}>
 
           <TouchableOpacity onPress={handleHostPress}  style={styles.hostContainer}>
-            <Shadow>
               <Text style={styles.text}>호스트</Text>
               <Text style={styles.subtext}>가게에서 모임을 호스팅해요.</Text>
-            </Shadow>
           </TouchableOpacity>
 
           <View style={styles.line}></View>
