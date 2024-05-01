@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "930843202131",
+    "project_id": "lets-da2b4",
+    "storage_bucket": "lets-da2b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930843202131:android:befbd515e6d8f5f3896ca6",
+        "android_client_info": {
+          "package_name": "java.com.letapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "930843202131-vljb5s57vmbq7vdmqash9k6ep5vikphc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "java.com.letapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "930843202131-uu8inlasf36f4lsqatpodvb18ql5gfg0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBugyFM6Lp0jwRCGxW4-rTlXmqnbjkV63c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "930843202131-uu8inlasf36f4lsqatpodvb18ql5gfg0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
