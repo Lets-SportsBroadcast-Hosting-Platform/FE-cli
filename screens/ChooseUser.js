@@ -7,7 +7,7 @@ export default function LoginPage({navigation}) {
     navigation.navigate('HostAuthentication')
   };
   const arrowbuttonPress = () => {
-    navigation.navigate('HostAuthentication');
+    navigation.navigate('LoginPage');
   };
     return (
         <View style={styles.container}>
