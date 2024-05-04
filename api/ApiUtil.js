@@ -6,7 +6,7 @@ const ApiUtil = axios.create({
 })
 
 // 요청 전에 실행될 작업
-api.interceptors.request.use(
+ApiUtil.interceptors.request.use(
     (config) => {
       // 예: 인증 토큰 추가
       // config.headers.Authorization = `Bearer ${accessToken}`;
@@ -19,7 +19,7 @@ api.interceptors.request.use(
   );
   
 // 응답을 받은 후 실행될 작업
-api.interceptors.response.use(
+ApiUtil.interceptors.response.use(
 (response) => {
     return response.data; // 응답의 데이터만 반환
 },
