@@ -23,6 +23,8 @@ import {
   unlink,
 } from "@react-native-seoul/kakao-login";
 
+// auth
+import { useAuth } from '../contexts/AuthContext';
 
 
 export default function LoginPage({navigation}) {
