@@ -29,7 +29,7 @@ export default function LoginPage({navigation}) {
     const [userInfo, setUserInfo] = useState(null);
     useEffect(() => {
         GoogleSignin.configure({
-          // webClientId: '클라이언트 웹 아이디',
+          // webClientId: '클라이언트 웹 아이디',///
         });
       }, []);
     
