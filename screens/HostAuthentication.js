@@ -60,14 +60,15 @@ export default function HostAuthentication() {
   };
 
   const goNextStep=(title)=>{
-    if(title === ''){
-      Alert.alert('먼저 가게 이름을 입력해주세요!')
-      return;
-    }
-    console.log(`${title} 사업장 선택!`)
-    navigation.navigate('HostBusinessRegisNumber', {
-      'title': title,
-    })
+    navigation.navigate('InputStore');
+    // if(title === ''){
+    //   Alert.alert('먼저 가게 이름을 입력해주세요!')
+    //   return;
+    // }
+    // console.log(`${title} 사업장 선택!`)
+    // navigation.navigate('HostBusinessRegisNumber', {
+    //   'title': title,
+    // })
   }
 
   const StoreList = storeInfoList.map((store, storeIdx)=>{

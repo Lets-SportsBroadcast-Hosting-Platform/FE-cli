@@ -79,13 +79,14 @@ const styles = StyleSheet.create({
     arrowIcon: {
       width: 20,
       height: 20,
-      marginTop:20
+      marginTop:20,
   },
   touchable: {
     alignItems: 'center',
     position: 'absolute',
     top: '50%', left: 0,
-    transform: [{translateY: 13.1}, {translateX: 20}]
+    transform: [{translateY: 13.1}, {translateX: 20}],
+    zIndex:10
   },
   header: {
     flexDirection: 'row',

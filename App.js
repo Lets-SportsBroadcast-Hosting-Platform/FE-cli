@@ -7,6 +7,7 @@ import ChooseUser from './screens/ChooseUser';
 import HostAuthentication from './screens/HostAuthentication';
 import HostBusinessRegisNumber from './screens/HostBusinessRegisNumber.js';
 import TermsOfService from './screens/TermsOfService.js';
+import InputStore from './screens/InputStore.js';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -24,6 +25,8 @@ export default function App() {
         <Stack.Screen name="HostAuthentication" component={HostAuthentication} options={{headerShown:false}}/>
         <Stack.Screen name="HostBusinessRegisNumber" component={HostBusinessRegisNumber} options={{headerShown:false}}/>
         <Stack.Screen name="TermsOfService" component={TermsOfService} options={{headerShown:false}}/>
+        <Stack.Screen name="InputStore" component={InputStore} options={{headerShown:false}}/>
+
       </Stack.Navigator>
     </NavigationContainer>
   );
