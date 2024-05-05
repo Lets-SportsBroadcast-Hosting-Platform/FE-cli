@@ -8,6 +8,7 @@ import HostAuthentication from './screens/HostAuthentication';
 import HostBusinessRegisNumber from './screens/HostBusinessRegisNumber.js';
 import TermsOfService from './screens/TermsOfService.js';
 import InputStore from './screens/InputStore.js';
+import Toast from 'react-native-toast-message';
 
 import { AuthProvider } from './contexts/AuthContext.js';
 
@@ -18,7 +19,6 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-
         <Stack.Navigator initialRouteName="Home">
           
           <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
@@ -33,6 +33,7 @@ export default function App() {
 
         </Stack.Navigator>
       </NavigationContainer>
+      <Toast />
     </AuthProvider>
   );
 }

@@ -77,7 +77,7 @@ export default function LoginPage({navigation}) {
         console.log(userInfo)
 
         saveLogin(userInfo, jwtToken)
-        // navigation.navigate('ChooseUser')
+        navigation.navigate('ChooseUser')
 
 
       }).catch((error)=>console.log(error))
