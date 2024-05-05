@@ -21,7 +21,9 @@ import {
   getProfile as getKakaoProfile,
   shippingAddresses as getKakaoShippingAddresses,
   unlink,
-} from "@react-native-seoul/kakao-login"; 
+} from "@react-native-seoul/kakao-login";
+
+
 
 // auth
 import { useAuth } from '../contexts/AuthContext.js';
@@ -77,7 +79,8 @@ export default function LoginPage({navigation}) {
         console.log(userInfo)
 
         saveLogin(userInfo, jwtToken)
-        navigation.navigate('ChooseUser')
+        navigation.navigate('PlaceList')
+        // navigation.navigate('ChooseUser')
 
 
       }).catch((error)=>console.log(error))

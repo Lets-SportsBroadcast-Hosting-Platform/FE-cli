@@ -10,6 +10,7 @@ import TermsOfService from './screens/TermsOfService.js';
 import InputStore from './screens/InputStore.js';
 import Toast from 'react-native-toast-message';
 import StoreAddress from './screens/StoreAddress.js';
+import PlaceList from './screens/PlaceList.js';
 
 import { AuthProvider } from './contexts/AuthContext.js';
 
@@ -20,7 +21,7 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="PlaceList">
           
           <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
           
@@ -32,6 +33,10 @@ export default function App() {
           <Stack.Screen name="TermsOfService" component={TermsOfService} options={{headerShown:false}}/>
           <Stack.Screen name="InputStore" component={InputStore} options={{headerShown:false}}/>
           <Stack.Screen name="StoreAddress" component={StoreAddress} options={{headerShown:false}}/>
+
+          {/* 메인 화면 */}
+          <Stack.Screen name="PlaceList" component={PlaceList} options={{headerShown:false}}/>
+
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />
