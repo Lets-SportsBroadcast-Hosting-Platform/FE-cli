@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import kakaoMapIcon from '../assets/images/KakaoMap_logo.png';
 import NaverMap_logo from '../assets/images/NaverMap_logo.png';
+import { Searchbar } from 'react-native-paper';
 
 export default function HostAuthentication() {
   const navigation = useNavigation();
@@ -14,6 +15,12 @@ export default function HostAuthentication() {
     console.log("arrowbuttonPressed");
   };
 
+
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const onChangeSearch = query => setSearchQuery(query);
+
+  
   //map 선택
   const [map, setMap] = useState(0);
   const mapIconClick = () => {
@@ -93,12 +100,17 @@ export default function HostAuthentication() {
       </View>
       <View style={styles.contentContainer}>
         <View style={styles.textInputContainer}>
-          <TextInput
+          {/* <TextInput
             placeholder='    가게 이름을 입력해주세요'
             value={text}
             onChangeText={onChangeText}
             style={styles.storeInputText}
             mode='outlined'
+          /> */}
+          <Searchbar
+            placeholder="Search"
+            onChangeText={onChangeSearch}
+            value={searchQuery}
           />
           {/* <Image source={kakaoMapIcon} style={styles.kakaoMapIcon} /> */}
           <TouchableOpacity onPress={mapIconClick}>
@@ -114,6 +126,13 @@ export default function HostAuthentication() {
         </Button>
         {StoreList}
 
+
+
+        <Searchbar
+            placeholder="Search"
+            onChangeText={onChangeSearch}
+            value={searchQuery}
+          />
       </View>
     </View>
   );
