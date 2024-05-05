@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const ApiUtil = axios.create({
-    baseURL: "http://43.202.194.172/",
     timeout: 10000, // 타임아웃 시간 설정 (ms)
 })
 
@@ -10,7 +9,6 @@ ApiUtil.interceptors.request.use(
     (config) => {
       // 예: 인증 토큰 추가
       // config.headers.Authorization = `Bearer ${accessToken}`;
-  
       return config;
     },
     (error) => {

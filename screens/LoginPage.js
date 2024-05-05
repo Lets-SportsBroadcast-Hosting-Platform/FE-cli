@@ -21,14 +21,18 @@ import {
   getProfile as getKakaoProfile,
   shippingAddresses as getKakaoShippingAddresses,
   unlink,
-} from "@react-native-seoul/kakao-login";
+} from "@react-native-seoul/kakao-login"; 
 
 // auth
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext.js';
 
+// api
+import ApiUtil from '../api/ApiUtil';
+import ApiConfig from '../api/ApiConfig';
 
 export default function LoginPage({navigation}) {
     const [userInfo, setUserInfo] = useState(null);
+    const { saveLogin } = useAuth();
     useEffect(() => {
         GoogleSignin.configure({
           // webClientId: '클라이언트 웹 아이디',///
@@ -38,7 +42,6 @@ export default function LoginPage({navigation}) {
     const onPressGoogleBtn = async () => {
         await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
         const {idToken} = await GoogleSignin.signIn();
-        console.log('idToekn : ', idToken);
         if (idToken) {
             // setIdToken(idToken);
             console.log(idToken)
@@ -49,56 +52,36 @@ export default function LoginPage({navigation}) {
     };
 
     //kakao sso
-    const [result, setResult] = useState("");
+    const [token, setToken] = useState("");
     const signInWithKakao = async ()=> {
-        try {
-          const token = await login();
-          setResult(JSON.stringify(token));
-          console.log(token)
-        } catch (err) {
-          console.error("login err", err);
-        }
-      };
-    
-      const signOutWithKakao = async ()=> {
-        try {
-          const message = await logout();
-    
-          setResult(message);
-        } catch (err) {
-          console.error("signOut error", err);
-        }
-      };
-    
-      const getProfile = async ()=>{
-        try {
-          const profile = await getKakaoProfile();
-    
-          setResult(JSON.stringify(profile));
-        } catch (err) {
-          console.error("signOut error", err);
-        }
-      };
-    
-      const getShippingAddresses = async ()=>{
-        try {
-          const shippingAddresses = await getKakaoShippingAddresses();
-    
-          setResult(JSON.stringify(shippingAddresses));
-        } catch (err) {
-          console.error("signOut error", err);
-        }
-      };
-    
-      const unlinkKakao = async ()=>{
-        try {
-          const message = await unlink();
-    
-          setResult(message);
-        } catch (err) {
-          console.error("signOut error", err);
-        }
-      };
+      try {
+        const {accessToken} = await login();
+        loginToServer(accessToken)
+        
+
+      } catch (err) {
+        console.error("login err", err);
+      }
+    };
+
+    function loginToServer(token){
+      const params = {
+        access_token: token,
+        provider: 'kakao'
+      }
+      ApiUtil.post(`${ApiConfig.SERVER_URL}/login/`, params).then((res)=>{
+        const jwtToken = res.jwt_token ?? ''
+        const userInfo = res.userInfo ?? {}
+
+        console.log(jwtToken)
+        console.log(userInfo)
+
+        saveLogin(userInfo, jwtToken)
+        // navigation.navigate('ChooseUser')
+
+
+      }).catch((error)=>console.log(error))
+    }
 
     return (
         <View style={styles.container}>
