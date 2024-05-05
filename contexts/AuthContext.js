@@ -6,18 +6,19 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
 
-  const login = (userData, authToken) => {
+  const saveLogin = (userData, authToken) => {
     setUser(userData);
     setToken(authToken);
+    console.log(`안녕하세요 ${userData.name}님!`)
   };
 
-  const logout = () => {
+  const clearLogin = () => {
     setUser(null);
     setToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, saveLogin, clearLogin }}>
       {children}
     </AuthContext.Provider>
   );
