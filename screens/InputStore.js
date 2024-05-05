@@ -1,21 +1,8 @@
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert,TextInput,Modal,Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react-native';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
-
-
-const ModalComponent = () => {
-    return (
-    
-    <Modal>HI</Modal>
-    // <Modal isVisible={isModalVisible}>
-    //     {/* Modal 내부 내용 (주소 선택 UI 등) */}
-    //     <Text>Modal 내용</Text>
-    //     <Button title="닫기" onPress={() => setIsModalVisible(false)} />
-    // </Modal>
-    );
-};
 
 export default function InputStore() {
     const navigation = useNavigation();
@@ -37,8 +24,26 @@ export default function InputStore() {
         setPhone(inputPhoneNumber);
     };
 //주소를 입력
-const [modalVisible, setModalVisible] = useState(false);
     const [storeAddress, setStoreAddress] = useState('');
+
+    const storeInfoList = [
+        {
+            title: '벨지움재즈카페',
+            desc: '서울 강남구 테헤란로 83길 20 건영빌딩 400호'
+        }]
+    
+    
+    const goToHostBusinessRegisNumber=(title)=>{
+        navigation.navigate('HostBusinessRegisNumber',{'title':title});
+        // if(title === ''){
+        //   Alert.alert('먼저 가게 이름을 입력해주세요!')
+        //   return;
+        // }
+        // console.log(`${title} 사업장 선택!`)
+        // navigation.navigate('HostBusinessRegisNumber', {
+        //   'title': title,
+        // })
+    }
     return (
         <View style={styles.container}>
         
@@ -76,8 +81,8 @@ const [modalVisible, setModalVisible] = useState(false);
 
             <Text style={styles.InputTitle}>주소</Text>
 
-            <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-                <View style={styles.textInputContainer}>
+                <View style={styles.textInputContainer} >
+                <TouchableOpacity onPress={() => navigation.navigate('StoreAddress')} style={styles.textInputContainer}>
                 <TextInput
                     placeholder='가게 주소를 입력해주세요.'
                     style={styles.storeAddressInputText}
@@ -85,35 +90,13 @@ const [modalVisible, setModalVisible] = useState(false);
                     editable={false}
                     value={storeAddress}
                 />
+                </TouchableOpacity>
                 </View>
-            </TouchableOpacity>
 
-            {/* {isModalVisible && <ModalComponent() />} */}
-            {/* {ModalComponent()} */}
-            <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-            }}>
-            <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-                <Text style={styles.modalText}>Hello World!</Text>
-                <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>Hide Modal</Text>
-                </Pressable>
-            </View>
-            </View>
-        </Modal>
-        <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}>
-        <Text style={styles.textStyle}>Show Modal</Text>
-      </Pressable>
+                <Button  mode="contained" onPress={()=> goToHostBusinessRegisNumber(storeAddress)} style={styles.FindAddressButton}>
+                <Text style={styles.nextText}>다음</Text>
+                </Button>
+        
         </View>
         </View>
     );
@@ -195,6 +178,8 @@ const [modalVisible, setModalVisible] = useState(false);
         backgroundColor:'#eee',
         borderRadius:10,
         paddingLeft:14,
+        width:'100%',
+        color:'#B7B7B7'
     },
     modalContent: {
         backgroundColor: 'white',
@@ -205,4 +190,16 @@ const [modalVisible, setModalVisible] = useState(false);
     modalInput: {
     marginBottom: 10,
     },
+    FindAddressButton :{
+        height:50,
+        backgroundColor:'#B7B7B7',
+        marginTop:40
+    },
+    nextText :{
+        color:'#fff',
+        fontFamily:'NotoSansKR-Medium',
+        alignItems:'center',
+        fontSize:15,
+        lineHeight:25.5
+    }
     });

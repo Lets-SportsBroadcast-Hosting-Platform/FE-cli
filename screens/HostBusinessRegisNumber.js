@@ -44,7 +44,7 @@ export default function HostBusinessRegisNumber() {
             <TouchableOpacity onPress={arrowbuttonPress} style={styles.touchable}>
             <Image source={arrowToLeft} style={styles.arrowIcon} />
             </TouchableOpacity>
-            <Text style={styles.headerText}>사장님이신가요?</Text>
+            <Text style={styles.headerText}>사업자등록번호 인증</Text>
         </View>
         
         <View style={styles.contentContainer}>
@@ -54,7 +54,7 @@ export default function HostBusinessRegisNumber() {
                 value={title}
                 readOnly
                 onChangeText={onChangeText}
-                style={styles.storeInputText}
+                style={styles.storeAddressInputText}
                 mode='outlined'
                 // mode="outlined" // TextInput을 읽기 전용 모드로 변경
                 // editable={false} // TextInput을 비활성화
@@ -158,5 +158,12 @@ const styles = StyleSheet.create({
         padding: 2,
         // backgroundColor:'#01162D',
         backgroundColor:'#B7B7B7',
+    },
+    storeAddressInputText :{
+        backgroundColor:'#eee',
+        borderRadius:10,
+        paddingLeft:14,
+        width:'100%',
+        color:'#B7B7B7'
     },
 });

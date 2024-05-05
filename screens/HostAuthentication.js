@@ -67,7 +67,9 @@ export default function HostAuthentication() {
   };
 
   const goNextStep=(title)=>{
-    navigation.navigate('InputStore');
+    navigation.navigate('HostBusinessRegisNumber',{
+    'title': title,
+    });
     // if(title === ''){
     //   Alert.alert('먼저 가게 이름을 입력해주세요!')
     //   return;
@@ -100,18 +102,18 @@ export default function HostAuthentication() {
       </View>
       <View style={styles.contentContainer}>
         <View style={styles.textInputContainer}>
-          {/* <TextInput
+          <TextInput
             placeholder='    가게 이름을 입력해주세요'
             value={text}
             onChangeText={onChangeText}
             style={styles.storeInputText}
             mode='outlined'
-          /> */}
-          <Searchbar
+          />
+          {/* <Searchbar
             placeholder="Search"
             onChangeText={onChangeSearch}
             value={searchQuery}
-          />
+          /> */}
           {/* <Image source={kakaoMapIcon} style={styles.kakaoMapIcon} /> */}
           <TouchableOpacity onPress={mapIconClick}>
             {map === 0 ? (
@@ -121,18 +123,10 @@ export default function HostAuthentication() {
             )}
           </TouchableOpacity>
         </View>
-        <Button mode="contained" onPress={() => goNextStep(text)} style={styles.typeButton}>
+        <Button mode="contained" onPress={() => navigation.navigate('InputStore')} style={styles.typeButton}>
           우리 가게를 못찾겠어요
         </Button>
         {StoreList}
-
-
-
-        <Searchbar
-            placeholder="Search"
-            onChangeText={onChangeSearch}
-            value={searchQuery}
-          />
       </View>
     </View>
   );

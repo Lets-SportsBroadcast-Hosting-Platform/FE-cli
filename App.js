@@ -9,6 +9,7 @@ import HostBusinessRegisNumber from './screens/HostBusinessRegisNumber.js';
 import TermsOfService from './screens/TermsOfService.js';
 import InputStore from './screens/InputStore.js';
 import Toast from 'react-native-toast-message';
+import StoreAddress from './screens/StoreAddress.js';
 
 import { AuthProvider } from './contexts/AuthContext.js';
 
@@ -30,7 +31,7 @@ export default function App() {
           <Stack.Screen name="HostBusinessRegisNumber" component={HostBusinessRegisNumber} options={{headerShown:false}}/>
           <Stack.Screen name="TermsOfService" component={TermsOfService} options={{headerShown:false}}/>
           <Stack.Screen name="InputStore" component={InputStore} options={{headerShown:false}}/>
-
+          <Stack.Screen name="StoreAddress" component={StoreAddress} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />
