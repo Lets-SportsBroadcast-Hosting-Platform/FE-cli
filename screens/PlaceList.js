@@ -2,6 +2,7 @@ import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList } from '
 import arrowToLeft from '../assets/images/location.png';
 import arrowRight from '../assets/images/arrow-right.png';
 import TempGopChang from '../assets/images/gopchang.jpeg';
+import UserImage from '../assets/images/user.png'
 
 export default function PlaceList({navigation}) {
     const onClickLocationChange = () => {
@@ -99,7 +100,15 @@ export default function PlaceList({navigation}) {
 
             <View style={styles.placeDetail}>
                 <Text>{event_place} | {event_date}({event_day}) | {event_time}</Text>
-                <Text>{count} / {total}</Text>
+
+                <View style={{flexDirection: 'row'}}>
+
+                    <Text>
+                        {count} / {total}
+                        
+                    </Text>
+                    <Image style={styles.userImage} source={UserImage}></Image>
+                </View>
             </View>
         </View>
     );
@@ -249,6 +258,12 @@ const styles = StyleSheet.create({
     placeImage: {
         flex: 1,
         resizeMode: ''
+    },
+
+    userImage: {
+        marginLeft: 5,
+        position: 'relative',
+        top: 2.5,
     }
     
 });

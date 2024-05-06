@@ -21,7 +21,7 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="TermsOfService">
+        <Stack.Navigator initialRouteName="Home">
           
           <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
           
