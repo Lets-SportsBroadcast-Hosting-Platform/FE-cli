@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList } from 'react-native';
 import arrowToLeft from '../assets/images/location.png';
 import arrowRight from '../assets/images/arrow-right.png';
+import TempGopChang from '../assets/images/gopchang.jpeg';
 
 export default function PlaceList({navigation}) {
     const onClickLocationChange = () => {
@@ -27,57 +28,57 @@ export default function PlaceList({navigation}) {
     const DATA = [
         { 
             id: '1', 
-            imageLink: "https://pcmap.place.naver.com/restaurant/36028358/home?entry=pll&from=nx&fromNxList=true&from=map&fromPanelNum=2&timestamp=202405051906#",
+            imageLink: TempGopChang,
             place: '서초동',
             time: '16:30',
 
             event_title: '서울당산곱창 서울 - 당산',
             event_place: '당산역 N번출구',
-            event_date: '20240505',
+            event_date: '05.05',
             event_day: '수',
-            event_time: '1900',
+            event_time: '19:00',
             count: 13,
             total: 15, 
         },
         { 
-            id: '2', 
-            imageLink: "https://pcmap.place.naver.com/restaurant/36028358/home?entry=pll&from=nx&fromNxList=true&from=map&fromPanelNum=2&timestamp=202405051906#",
+            id: '2',
+            imageLink: TempGopChang,
             place: '서초동',
             time: '16:30',
 
             event_title: '서울당산곱창',
             event_place: '당산역 N번출구',
-            event_date: '20240505',
+            event_date: '05.05',
             event_day: '수',
-            event_time: '1900',
+            event_time: '19:00',
             count: 13,
             total: 15, 
         },
         { 
-            id: '3', 
-            imageLink: "https://pcmap.place.naver.com/restaurant/36028358/home?entry=pll&from=nx&fromNxList=true&from=map&fromPanelNum=2&timestamp=202405051906#",
+            id: '3',
+            imageLink: TempGopChang,
             place: '서초동',
             time: '16:30',
 
             event_title: '서울당산곱창',
             event_place: '당산역 N번출구',
-            event_date: '20240505',
+            event_date: '05.05',
             event_day: '수',
-            event_time: '1900',
+            event_time: '19:00',
             count: 13,
             total: 15, 
         },
         { 
             id: '4', 
-            imageLink: "https://pcmap.place.naver.com/restaurant/36028358/home?entry=pll&from=nx&fromNxList=true&from=map&fromPanelNum=2&timestamp=202405051906#",
+            imageLink: TempGopChang,
             place: '서초동',
             time: '16:30',
 
             event_title: '서울당산곱창',
             event_place: '당산역 N번출구',
-            event_date: '20240505',
+            event_date: '05.05',
             event_day: '수',
-            event_time: '1900',
+            event_time: '19:00',
             count: 13,
             total: 15, 
         },
@@ -85,15 +86,36 @@ export default function PlaceList({navigation}) {
         // 추가적인 데이터 항목들...
     ];
 
-    const ListItem = ({ event_title }) => (
+    const ListItem = ({ 
+        event_title, imageLink, event_place,
+        event_date, event_day, event_time,
+        count, total
+        }) => (
         <View style={styles.placeItem}>
+            <View style={styles.imageContainer}>
+                <Image source={imageLink} style={styles.placeImage}/>
+            </View>
             <Text style={styles.placeTitle}>{event_title}</Text>
+
+            <View style={styles.placeDetail}>
+                <Text>{event_place} | {event_date}({event_day}) | {event_time}</Text>
+                <Text>{count} / {total}</Text>
+            </View>
         </View>
     );
 
     const renderItem = ({ item }) => (
         <ListItem
-         event_title={item.event_title}
+            style={styles.itemScrollContainer}
+            event_title={item.event_title}
+            event_place={item.event_place}
+            event_date={item.event_date}
+            event_day={item.event_day}
+            event_time={item.event_time}
+            imageLink={item.imageLink}
+            count={item.count}
+            total={item.total}
+
         />
     );
       
@@ -120,6 +142,8 @@ export default function PlaceList({navigation}) {
                 data={DATA}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
+                showsVerticalScrollIndicator={false}
+                scrollIndicatorInsets={{ right: 1 }}
             />
 
         </View>
@@ -197,7 +221,34 @@ const styles = StyleSheet.create({
     },
 
     placeTitle: {
+        marginTop: 12,
+        marginLeft: 10,
+        fontSize: 17,
+        color:'black',
+        fontFamily:'BlackHanSans-Regular',
+        fontWeight: '100'
+    },
 
+    placeDetail: {
+        padding: 10,
+        marginTop: 10,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
+    itemScrollContainer: {
+        
+    },
+
+    imageContainer: {
+        height: 162,
+        width: 335,
+    },
+
+    placeImage: {
+        flex: 1,
+        resizeMode: ''
     }
     
 });
