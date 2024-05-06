@@ -3,18 +3,20 @@ import React,{useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,Linking, Switch} from 'react-native';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
 import { useNavigation } from '@react-navigation/native';
+import { Button } from 'react-native-paper';
+import Toggle from '../components/toggle.js';
 
 
 export default function TermsOfService() {
     const navigation = useNavigation();
-
+    const [isChecked, setIsChecked] = useState(false)
+    
     const arrowbuttonPress = () => {
         navigation.navigate('ChooseUser');
         console.log("arrowbuttonPressed");
     };
-
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    
+    
     
     return (
     <View style={styles.container}>
@@ -28,29 +30,28 @@ export default function TermsOfService() {
 
         <View style={styles.linkContainer}>
         {/* <OpenURLButton url={serviceUseURL}>Service Use URL</OpenURLButton> */}
-        <Text style={{fontWeight: 'bold', width: '100%', color: 'grey',textDecorationLine: 'underline', textAlign:'center' }}
+        <Text style={{fontWeight: 'bold', width: '100%', color: 'black',textDecorationLine: 'underline', textAlign:'center' }}
             onPress={() => Linking.openURL('http://google.com')}>
             서비스 이용약관
         </Text>
-        <Text style={{fontWeight: 'bold', width: '100%', color: 'grey',textDecorationLine: 'underline', paddingTop:35, textAlign:'center'}}
+        <Text style={{fontWeight: 'bold', width: '100%', color: 'black',textDecorationLine: 'underline', paddingTop:35, textAlign:'center'}}
             onPress={() => Linking.openURL('http://google.com')}>
             개인정보 처리 동의
         </Text>
         </View>
 
         <View style={styles.toogleContainer}>
-            <Text style={{fontSize: 25, color: '#000', marginRight: 20}}> 알림 </Text>
-            <Switch
-            style={{width: 50, transform: [{scale: 2}]}}
-            trackColor={{false: '#767577', true: '#01162D'}}
-            thumbColor="#fff"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-            />
+            <Text style={{fontSize: 15, color: '#000', marginRight: 20,fontFamily:'BlackHanSans-Regular',fontWeight:'800'}}> 알림 </Text>
+            
         </View>
-        <View>
-            <Text>{ isEnabled ? 'ON' : 'OFF' }</Text>
-        </View>
+        <Toggle
+            isOn={isChecked}
+            onToggle={(value)=>{}}
+        ></Toggle>
+        <Text style={styles.explainText}>호스팅이나 예약이 취소된 경우 알림 드립니다</Text>
+        <Button mode="contained"  style={styles.typeButton}>
+        동의
+        </Button>
     </View>
     );
 }
@@ -77,7 +78,10 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: 25,
+        color:'black',
+        fontFamily:'BlackHanSans-Regular',
+        fontWeight:'200'
     },
     touchable: {
         alignItems: 'center',
@@ -98,8 +102,23 @@ const styles = StyleSheet.create({
     toogleContainer:{
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 30,
+        marginTop: 100,
         alignItems: 'center',
         width: '100%',
-    }
+    },
+    explainText :{
+        fontSize:15,
+        color:'#666',
+        lineHeight:17.54
+    },
+    typeButton: {
+        width: '80%',
+        height:41,
+        borderRadius: 20,
+        marginTop: 15,
+        backgroundColor:'#01162D',
+        fontFamily:'BlackHanSans-Regular',
+        fontSize:15,
+        marginTop:50
+    },
 });

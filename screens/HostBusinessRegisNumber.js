@@ -1,9 +1,9 @@
 //사업자등록 번호 입력하는 페이지
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react-native';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { TextInput, Button } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 
 export default function HostBusinessRegisNumber() {
     const navigation = useNavigation();
@@ -55,7 +55,7 @@ export default function HostBusinessRegisNumber() {
                 readOnly
                 onChangeText={onChangeText}
                 style={styles.storeAddressInputText}
-                mode='outlined'
+                // mode='outlined'
                 // mode="outlined" // TextInput을 읽기 전용 모드로 변경
                 // editable={false} // TextInput을 비활성화
                 
@@ -112,7 +112,10 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: 25,
+        color:'black',
+        fontFamily:'BlackHanSans-Regular',
+        fontWeight:'200'
     },
     touchable: {
         alignItems: 'center',
@@ -135,7 +138,11 @@ const styles = StyleSheet.create({
     },
     textInputContainer: {
         width: '100%',
-        justifyContent: 'center',
+        // justifyContent: 'center',
+        borderRadius: 10,
+        borderBottomWidth: 0,
+        // backgroundColor:'red',
+        flexDirection: 'row'
     },
     storeInputText :{
         
@@ -144,12 +151,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#ddd',
     },
     regisNumberTextInput: {
+        width: '100%',
         backgroundColor: '#fff',
-        
-        borderRadius:15,
-        marginBottom:30,
-        borderBottomWidth: 0,
-        borderColor: 'transparent'
+        borderRadius:10,
+        paddingLeft:14,
+        borderWidth: 1, // Border width
+        borderColor: '#C5C5C7', // Border color
+        elevation: 3, 
+        color:'#B7B7B7',
+        marginTop:47,
+        marginBottom:47
     },
     HostBusinessNumberButton: {
         width: '100%',
@@ -160,10 +171,9 @@ const styles = StyleSheet.create({
         backgroundColor:'#B7B7B7',
     },
     storeAddressInputText :{
-        backgroundColor:'#eee',
+        width: '100%',
+        backgroundColor: '#ddd',
         borderRadius:10,
-        paddingLeft:14,
-        width:'100%',
-        color:'#B7B7B7'
+        paddingLeft:16
     },
 });
