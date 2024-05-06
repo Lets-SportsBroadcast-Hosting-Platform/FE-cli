@@ -8,7 +8,7 @@ export default function InputStore() {
     const navigation = useNavigation();
 
     const arrowbuttonPress = () => {
-        navigation.navigate('ChooseUser');
+        navigation.navigate('HostAuthentication');
         console.log("arrowbuttonPressed");
     };
 
