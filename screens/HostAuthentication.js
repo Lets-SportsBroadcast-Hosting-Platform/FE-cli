@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     width: '85%',
     backgroundColor: '#ddd',
     borderRadius:10,
-    paddingLeft:5
+    paddingLeft:15,
   },
   storeItem: {
     width: '100%',

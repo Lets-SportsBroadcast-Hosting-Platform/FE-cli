@@ -32,7 +32,7 @@ export default function HostBusinessRegisNumber() {
         
         // 7자리부터는 '000-00-0'부터 '000-00-00000'로 변환
         return numbers.replace(/(\d{3})(\d{2})(\d{0,5})/, '$1-$2-$3');
-      };
+    };
     const onChangeNumber = (inputNumber) => {
         const formattedNumber = formatBusinessNumber(inputNumber)
         setNumber(formattedNumber)
