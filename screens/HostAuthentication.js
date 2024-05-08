@@ -5,7 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import kakaoMapIcon from '../assets/images/KakaoMap_logo.png';
 import NaverMap_logo from '../assets/images/NaverMap_logo.png';
-import { Searchbar } from 'react-native-paper';
+
+// api
+import ApiUtil from '../api/ApiUtil';
+import ApiConfig from '../api/ApiConfig';
+import { resetCache } from '../metro.config';
 
 export default function HostAuthentication() {
   const navigation = useNavigation();
@@ -17,78 +21,69 @@ export default function HostAuthentication() {
 
 
   const [searchQuery, setSearchQuery] = React.useState('');
-
   const onChangeSearch = query => setSearchQuery(query);
+  const [provider,setProvider] = React.useState('kakao');
+  const [searchText, setSearchText] = React.useState('');
 
-  
+  //res [{},{}]
+  const [storeInfoList, setStoreInfoList] = React.useState([]);
+  //가게 입력값
+  const [text, setText] = React.useState('');
+
   //map 선택
   const [map, setMap] = useState(0);
   const mapIconClick = () => {
     setMap(map===1? 0:1);
-    // if (map === 0) {
-  //   axios.post('/host/kakao/store/list', { /* 필요한 데이터를 넣어주세요 */ })
-  //       .then(response => {
-  //         // POST 요청 성공 시 처리할 내용
-  //       })
-  //       .catch(error => {
-  //         console.log("kakaomap 실패")
-  //       });
-  //   } 
-  //   else {
-  //     // Naver Map인 경우
-  //     axios.post('/host/naver/store/list', { /* 필요한 데이터를 넣어주세요 */ })
-  //       .then(response => {
-  //         // POST 요청 성공 시 처리할 내용
-  //       })
-  //       .catch(error => {
-  //         console.log("naveromap 실패")
-  //       });
-  //   }
+    setProvider(map === 0 ? 'kakao' : 'naver');
+    SearchStore(text);
+    // console.log(storeInfoList)
   };
 
-  // 가게 이름 검색
-  const storeInfoList = [
-    {
-      title: '벨지움재즈카페',
-      desc: '서울 강남구 테헤란로 83길 20 건영빌딩 400호'
-    },
-    {
-      title: '재즈카페',
-      desc: '서울 종로구 평창 11길 7'
-    },
-    {
-      title: '째즈카페',
-      desc: '서울 동작구 여의대방로 24길 129'
-    },
-  ]
-  const [text, setText] = React.useState('');
-  const onChangeText = (inputText) => {
-    setText(inputText);
-  };
-
+  //링크 부분
+  //http://43.202.194.172/host/search?keyword=ㅅ&provider=kakao
+  function SearchStore(text){
+    
+    const params = {}
+    ApiUtil.post(`${ApiConfig.SERVER_URL}/host/search?keyword=${text}&provider=${provider}`, params)
+    .then((res)=>{
+      const stores = res.stores ?? [];
+      // console.log(stores);
+      // console.log(stores[0]);
+      // console.log(stores.length);//항상 5구나 아님 0
+      setStoreInfoList(stores)
+      console.log(storeInfoList)
+    })
+    .catch((error)=>console.log(error))
+  }
+  //진진자라
+  //res에 뜬 가게를 선책하면 사업자등록번호 페이지로 넘어감
   const goNextStep=(title)=>{
     navigation.navigate('HostBusinessRegisNumber',{
     'title': title,
     });
-    // if(title === ''){
-    //   Alert.alert('먼저 가게 이름을 입력해주세요!')
-    //   return;
-    // }
-    // console.log(`${title} 사업장 선택!`)
-    // navigation.navigate('HostBusinessRegisNumber', {
-    //   'title': title,
-    // })
   }
 
-  const StoreList = storeInfoList.map((store, storeIdx)=>{
-    return (
-    <TouchableOpacity style={styles.storeItem} onPress={()=>goNextStep(store.title)} key={storeIdx}>
-      <View style={styles.line}></View>
-      <Text style={[styles.storeItemText, styles.storeItemTitle]}>{store.title}</Text>
-      <Text style={[styles.storeItemText, styles.storeItemDesc]}>{store.desc}</Text>
-    </TouchableOpacity>
-    )
-  })
+  //res 가게를 출력
+  const StoreList = () => (
+    <>
+    {storeInfoList.length > 0 ? 
+      (storeInfoList.map((store, storeIdx) => 
+      {
+          return (
+            <TouchableOpacity
+            style={styles.storeItem}
+            onPress={() => goNextStep(store.place_name)}
+            key={storeIdx}>
+              <View style={styles.line}></View>
+              <Text style={[styles.storeItemText, styles.storeItemTitle]}>{store.place_name}</Text>
+              <Text style={[styles.storeItemText, styles.storeItemDesc]}>{store.address_name}</Text>
+            </TouchableOpacity>
+          )
+      })
+      ) : (<Text>검색 결과가 없습니다.</Text>)
+      }
+    </>
+  );
 
   return (
     <View style={styles.container}>
@@ -98,23 +93,20 @@ export default function HostAuthentication() {
           <Image source={arrowToLeft} style={styles.arrowIcon} />
         </TouchableOpacity>
         <Text style={styles.headerText}>우리 가게 검색</Text>
-        
       </View>
+
       <View style={styles.contentContainer}>
         <View style={styles.textInputContainer}>
           <TextInput
             placeholder='    가게 이름을 입력해주세요'
             value={text}
-            onChangeText={onChangeText}
+            onChangeText={(inputText) => {
+              setText(inputText);
+              SearchStore(inputText);
+            }}
             style={styles.storeInputText}
             mode='outlined'
           />
-          {/* <Searchbar
-            placeholder="Search"
-            onChangeText={onChangeSearch}
-            value={searchQuery}
-          /> */}
-          {/* <Image source={kakaoMapIcon} style={styles.kakaoMapIcon} /> */}
           <TouchableOpacity onPress={mapIconClick}>
             {map === 0 ? (
               <Image source={kakaoMapIcon} style={styles.kakaoMapIcon} />
@@ -126,7 +118,7 @@ export default function HostAuthentication() {
         <Button mode="contained" onPress={() => navigation.navigate('InputStore')} style={styles.typeButton}>
           우리 가게를 못찾겠어요
         </Button>
-        {StoreList}
+        {StoreList()}
       </View>
     </View>
   );

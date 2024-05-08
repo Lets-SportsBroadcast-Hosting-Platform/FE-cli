@@ -1,7 +1,7 @@
 import {Pressable, ScrollView, StyleSheet, Text, View,Image  } from 'react-native';
 import icons from '../assets/images/logo.png';
 import { Button } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+// import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import naverIcon from '../assets/images/naver-icon.png';
 import appleIcon from '../assets/images/apple-icon.png';
@@ -33,13 +33,13 @@ import ApiUtil from '../api/ApiUtil';
 import ApiConfig from '../api/ApiConfig';
 
 export default function LoginPage({navigation}) {
-    const [userInfo, setUserInfo] = useState(null);
-    const { saveLogin } = useAuth();
-    useEffect(() => {
-        GoogleSignin.configure({
-          // webClientId: '클라이언트 웹 아이디',///
-        });
-      }, []);
+    // const [userInfo, setUserInfo] = useState(null);
+    // const { saveLogin } = useAuth();
+    // useEffect(() => {
+    //     GoogleSignin.configure({
+    //       // webClientId: '클라이언트 웹 아이디',///
+    //     });
+    //   }, []);
     
     const onPressGoogleBtn = async () => {
         await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
         width: 300,
         height: 42,
         backgroundColor: '#03C75A', // 버튼 배경색
-        borderRadius: 10, // 아래쪽 모서리가 둥근 사각형
+        borderRadius: 7, // 아래쪽 모서리가 둥근 사각형
         // alignItems: 'flex-start', // 버튼 안의 내용을 왼쪽 정렬
         position:'relative',
         
