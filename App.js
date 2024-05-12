@@ -10,7 +10,10 @@ import TermsOfService from './screens/TermsOfService.js';
 import InputStore from './screens/InputStore.js';
 import Toast from 'react-native-toast-message';
 import StoreAddress from './screens/StoreAddress.js';
-import PlaceList from './screens/PlaceList.js';
+
+// 메인화면
+import HostPlaceList from './screens/HostPlaceList.js';
+import HostPlaceDetail from './screens/HostPlaceDetail.js';
 
 import { AuthProvider } from './contexts/AuthContext.js';
 
@@ -35,7 +38,8 @@ export default function App() {
           <Stack.Screen name="StoreAddress" component={StoreAddress} options={{headerShown:false}}/>
 
           {/* 메인 화면 */}
-          <Stack.Screen name="PlaceList" component={PlaceList} options={{headerShown:false}}/>
+          <Stack.Screen name="PlaceList" component={HostPlaceList} options={{headerShown:false}}/>
+          <Stack.Screen name="HostPlaceDetail" component={HostPlaceDetail} options={{headerShown:false}}/>
 
         </Stack.Navigator>
       </NavigationContainer>

@@ -4,7 +4,7 @@ import arrowRight from '../assets/images/arrow-right.png';
 import TempGopChang from '../assets/images/gopchang.jpeg';
 import UserImage from '../assets/images/user.png'
 
-export default function PlaceList({navigation}) {
+export default function HostPlaceList({navigation}) {
     const onClickLocationChange = () => {
         Alert.alert(
           '내 위치',
@@ -24,6 +24,10 @@ export default function PlaceList({navigation}) {
           ],
           { cancelable: false }
         );
+    }
+
+    const onClickItem = (item)=>{
+        navigation.navigate('HostPlaceDetail', {...item})
     }
 
     const DATA = [
@@ -90,9 +94,13 @@ export default function PlaceList({navigation}) {
     const ListItem = ({ 
         event_title, imageLink, event_place,
         event_date, event_day, event_time,
-        count, total
+        count, total, id
         }) => (
-        <View style={styles.placeItem}>
+        <TouchableOpacity onPress={()=>onClickItem({ 
+            event_title, imageLink, event_place,
+            event_date, event_day, event_time,
+            count, total, id
+            })} style={styles.placeItem}>
             <View style={styles.imageContainer}>
                 <Image source={imageLink} style={styles.placeImage}/>
             </View>
@@ -110,11 +118,12 @@ export default function PlaceList({navigation}) {
                     <Image style={styles.userImage} source={UserImage}></Image>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 
     const renderItem = ({ item }) => (
         <ListItem
+            id={item.id}
             style={styles.itemScrollContainer}
             event_title={item.event_title}
             event_place={item.event_place}

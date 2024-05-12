@@ -33,8 +33,8 @@ import ApiUtil from '../api/ApiUtil';
 import ApiConfig from '../api/ApiConfig';
 
 export default function LoginPage({navigation}) {
-    // const [userInfo, setUserInfo] = useState(null);
-    // const { saveLogin } = useAuth();
+    const [userInfo, setUserInfo] = useState(null);
+    const { saveLogin } = useAuth();
     // useEffect(() => {
     //     GoogleSignin.configure({
     //       // webClientId: '클라이언트 웹 아이디',///
