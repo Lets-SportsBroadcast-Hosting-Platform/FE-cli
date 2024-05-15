@@ -17,11 +17,14 @@ export default function MakingHost() {
         console.log('정원값 입력')
     }
     // 이미지
-    const [selectedImageUri, setSelectedImageUri] = useState(null);
+    const [selectedImageUris, setSelectedImageUris] = useState([]);
     const [hasImage, setHasImage] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(null);
+    const MAX_IMAGES = 5;
     const pickImage = async () => {
     const options = {
-        selectionLimit: 1, // Allow only single image selection
+        selectionLimit: MAX_IMAGES - selectedImageUris.length, // Allow only single image selection
         mediaType: 'photo', // Restrict to images only
         includeBase64: false, // Avoid including base64 data (optional)
     };
@@ -30,13 +33,36 @@ export default function MakingHost() {
         const result = await launchImageLibrary(options);
 
         if (!result.didCancel) {
-        setSelectedImageUri(result.assets[0].uri); // Set the URI of the selected image
+
+        const newUris = result.assets.map((asset) => asset.uri);
+        setSelectedImageUris([...selectedImageUris, ...newUris]);
         setHasImage(true); // Update image selection state
         }
     } catch (error) {
         console.error('Error selecting image:', error);
     }
     };
+    //이미지 삭제
+    const handleLongPress = (index) => {
+        setSelectedIndex(index); // 선택된 이미지 인덱스 저장
+        setIsModalVisible(true);
+    };
+
+    const handleDeleteImage = () => {
+        if (selectedIndex !== null && selectedIndex < selectedImageUris.length) {
+            const newSelectedImageUris = [...selectedImageUris];
+            newSelectedImageUris.splice(selectedIndex, 1);
+            setSelectedImageUris(newSelectedImageUris);
+            setIsModalVisible(false);
+            setSelectedIndex(null); // 삭제 완료 후 인덱스 초기화
+        }
+        };
+
+    const handleCancelModal = () => {
+        setSelectedIndex(null); // 모달 닫을 때 인덱스 초기화
+        setIsModalVisible(false);
+        };
+    
     return (
         <View style={styles.container}>
         
@@ -50,15 +76,39 @@ export default function MakingHost() {
         <View style={styles.contentContainer}>
 
             <Text style={styles.InputTitle}>이미지</Text>
-            {/* <View style={styles.textInputContainer}>
-            </View> */}
-            {hasImage ? (
-            <Image source={{ uri: selectedImageUri }} style={styles.selectedImage} />
-            ) : (
+            {selectedImageUris.length < MAX_IMAGES && ( // Show "사진 추가" only if less than max
             <TouchableOpacity onPress={pickImage} style={styles.imagePlaceholder}>
                 <Text style={styles.placeholderText}>사진 추가</Text>
             </TouchableOpacity>
             )}
+            {selectedImageUris.length > 0 && (
+            <View style={styles.selectedImagesContainer}>
+                {selectedImageUris.map((uri, index) => (
+                <Image
+                    key={index} // 고유 키 제공
+                    source={{ uri }}
+                    style={styles.selectedImage}
+                    onLongPress={() => handleLongPress(index)} // 각 이미지에 롱 프레스 이벤트 추가
+                />
+                ))}
+            </View>
+            )}
+            {isModalVisible && (
+            <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+                <Text style={styles.modalText}>이미지를 삭제하시겠습니까?</Text>
+                <View style={styles.modalButtonContainer}>
+                <Button mode="outlined" onPress={handleDeleteImage} style={styles.modalButton}>
+                    삭제
+                </Button>
+                <Button mode="outlined" onPress={handleCancelModal} style={styles.modalButton}>
+                    취소
+                </Button>
+                </View>
+            </View>
+            </View>
+            )}
+
 
             <Text style={styles.InputTitle}>모임 이름</Text>
             <View style={styles.textInputContainer}>
@@ -275,5 +325,14 @@ export default function MakingHost() {
     resizeMode: 'cover',
     borderRadius: 10,
     marginBottom: 20,
+    marginRight:20,
+    },
+    selectedImagesContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap', // Allow images to wrap to multiple lines
+        width: '100%', // Set width to 100% of the container
+        overflowX: 'scroll', // Enable horizontal scrolling
+        overflowY: 'hidden', // Hide vertical overflow (optional)
+        marginBottom: 20,
     },
     });
