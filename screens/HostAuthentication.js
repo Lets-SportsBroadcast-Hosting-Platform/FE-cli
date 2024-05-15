@@ -9,7 +9,6 @@ import NaverMap_logo from '../assets/images/NaverMap_logo.png';
 // api
 import ApiUtil from '../api/ApiUtil';
 import ApiConfig from '../api/ApiConfig';
-import { resetCache } from '../metro.config';
 
 export default function HostAuthentication() {
   const navigation = useNavigation();
@@ -20,10 +19,7 @@ export default function HostAuthentication() {
   };
 
 
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const onChangeSearch = query => setSearchQuery(query);
   const [provider,setProvider] = React.useState('kakao');
-  const [searchText, setSearchText] = React.useState('');
 
   //res [{},{}]
   const [storeInfoList, setStoreInfoList] = React.useState([]);
@@ -34,10 +30,15 @@ export default function HostAuthentication() {
   const [map, setMap] = useState(0);
   const mapIconClick = () => {
     setMap(map===1? 0:1);
-    setProvider(map === 0 ? 'kakao' : 'naver');
-    SearchStore(text);
+    setProvider(map === 0 ? 'naver': 'kakao');
+    // SearchStore(text);
     // console.log(storeInfoList)
   };
+
+  useEffect(()=>{
+    SearchStore(text);
+    console.log(map)
+  }, [map])
 
   //링크 부분
   //http://43.202.194.172/host/search?keyword=ㅅ&provider=kakao

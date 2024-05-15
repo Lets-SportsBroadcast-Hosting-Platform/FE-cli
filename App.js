@@ -10,11 +10,11 @@ import TermsOfService from './screens/TermsOfService.js';
 import InputStore from './screens/InputStore.js';
 import Toast from 'react-native-toast-message';
 import StoreAddress from './screens/StoreAddress.js';
-
 // 메인화면
 import HostPlaceList from './screens/HostPlaceList.js';
 import HostPlaceDetail from './screens/HostPlaceDetail.js';
-
+//호스팅
+import MakingHost from './screens/Hosting/MakingHost.js';
 import { AuthProvider } from './contexts/AuthContext.js';
 
 const Stack = createNativeStackNavigator();
@@ -40,7 +40,7 @@ export default function App() {
           {/* 메인 화면 */}
           <Stack.Screen name="PlaceList" component={HostPlaceList} options={{headerShown:false}}/>
           <Stack.Screen name="HostPlaceDetail" component={HostPlaceDetail} options={{headerShown:false}}/>
-
+          <Stack.Screen name="MakingHost" component={MakingHost} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />
