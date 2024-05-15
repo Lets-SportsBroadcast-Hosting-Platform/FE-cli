@@ -6,11 +6,13 @@ export const layouts = StyleSheet.create({
   container: {
     flex: 1,
     position: 'relative',
-    backgroundColor: "#ddd",
   },
 
   horizontal: {
     flexDirection: 'row',
+  },
+
+  spaceBetween: {
     justifyContent: 'space-between'
   },
 
@@ -63,9 +65,20 @@ export const styles = StyleSheet.create({
     marginBottom: 80
   },
 
+  ml10: {
+    marginLeft: 10,
+  },
+
   // 패딩
-  p10: {
-    padding: 10,
+  p5: {
+    padding: 5,
+  },
+
+  pr15: {
+    paddingLeft: 15,
+  },
+  pl15: {
+    paddingRight: 15,
   }
 
 
