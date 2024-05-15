@@ -70,7 +70,7 @@ export default function HostPlaceList({navigation}) {
             event_date: '05.05',
             event_day: '수',
             event_time: '19:00',
-            count: 13,
+            // count: 13,
             total: 15, 
         },
         { 
