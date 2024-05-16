@@ -76,23 +76,23 @@ export default function MakingHost() {
         <View style={styles.contentContainer}>
 
             <Text style={styles.InputTitle}>이미지</Text>
-            {selectedImageUris.length < MAX_IMAGES && ( // Show "사진 추가" only if less than max
-            <TouchableOpacity onPress={pickImage} style={styles.imagePlaceholder}>
-                <Text style={styles.placeholderText}>사진 추가</Text>
-            </TouchableOpacity>
-            )}
-            {selectedImageUris.length > 0 && (
-            <View style={styles.selectedImagesContainer}>
+            <View style={styles.imageContainer}>
                 {selectedImageUris.map((uri, index) => (
-                <Image
-                    key={index} // 고유 키 제공
-                    source={{ uri }}
-                    style={styles.selectedImage}
-                    onLongPress={() => handleLongPress(index)} // 각 이미지에 롱 프레스 이벤트 추가
-                />
+                    <TouchableOpacity onLongPress={() => handleLongPress(index)} key={index}>
+                    <Image
+                        source={{ uri }}
+                        style={styles.selectedImage}
+                    />
+                    </TouchableOpacity>
                 ))}
+
+                {selectedImageUris.length < MAX_IMAGES && (
+                    <TouchableOpacity onPress={pickImage} style={styles.imagePlaceholder}>
+                    <Text style={styles.placeholderText}>사진 추가</Text>
+                    </TouchableOpacity>
+                )}
             </View>
-            )}
+            
             {isModalVisible && (
             <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
@@ -290,10 +290,12 @@ export default function MakingHost() {
         color:'#B7B7B7'
     },
     modalContent: {
+        width:250,
         backgroundColor: 'white',
         padding: 22,
         borderRadius: 4,
         borderColor: 'rgba(0, 0, 0, 0.1)',
+        alignSelf: 'center'
     },
     modalInput: {
     marginBottom: 10,
@@ -318,6 +320,7 @@ export default function MakingHost() {
     alignItems: 'center',
     backgroundColor: '#eee',
     borderRadius: 10,
+    
     },
     selectedImage: {
     width: 100,
@@ -334,5 +337,29 @@ export default function MakingHost() {
         overflowX: 'scroll', // Enable horizontal scrolling
         overflowY: 'hidden', // Hide vertical overflow (optional)
         marginBottom: 20,
+        // backgroundColor:'red'
     },
-    });
+    imageContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap', 
+        // justifyContent: 'space-evenly', 
+        width: '100%', 
+    },
+    modalContainer :{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right:0,
+        bottom:0,
+        // width: 250,
+        // height: 150,
+        justifyContent:'center',
+        alignContent:'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 100,
+    },
+    modalButton :{
+        borderRadius:6,
+        marginTop:8,
+    }
+});
