@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput, ScrollView, Animated  } from 'react-native';
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
@@ -23,24 +23,24 @@ export default function MakingHost() {
     const [selectedIndex, setSelectedIndex] = useState(null);
     const MAX_IMAGES = 5;
     const pickImage = async () => {
-    const options = {
-        selectionLimit: MAX_IMAGES - selectedImageUris.length, // Allow only single image selection
-        mediaType: 'photo', // Restrict to images only
-        includeBase64: false, // Avoid including base64 data (optional)
-    };
+        const options = {
+            selectionLimit: MAX_IMAGES - selectedImageUris.length, // Allow only single image selection
+            mediaType: 'photo', // Restrict to images only
+            includeBase64: false, // Avoid including base64 data (optional)
+        };
 
-    try {
-        const result = await launchImageLibrary(options);
+        try {
+            const result = await launchImageLibrary(options);
 
-        if (!result.didCancel) {
+            if (!result.didCancel) {
 
-        const newUris = result.assets.map((asset) => asset.uri);
-        setSelectedImageUris([...selectedImageUris, ...newUris]);
-        setHasImage(true); // Update image selection state
+            const newUris = result.assets.map((asset) => asset.uri);
+            setSelectedImageUris([...selectedImageUris, ...newUris]);
+            setHasImage(true); // Update image selection state
+            }
+        } catch (error) {
+            console.error('Error selecting image:', error);
         }
-    } catch (error) {
-        console.error('Error selecting image:', error);
-    }
     };
     //이미지 삭제
     const handleLongPress = (index) => {
@@ -62,7 +62,47 @@ export default function MakingHost() {
         setSelectedIndex(null); // 모달 닫을 때 인덱스 초기화
         setIsModalVisible(false);
         };
+    // 연령대 progress-indicator
+    const ProgressIndicator = ({ selectedAgeRange }) => {
+        const ageRanges = [20, 30, 40, 50]; // Available age ranges
     
+    // Map selectedAgeRange to circle dot representations
+    const circleDots = ageRanges.map((ageRange) => {
+        return {
+        age: ageRange,
+        isSelected: selectedAgeRange.includes(ageRange), // Check if ageRange is selected
+        };
+    });
+    
+    return (
+        <View style={styles.progressBarContainer}>
+        <View style={styles.circleDotContainer}>
+            {circleDots.map((circleDot) => (
+            <TouchableOpacity
+                key={circleDot.age}
+                style={[styles.circleDot, { backgroundColor: circleDot.isSelected ? '#2196F3' : '#ccc' }]}
+                onPress={() => {
+                // Handle selection logic
+                if (selectedAgeRange.includes(circleDot.age)) {
+                    // Unselect if already selected
+                    setSelectedAgeRange(selectedAgeRange.filter((age) => age !== circleDot.age));
+                } else {
+                    // Select if not already selected
+                    setSelectedAgeRange([...selectedAgeRange, circleDot.age]);
+                }
+                }}
+            >
+                <Text style={styles.circleDotText}>{circleDot.age}</Text>
+            </TouchableOpacity>
+            ))}
+        </View>
+        <Text style={styles.progressBarLabel}>연령대</Text>
+            <ProgressIndicator selectedAgeRange={selectedAgeRange} />
+        </View>
+    );
+    };
+
+
     return (
         <View style={styles.container}>
         
@@ -74,9 +114,10 @@ export default function MakingHost() {
             
         </View>
         <View style={styles.contentContainer}>
-
+            <ScrollView showsVerticalScrollIndicator={false}>
             <Text style={styles.InputTitle}>이미지</Text>
             <View style={styles.imageContainer}>
+                <ScrollView horizontal = {true}>
                 {selectedImageUris.map((uri, index) => (
                     <TouchableOpacity onLongPress={() => handleLongPress(index)} key={index}>
                     <Image
@@ -91,6 +132,7 @@ export default function MakingHost() {
                     <Text style={styles.placeholderText}>사진 추가</Text>
                     </TouchableOpacity>
                 )}
+                </ScrollView>
             </View>
             
             {isModalVisible && (
@@ -149,30 +191,32 @@ export default function MakingHost() {
 
             <View style={styles.capacityContainer}>
             <Text style={styles.InputTitleInOneLine}>연령대</Text>
-            <TextInput
-            placeholder='숫자' // Placeholder text
-            keyboardType='numeric' // Set keyboard type to numeric for numbers
-            // value={capacity} // Set value from state
-            onChangeText={(text) => setCapacity(text)} // Update state on change
-            style={styles.peopleText}
-            mode='outlined'
-            />
+                {/* <ProgressIndicator progress={ageProgress} /> */}
             </View>
 
-
             <Text style={styles.InputTitle}>스크린 사이즈</Text>
+            <View style = {styles.ScreenButtonContainer}>
+                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 60인치</Button>
+                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 80인치</Button>
+                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 100인치</Button>
+                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 120인치</Button>
+                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 150인치</Button>
+
+            </View>
 
 
                 <Button  mode="contained" onPress={()=> goToHostBusinessRegisNumber(storeAddress)} style={styles.FindAddressButton}>
                 <Text style={styles.nextText}>다음</Text>
                 </Button>
+                </ScrollView>
+        </View>
         
         </View>
-        </View>
     );
-    }
+}
 
-    const styles = StyleSheet.create({
+    const styles = 
+    StyleSheet.create({
     container: {
         height: '100%',
         flex: 1,
@@ -208,7 +252,7 @@ export default function MakingHost() {
         flexDirection: 'row', // Arrange elements horizontally
         alignItems: 'center', // Align text and input vertically
         justifyContent:'center',
-        position:'relative',
+        // position:'relative',
         height:60
     },
     peopleText:{
@@ -239,6 +283,7 @@ export default function MakingHost() {
         height: 20,
         // 이미지와 텍스트 사이의 간격 조정
     },
+    //모임정보 입력 아래 부분
     contentContainer: {
         flex: 1,
         width: '100%',
@@ -314,21 +359,31 @@ export default function MakingHost() {
     },
     // 이미지
     imagePlaceholder: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#eee',
     borderRadius: 10,
-    
+
+    borderWidth: 1,
+    borderColor: '#C5C5C7',
+    elevation: 3,
+    color: '#B7B7B7'
     },
     selectedImage: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     resizeMode: 'cover',
     borderRadius: 10,
     marginBottom: 20,
     marginRight:20,
+
+    paddingLeft: 14,
+    borderWidth: 1,
+    borderColor: '#C5C5C7',
+    elevation: 3,
+    color: '#B7B7B7'
     },
     selectedImagesContainer: {
         flexDirection: 'row',
@@ -351,15 +406,54 @@ export default function MakingHost() {
         left: 0,
         right:0,
         bottom:0,
-        // width: 250,
-        // height: 150,
+        
         justifyContent:'center',
         alignContent:'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.2)',
         zIndex: 100,
     },
     modalButton :{
         borderRadius:6,
         marginTop:8,
+    },
+    progressBarContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 25,
+    },
+    circleDotContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    },
+    circleDot: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+    },
+    circleDotText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+    },
+    progressBarLabel: {
+    marginLeft: 10,
+    fontSize: 14,
+    fontWeight: 'bold',
+    },
+    ScreenButton :{
+        backgroundColor:'#eee',
+        // width:40,
+        width:'19%',
+        borderRadius:7,
+        fontSize:7
+    },
+    ScreenButtonContainer :{
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-evenly', 
+        
     }
 });

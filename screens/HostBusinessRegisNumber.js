@@ -1,9 +1,13 @@
 //사업자등록 번호 입력하는 페이지
-import React from 'react';
+import React,{useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react-native';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
+
+// api
+import ApiUtil from '../api/ApiUtil';
+import ApiConfig from '../api/ApiConfig';
 
 export default function HostBusinessRegisNumber() {
     const navigation = useNavigation();
@@ -12,12 +16,55 @@ export default function HostBusinessRegisNumber() {
     const arrowbuttonPress = () => {
         navigation.navigate('HostAuthentication');
     };
+    const [isDisable, setIsDisable] = useState(true);
+    const AuthenticateButton = async () => {
+        console.log("인증 버튼 Pressed")
+        checkNumber(number)
+        // console.log(number)
+    }
+    function checkNumber(number){
+        // console.log(number)
+        const params = {
+            b_no : number
+        }
+        ApiUtil.post(`${ApiConfig.SERVER_URL}/host/bussiness_num/`, params).then((res)=>{
+        const result = res.result ?? ''
+        const type = res.type ?? ''
+        const detail = res.detail ?? ''
+
+        // console.log(result)
+        // console.log(type)
+        // console.log(detail)
+
+        if (detail) {
+            //다음 버튼 비활성화
+            console.log("존재하지 않는 사업번호")
+        }
+        else if (type=="계속사업자") {
+            //다음 버튼 활성화
+            console.log("계속사업자")
+            setIsDisable(false)
+        }
+        else {
+            //다음 버튼 비활성화
+            console.log("유효하지 않은 사업자번호")
+        }
+
+
+        }).catch((error)=>console.log(error))
+        }
+
+
+
+
+
 
     //TextInput
     const [text, setText] = React.useState('');
     const onChangeText = (inputText) => {
         // setText(inputText);
         console.log(inputText);
+        
     };
 
     //사업자등록번호
@@ -78,12 +125,12 @@ export default function HostBusinessRegisNumber() {
             </View>
             
             {/* 사업자번호 형식 만족하면 활성화 */}
-            <Button mode="contained" onPress={() => console.log('Pressed')} style={styles.HostBusinessNumberButton}>
+            <Button mode="contained" onPress={AuthenticateButton} style={styles.HostBusinessNumberButton}>
             인증
             </Button>
 
             {/* 인증 완료되면 활성화 */}
-            <Button mode="contained" onPress={() => navigation.navigate('TermsOfService')} style={styles.HostBusinessNumberButton}>
+            <Button mode="contained" disabled={isDisable} onPress={() => navigation.navigate('TermsOfService')} style={styles.HostBusinessNumberButton}>
             다음
             </Button>
 
