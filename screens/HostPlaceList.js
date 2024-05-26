@@ -30,6 +30,10 @@ export default function HostPlaceList({navigation}) {
         navigation.navigate('HostPlaceDetail', {...item})
     }
 
+    const onClickHostBtn = ()=>{
+        navigation.navigate('ChoosingGame')
+    }
+
     const DATA = [
         { 
             id: '1', 
@@ -147,7 +151,7 @@ export default function HostPlaceList({navigation}) {
                     <Image source={arrowToLeft} style={styles.arrowIcon} />
                 </TouchableOpacity>
                 
-                <TouchableOpacity onPress={onClickLocationChange} style={styles.touchableRight}>
+                <TouchableOpacity onPress={onClickHostBtn} style={styles.touchableRight}>
                     <Text style={styles.hostingText}>
                         호스팅하기
                     </Text>
