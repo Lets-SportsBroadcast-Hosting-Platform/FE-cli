@@ -23,6 +23,8 @@ import {
   unlink,
 } from "@react-native-seoul/kakao-login";
 
+// async storage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // auth
@@ -58,31 +60,29 @@ export default function LoginPage({navigation}) {
     const signInWithKakao = async ()=> {
       try {
         const {accessToken} = await login();
-        // loginToServer(accessToken)
-        navigation.navigate('PlaceList')
+        loginToServer(accessToken)
+        
+        // navigation.navigate('PlaceList')
 
       } catch (err) {
-        console.error("login err", err);
+        console.error("login err", err.config);
       }
     };
 
     function loginToServer(token){
       const params = {
-        access_token: token,
+        accesstoken: token,
         provider: 'kakao'
       }
-      console.log(ApiConfig.SERVER_URL)
-      ApiUtil.post(`${ApiConfig.SERVER_URL}/login/`, params).then((res)=>{
+
+      ApiUtil.post(`${ApiConfig.SERVER_URL}/login/`, {}, {headers: params}).then((res)=>{
         const jwtToken = res.jwt_token ?? ''
         const userInfo = res.userInfo ?? {}
-
-        console.log(jwtToken)
-        console.log(userInfo)
-
+        
+        AsyncStorage.setItem('jwtToken', jwtToken);
+        AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
         saveLogin(userInfo, jwtToken)
-        navigation.navigate('MakingHost')
-        // navigation.navigate('ChooseUser')
-
+        navigation.navigate('PlaceList')
 
       }).catch((error)=>console.log(error))
     }

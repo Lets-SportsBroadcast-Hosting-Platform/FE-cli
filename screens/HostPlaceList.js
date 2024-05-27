@@ -3,6 +3,9 @@ import arrowToLeft from '../assets/images/location.png';
 import arrowRight from '../assets/images/arrow-right.png';
 import TempGopChang from '../assets/images/gopchang.jpeg';
 import UserImage from '../assets/images/user.png'
+import { useEffect } from 'react';
+import ApiConfig from '../api/ApiConfig';
+import ApiUtil from '../api/ApiUtil';
 
 export default function HostPlaceList({navigation}) {
     const onClickLocationChange = () => {
@@ -25,6 +28,16 @@ export default function HostPlaceList({navigation}) {
           { cancelable: false }
         );
     }
+
+    useEffect(()=>{
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/hosting/read_hostings`, {
+            params: {
+                business_no: 123
+            }
+        }).then((res)=>{
+            console.log(res)
+        })
+    }, [])
 
     const onClickItem = (item)=>{
         navigation.navigate('HostPlaceDetail', {...item})

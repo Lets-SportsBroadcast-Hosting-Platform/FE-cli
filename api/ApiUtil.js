@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const ApiUtil = axios.create({
@@ -6,9 +7,14 @@ const ApiUtil = axios.create({
 
 // 요청 전에 실행될 작업
 ApiUtil.interceptors.request.use(
-    (config) => {
+    async (config) => {
       // 예: 인증 토큰 추가
       // config.headers.Authorization = `Bearer ${accessToken}`;
+      // if(config.headers.accesstoken === undefined){
+      //   const jwtToken = await AsyncStorage.getItem('jwtToken')
+      //   config.headers.accesstoken = jwtToken
+      // }
+      
       return config;
     },
     (error) => {
