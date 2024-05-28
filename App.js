@@ -15,6 +15,7 @@ import HostPlaceList from './screens/HostPlaceList.js';
 import HostPlaceDetail from './screens/HostPlaceDetail.js';
 //호스팅
 import MakingHost from './screens/Hosting/MakingHost.js';
+import ChoosingGame from './screens/Hosting/ChoosingGame.js';
 import { AuthProvider } from './contexts/AuthContext.js';
 
 const Stack = createNativeStackNavigator();
@@ -41,6 +42,7 @@ export default function App() {
           <Stack.Screen name="PlaceList" component={HostPlaceList} options={{headerShown:false}}/>
           <Stack.Screen name="HostPlaceDetail" component={HostPlaceDetail} options={{headerShown:false}}/>
           <Stack.Screen name="MakingHost" component={MakingHost} options={{headerShown:false}}/>
+          <Stack.Screen name="ChoosingGame" component={ChoosingGame} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />

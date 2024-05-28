@@ -3,6 +3,9 @@ import arrowToLeft from '../assets/images/location.png';
 import arrowRight from '../assets/images/arrow-right.png';
 import TempGopChang from '../assets/images/gopchang.jpeg';
 import UserImage from '../assets/images/user.png'
+import { useEffect } from 'react';
+import ApiConfig from '../api/ApiConfig';
+import ApiUtil from '../api/ApiUtil';
 
 export default function HostPlaceList({navigation}) {
     const onClickLocationChange = () => {
@@ -26,8 +29,22 @@ export default function HostPlaceList({navigation}) {
         );
     }
 
+    useEffect(()=>{
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/hosting/read_hostings`, {
+            params: {
+                business_no: 123
+            }
+        }).then((res)=>{
+            console.log(res)
+        })
+    }, [])
+
     const onClickItem = (item)=>{
         navigation.navigate('HostPlaceDetail', {...item})
+    }
+
+    const onClickHostBtn = ()=>{
+        navigation.navigate('ChoosingGame')
     }
 
     const DATA = [
@@ -147,7 +164,7 @@ export default function HostPlaceList({navigation}) {
                     <Image source={arrowToLeft} style={styles.arrowIcon} />
                 </TouchableOpacity>
                 
-                <TouchableOpacity onPress={onClickLocationChange} style={styles.touchableRight}>
+                <TouchableOpacity onPress={onClickHostBtn} style={styles.touchableRight}>
                     <Text style={styles.hostingText}>
                         호스팅하기
                     </Text>
