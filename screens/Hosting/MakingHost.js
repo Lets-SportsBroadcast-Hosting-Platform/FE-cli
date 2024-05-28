@@ -100,6 +100,7 @@ export default function MakingHost() {
         isSelected: selectedAgeRange.includes(ageRange), // Check if ageRange is selected
         };
     });
+    //연령대 스와이퍼? 실험
     
     return (
         <View style={styles.progressBarContainer}>
@@ -155,7 +156,7 @@ export default function MakingHost() {
                 ))}
 
                 {selectedImageUris.length < MAX_IMAGES && (
-                    <TouchableOpacity onPress={pickImage} style={styles.imagePlaceholder}>
+                    <TouchableOpacity onPress={pickImage()} style={styles.imagePlaceholder}>
                     <Text style={styles.placeholderText}>사진 추가</Text>
                     </TouchableOpacity>
                 )}
