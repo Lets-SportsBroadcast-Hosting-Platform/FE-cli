@@ -138,7 +138,7 @@ export default function MakingHost() {
             <TouchableOpacity onPress={arrowbuttonPress} style={styles.touchable}>
             <Image source={arrowToLeft} style={styles.arrowIcon} />
             </TouchableOpacity>
-            <Text style={styles.headerText}>모임 정보 입력</Text>
+            <Text style={styles.headerText}>모임 정보</Text>
             
         </View>
         <View style={styles.contentContainer}>
