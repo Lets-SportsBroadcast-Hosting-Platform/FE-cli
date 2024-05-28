@@ -57,6 +57,33 @@ export default function MakingHost() {
             setSelectedIndex(null); // 삭제 완료 후 인덱스 초기화
         }
         };
+        //클릭하면 다른 이미지로 대체
+        const changeImage = async (index) => {
+            const options = {
+              selectionLimit: 1, // Allow only single image selection
+              mediaType: 'photo', // Restrict to images only
+              includeBase64: false, // Avoid including base64 data (optional)
+            };
+        
+        try {
+            const result = await launchImageLibrary(options);
+        
+            if (!result.didCancel) {
+            const newUri = result.assets[0].uri; // Get the URI of the newly selected image
+        
+            // Replace the selected image with the new one
+            const updatedSelectedImageUris = [...selectedImageUris];
+            updatedSelectedImageUris.splice(selectedIndex, 1, newUri);
+            setSelectedImageUris(updatedSelectedImageUris);
+        
+            // Close the modal and reset the selected index
+            setIsModalVisible(false);
+            setSelectedIndex(null);
+            }
+        } catch (error) {
+            console.error('Error selecting image:', error);
+        }
+        };
 
     const handleCancelModal = () => {
         setSelectedIndex(null); // 모달 닫을 때 인덱스 초기화
@@ -119,7 +146,7 @@ export default function MakingHost() {
             <View style={styles.imageContainer}>
                 <ScrollView horizontal = {true}>
                 {selectedImageUris.map((uri, index) => (
-                    <TouchableOpacity onLongPress={() => handleLongPress(index)} key={index}>
+                    <TouchableOpacity onLongPress={() => handleLongPress(index)} onPress={() => changeImage(index)} key={index}>
                     <Image
                         source={{ uri }}
                         style={styles.selectedImage}
