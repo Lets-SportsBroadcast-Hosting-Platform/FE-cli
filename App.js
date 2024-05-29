@@ -17,6 +17,8 @@ import HostPlaceDetail from './screens/HostPlaceDetail.js';
 import MakingHost from './screens/Hosting/MakingHost.js';
 import ChoosingGame from './screens/Hosting/ChoosingGame.js';
 import { AuthProvider } from './contexts/AuthContext.js';
+//호스트 마이페이지
+import EditStoreMypage from './screens/HostUserMyPage/EditStoreMypage.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +27,7 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="MakingHost">
+        <Stack.Navigator initialRouteName="EditStoreMypage">
           
           <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
           
@@ -43,6 +45,7 @@ export default function App() {
           <Stack.Screen name="HostPlaceDetail" component={HostPlaceDetail} options={{headerShown:false}}/>
           <Stack.Screen name="MakingHost" component={MakingHost} options={{headerShown:false}}/>
           <Stack.Screen name="ChoosingGame" component={ChoosingGame} options={{headerShown:false}}/>
+          <Stack.Screen name="EditStoreMypage" component={EditStoreMypage} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />
