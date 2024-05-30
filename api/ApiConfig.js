@@ -1,5 +1,5 @@
 const ApiConfig = {
-    SERVER_URL: 'http://52.79.105.190'
+    SERVER_URL: 'https://letsapp.store'
 }
 
 
