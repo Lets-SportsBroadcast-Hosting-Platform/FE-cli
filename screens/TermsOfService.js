@@ -172,27 +172,26 @@ export default function TermsOfService() {
                         </Text>
                         <View style={styles.modalButtonContainer}>
                         <Button mode="outlined" onPress={handleCancelPrivacyModal} style={styles.modalButton}>
-                            닫기
                         </Button>
                         </View>
+                            닫기
                         
                         </ScrollView>
                     </View>
                     </View>
                     )}
 
-        <View style={styles.toogleContainer}>
-            <Text style={{fontSize: 15, color: '#000', marginRight: 20,fontFamily:'BlackHanSans-Regular',fontWeight:'800'}}> 알림 </Text>
-            
+        <View style={{flexDirection: 'row', marginTop: 150, marginBottom: 20}}>
+            <Text style={{fontSize: 17, color: '#000', lineHeight: 41, marginRight: 20,fontFamily:'BlackHanSans-Regular',fontWeight:'800'}}> 알림 </Text>
+            <Toggle
+                isOn={isChecked}
+                onToggle={(value)=>{}}
+            ></Toggle>
         </View>
-        <Toggle
-            isOn={isChecked}
-            onToggle={(value)=>{}}
-        ></Toggle>
-        <Text style={styles.explainText}>호스팅이나 예약이 취소된 경우 알림 드립니다</Text>
-        <Button mode="contained"  style={styles.typeButton}>
-        동의
-        </Button>
+            <Text style={styles.explainText}>호스팅이나 예약이 취소된 경우 알림 드립니다</Text>
+            <Button mode="contained"  style={styles.typeButton}>
+            동의
+            </Button>
     </View>
     );
 }

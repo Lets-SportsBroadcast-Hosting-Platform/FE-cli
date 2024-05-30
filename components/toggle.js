@@ -18,7 +18,7 @@ const Toggle = ({ onToggle, isOn }) => {
 
     const translateX = animatedValue.interpolate({
         inputRange: [0, 1],
-        outputRange: [1, 17],
+        outputRange: [1, 47],
     });
 
 
@@ -33,7 +33,7 @@ const Toggle = ({ onToggle, isOn }) => {
     };
 
     return (
-        <ToggleContainer onPress={onPress} color={isOn? 'black':'red'}>
+        <ToggleContainer onPress={onPress} color={isOn? 'black':'#01162D'}>
         <ToggleWheel style={{ transform: [{ translateX }]}} />
         {/* { transform: [{ translateX }] } */}
         </ToggleContainer>
@@ -43,16 +43,17 @@ const Toggle = ({ onToggle, isOn }) => {
 export default Toggle;
 
 const ToggleContainer = styled.TouchableOpacity`
-    width: 36px;
-    height: 20px;
-    border-radius: 10px;
+    width: 88px;
+    height: 41px;
+    padding-left: 5px;
+    border-radius: 25px;
     justify-content: center;
     background-color: ${({color})=>color}
 `;
 
 const ToggleWheel = styled(Animated.View)`
-    width: 18px;
-    height: 18px;
+    width: 30px;
+    height: 30px;
     background-color: white;
     border-radius: 99px;
 `;
