@@ -90,9 +90,9 @@ export default function EditStoreMypage() {
           </Button>
         
         </View>
-          <TouchableOpacity onPress={()=>{console.log("회원탈퇴!!")}}>
+          {/* <TouchableOpacity onPress={()=>{console.log("회원탈퇴!!")}}>
             <Text style={styles.withdrawalText}>회원탈퇴</Text>
-          </TouchableOpacity>   
+          </TouchableOpacity>    */}
         </View>
     );
     }
