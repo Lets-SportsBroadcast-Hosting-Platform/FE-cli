@@ -1,9 +1,10 @@
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput, Button} from 'react-native';
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
 import { useNavigation } from '@react-navigation/native';
-import { Button } from 'react-native-paper';
-
+// import { Button } from 'react-native-paper';
+// import Checkbox from 'react-native-custom-checkbox';
+import CheckedBoxImage from '../../assets/images/checkedbox.png';
 export default function EditMypage() {
     const navigation = useNavigation();
 
@@ -37,9 +38,14 @@ export default function EditMypage() {
         //   'title': title,
         // })
     }
+//체크박스
+const [checked, setChecked] = useState(false);
+
     return (
         <View style={styles.container}>
         
+        
+
         <View style={styles.header}>
             <TouchableOpacity onPress={arrowbuttonPress} style={styles.touchable}>
             <Image source={arrowToLeft} style={styles.arrowIcon} />
@@ -85,14 +91,29 @@ export default function EditMypage() {
                 />
                 </TouchableOpacity>
                 </View>
-          <Button  mode="contained" onPress={()=> goToHostBusinessRegisNumber(storeAddress)} style={styles.FindAddressButton}>
-          <Text style={styles.nextText}>수정 완료</Text>
-          </Button>
-        
+            {/* <Button  mode="contained" onPress={()=> goToHostBusinessRegisNumber(storeAddress)} style={styles.FindAddressButton}>
+            <Text style={styles.nextText}>수정 완료</Text>
+            <Image source={CheckedBoxImage} style={styles.CheckedBoxImage} />
+          </Button> */}
+        <TouchableOpacity onPress={()=>{console.log("수정완료")}}>
+            
+            <Text style={styles.nextText}>수정 완료</Text>
+            <Image source={CheckedBoxImage} style={styles.CheckedBoxImage} />
+            
+        </TouchableOpacity>
+        {/* <Checkbox
+            checked={true}
+            style={{backgroundColor: '#f2f2f2', color:'#900', borderRadius: 5}}
+            size={30}/> */}
+
+    
+
+   
+
         </View>
-          <TouchableOpacity onPress={()=>{console.log("회원탈퇴!!")}}>
-            <Text style={styles.withdrawalText}>회원탈퇴</Text>
-          </TouchableOpacity>   
+            <TouchableOpacity onPress={()=>{console.log("회원탈퇴!!")}}>
+                <Text style={styles.withdrawalText}>회원탈퇴</Text>
+            </TouchableOpacity>   
         </View>
     );
     }
@@ -142,7 +163,7 @@ export default function EditMypage() {
         marginTop: 20,
         paddingLeft: 20,
         paddingRight: 20,
-        // backgroundColor:'red'
+        // position:'relative'
     },
     textInputContainer: {
         width: '100%',
@@ -199,10 +220,17 @@ export default function EditMypage() {
         textDecorationLine: 'underline'
     },
     nextText :{
-      color:'#fff',
-      fontFamily:'NotoSansKR-Medium',
-      alignItems:'center',
-      fontSize:15,
-      lineHeight:25.5
+        color:'black',
+        fontFamily:'NotoSansKR-Medium',
+        fontSize:15,
+        lineHeight:15,
+
+  },
+  CheckedBoxImage:{
+    height:15,
+    width:15,
+    // position:'relative',
+    // top:0,
+    // left:60
   }
     });
