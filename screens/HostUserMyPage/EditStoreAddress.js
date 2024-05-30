@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     position: 'relative',
+    backgroundColor:'#fff'
     // paddingVertical: 30,
     // paddingHorizontal: 10
   },
