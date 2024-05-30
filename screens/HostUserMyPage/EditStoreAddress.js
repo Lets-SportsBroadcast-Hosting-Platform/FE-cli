@@ -12,24 +12,22 @@ export default function HostAuthentication() {
   const navigation = useNavigation();
 
   const arrowbuttonPress = () => {
-    navigation.navigate('ChooseUser');
+    navigation.navigate('EditStoreMypage');
     console.log("arrowbuttonPressed");
   };
-
-
-  const [provider,setProvider] = React.useState('kakao');
 
   //res [{},{}]
   const [storeInfoList, setStoreInfoList] = React.useState([]);
   //가게 입력값
   const [text, setText] = React.useState('');
 
+
   //링크 부분
-  //http://43.202.194.172/host/search?keyword=ㅅ&provider=kakao
+  //http://52.79.105.190/host/search?keyword=서초&provider=kakao
   function SearchStore(text){
     
     const params = {}
-    ApiUtil.post(`${ApiConfig.SERVER_URL}/host/search?keyword=${text}&provider=kakao`, params)
+    ApiUtil.get(`${ApiConfig.SERVER_URL}/host/search?keyword=${text}&provider=kakao`, params)
     .then((res)=>{
       const stores = res.stores ?? [];
       // console.log(stores);
@@ -71,7 +69,7 @@ export default function HostAuthentication() {
         <TouchableOpacity onPress={arrowbuttonPress} style={styles.touchable}>
           <Image source={arrowToLeft} style={styles.arrowIcon} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>우리 가게 검색</Text>
+        <Text style={styles.headerText}>우리 가게 주소</Text>
       </View>
 
       <View style={styles.contentContainer}>
