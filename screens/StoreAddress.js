@@ -8,7 +8,7 @@ export default function StoreAddress() {
     const navigation = useNavigation();
 
     const arrowbuttonPress = () => {
-        navigation.navigate('InputStore');
+        navigation.goBack()
     };
     const [storeAddress, setStoreAddress] = useState('');
 

@@ -14,7 +14,7 @@ export default function HostBusinessRegisNumber() {
     const route = useRoute()
     const { title } = route.params;
     const arrowbuttonPress = () => {
-        navigation.navigate('HostAuthentication');
+        navigation.goBack();
     };
     const [isDisable, setIsDisable] = useState(true);
     const AuthenticateButton = async () => {
@@ -24,19 +24,21 @@ export default function HostBusinessRegisNumber() {
     }
     function checkNumber(number){
         // console.log(number)
-        const params = {
-            b_no : number
-        }
-        ApiUtil.post(`${ApiConfig.SERVER_URL}/host/bussiness_num/`, params).then((res)=>{
-        const result = res.result ?? ''
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/business_num`,{ 
+            headers: {
+                bno: number
+            }
+        }).then((res)=>{
+        const businessNo = res.result ?? ''
         const type = res.type ?? ''
         const detail = res.detail ?? ''
+        console.log(res )
 
         // console.log(result)
         // console.log(type)
         // console.log(detail)
 
-        if (detail) {
+        if (detail == '400') {
             //다음 버튼 비활성화
             console.log("존재하지 않는 사업번호")
         }
@@ -51,7 +53,7 @@ export default function HostBusinessRegisNumber() {
         }
 
 
-        }).catch((error)=>console.log(error))
+        }).catch((error)=>console.log(error.config))
         }
 
 

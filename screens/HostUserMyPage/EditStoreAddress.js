@@ -12,7 +12,7 @@ export default function HostAuthentication() {
   const navigation = useNavigation();
 
   const arrowbuttonPress = () => {
-    navigation.navigate('EditStoreMypage');
+    navigation.goBack()
     console.log("arrowbuttonPressed");
   };
 

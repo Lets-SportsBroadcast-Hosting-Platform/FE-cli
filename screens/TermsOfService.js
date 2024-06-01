@@ -13,7 +13,7 @@ export default function TermsOfService() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const arrowbuttonPress = () => {
-        navigation.navigate('ChooseUser');
+        navigation.goBack()
         console.log("arrowbuttonPressed");
     };
     const handleCancelModal = () => {

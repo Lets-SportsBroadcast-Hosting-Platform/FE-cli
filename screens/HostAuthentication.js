@@ -14,7 +14,7 @@ export default function HostAuthentication() {
   const navigation = useNavigation();
 
   const arrowbuttonPress = () => {
-    navigation.navigate('ChooseUser');
+    navigation.goBack();
     console.log("arrowbuttonPressed");
   };
 
@@ -43,9 +43,12 @@ export default function HostAuthentication() {
   //링크 부분
   //http://43.202.194.172/host/search?keyword=ㅅ&provider=kakao
   function SearchStore(text){
-    
-    const params = {}
-    ApiUtil.post(`${ApiConfig.SERVER_URL}/host/search?keyword=${text}&provider=${provider}`, params)
+    ApiUtil.get(`${ApiConfig.SERVER_URL}/store/search`, {
+      params: {
+        keyword: text,
+        provider: provider
+      }
+    })
     .then((res)=>{
       const stores = res.stores ?? [];
       // console.log(stores);
@@ -54,7 +57,7 @@ export default function HostAuthentication() {
       setStoreInfoList(stores)
       console.log(storeInfoList)
     })
-    .catch((error)=>console.log(error))
+    .catch((error)=>console.log(error.config))
   }
   //진진자라
   //res에 뜬 가게를 선책하면 사업자등록번호 페이지로 넘어감
