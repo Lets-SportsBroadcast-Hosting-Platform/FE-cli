@@ -75,7 +75,7 @@ export default function LoginPage({navigation}) {
         provider: 'kakao'
       }
 
-      ApiUtil.post(`${ApiConfig.SERVER_URL}/login/`, {}, {headers: params}).then((res)=>{
+      ApiUtil.post(`${ApiConfig.SERVER_URL}/login`, {}, {headers: params}).then((res)=>{
         const jwtToken = res.jwt_token ?? ''
         const userInfo = res.userInfo ?? {}
         

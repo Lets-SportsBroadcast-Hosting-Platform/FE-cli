@@ -63,10 +63,10 @@ export default function HostAuthentication() {
   }
   //진진자라
   //res에 뜬 가게를 선책하면 사업자등록번호 페이지로 넘어감
-  const goNextStep=(title)=>{
+  const goNextStep=(store)=>{
     navigation.navigate('HostBusinessRegisNumber',{
-    'title': title,
-    ...params
+      ...store,
+      ...params
     });
   }
 
@@ -79,7 +79,7 @@ export default function HostAuthentication() {
           return (
             <TouchableOpacity
             style={styles.storeItem}
-            onPress={() => goNextStep(store.place_name)}
+            onPress={() => goNextStep(store)}
             key={storeIdx}>
               <View style={styles.line}></View>
               <Text style={[styles.storeItemText, styles.storeItemTitle]}>{store.place_name}</Text>

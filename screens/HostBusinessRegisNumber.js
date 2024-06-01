@@ -119,7 +119,7 @@ export default function HostBusinessRegisNumber() {
             {/* 클릭하면 다시 전 페이지로 가서 가게 이름 다시 찾기 */}
             <View style={styles.textInputContainer}>
                 <TextInput
-                value={params.title}
+                value={params.place_name}
                 readOnly
                 onChangeText={onChangeText}
                 style={styles.storeAddressInputText}

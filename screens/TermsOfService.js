@@ -6,11 +6,21 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import Toggle from '../components/toggle.js';
 import { useHTML } from 'react-native-html-render';
+import ApiConfig from '../api/ApiConfig.js';
+import ApiUtil from '../api/ApiUtil.js';
+
+// auth
+import { useAuth } from '../contexts/AuthContext.js';
 
 export default function TermsOfService() {
     const navigation = useNavigation();
     const route = useRoute();
     const params = route.params;
+
+    // context에서 userInfo 가져오기
+    const { getUserInfo } = useAuth()
+    const userInfo = getUserInfo();
+
     const [isChecked, setIsChecked] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
@@ -30,6 +40,21 @@ export default function TermsOfService() {
     const handleCancelPrivacyModal = () => {
         setIsModalVisible2(false);
     };
+
+    const submitSignUpForm = ()=>{
+        console.log(userInfo, params)
+        // ApiUtil.post(`${ApiConfig.SERVER_URL}/store`, {
+        //     bussiness_no: '',
+        //     id: '',
+        //     store_name: '',
+        //     store_address: '',
+        //     store_road_address: '',
+        //     store_category: '',
+        //     store_number: '',
+        //     alarm: true
+        // })
+    }
+
     return (
     <View style={styles.container}>
 
@@ -191,7 +216,7 @@ export default function TermsOfService() {
             ></Toggle>
         </View>
             <Text style={styles.explainText}>호스팅이나 예약이 취소된 경우 알림 드립니다</Text>
-            <Button mode="contained"  style={styles.typeButton} onPress={()=>console.log(params)}>
+            <Button mode="contained"  style={styles.typeButton} onPress={submitSignUpForm}>
             동의
             </Button>
     </View>
