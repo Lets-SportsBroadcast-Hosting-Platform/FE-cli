@@ -2,13 +2,15 @@
 import React,{useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,Linking, ScrollView} from 'react-native';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import Toggle from '../components/toggle.js';
 import { useHTML } from 'react-native-html-render';
 
 export default function TermsOfService() {
     const navigation = useNavigation();
+    const route = useRoute();
+    const params = route.params;
     const [isChecked, setIsChecked] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
@@ -189,7 +191,7 @@ export default function TermsOfService() {
             ></Toggle>
         </View>
             <Text style={styles.explainText}>호스팅이나 예약이 취소된 경우 알림 드립니다</Text>
-            <Button mode="contained"  style={styles.typeButton}>
+            <Button mode="contained"  style={styles.typeButton} onPress={()=>console.log(params)}>
             동의
             </Button>
     </View>

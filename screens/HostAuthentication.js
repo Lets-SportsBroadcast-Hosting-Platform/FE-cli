@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert,TextInput } from 'react-native';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import kakaoMapIcon from '../assets/images/KakaoMap_logo.png';
 import NaverMap_logo from '../assets/images/NaverMap_logo.png';
@@ -12,6 +12,8 @@ import ApiConfig from '../api/ApiConfig';
 
 export default function HostAuthentication() {
   const navigation = useNavigation();
+  const route = useRoute()
+  const params = route.params;
 
   const arrowbuttonPress = () => {
     navigation.goBack();
@@ -64,6 +66,7 @@ export default function HostAuthentication() {
   const goNextStep=(title)=>{
     navigation.navigate('HostBusinessRegisNumber',{
     'title': title,
+    ...params
     });
   }
 
@@ -119,7 +122,7 @@ export default function HostAuthentication() {
             )}
           </TouchableOpacity>
         </View>
-        <Button mode="contained" onPress={() => navigation.navigate('InputStore')} style={styles.typeButton}>
+        <Button mode="contained" onPress={() => navigation.navigate('InputStore', {...params})} style={styles.typeButton}>
           우리 가게를 못찾겠어요
         </Button>
         {StoreList()}
