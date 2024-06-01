@@ -43,7 +43,6 @@ export default function HostAuthentication() {
   //링크 부분
   //http://43.202.194.172/host/search?keyword=ㅅ&provider=kakao
   function SearchStore(text){
-    
     const params = {}
     ApiUtil.post(`${ApiConfig.SERVER_URL}/host/search?keyword=${text}&provider=${provider}`, params)
     .then((res)=>{

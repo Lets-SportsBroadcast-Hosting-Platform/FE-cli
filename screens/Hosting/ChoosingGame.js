@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList } from 'react-native';
+import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList, Button, ImageBackground } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
 import { useEffect } from 'react';
@@ -17,8 +17,8 @@ export default function HostPlaceList() {
     useEffect(()=>{
         ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports`, {
             params: {
-                upperCategoryId: 'kfootball',
-                categoryId : 'kleague',
+                upperCategoryId: 'kbaseball',
+                categoryId : 'kbo',
                 count: 10,
             }
         }).then(res=>{
@@ -71,24 +71,41 @@ export default function HostPlaceList() {
 
     //     />
     // );
-      
+
     return (
         <View style={self.container}>
+
             <View style={self.header}>
                 <TouchableOpacity onPress={goBackPage} style={self.touchable}>
                 <Image style={self.arrowIcon} source={arrowToLeft}  />
                 </TouchableOpacity>
                 <Text style={self.headerText}>4월</Text>
-                {/* <Text style={styles.headerText}>사업자등록번호 인증</Text> */}
             </View>
-            {/* <FlatList
-                data={DATA}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-                showsVerticalScrollIndicator={false}
-                scrollIndicatorInsets={{ right: 1 }}
-            /> */}
             
+            <View style={self.tabButtonContainer}>
+                <TouchableOpacity
+                    style={self.button}
+                    onPress={() => {console.log("KBO")}}>
+                    <Text style={self.buttonText}>KBO</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={self.button}
+                    onPress={() => navigation.navigate('Message')}>
+                    <Text style={self.buttonText}>해외축구</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={self.button}
+                    onPress={() => navigation.navigate('Contact')}>
+                    <Text style={self.buttonText}>E-스포츠</Text>
+                </TouchableOpacity>
+            </View>
+            
+
+            <View style={self.dailySportsContainer}>
+            <View style = {self.titleDate}>
+                <Text>3일 (수)</Text>
+            </View>
+            </View>
             
 
         </View>
@@ -97,6 +114,7 @@ export default function HostPlaceList() {
 
 const self = StyleSheet.create({
     container: {
+        backgroundColor: '#fff',
         height: '100%',
         flex: 1,
         alignItems: 'center',
@@ -132,5 +150,29 @@ const self = StyleSheet.create({
         top: '50%', left: 0,
         transform: [{translateY: 13.1}, {translateX: 20}]
     },
-    
+    button: {
+        backgroundColor: '#fff', // 버튼 배경색상 추가
+        paddingVertical: 5,
+        // paddingHorizontal: 30,
+        borderRadius: 10,
+        marginBottom: 20,
+        alignContent:'center',
+        height:'8%',
+    },
+    buttonText: {
+    color: '#C5C5C7', // 버튼 글자색상 추가
+    fontSize: 18,
+    fontWeight: '700',
+
+    },
+    tabButtonContainer:{
+        flex:1,
+        flexDirection:'row',
+        justifyContent:'space-around',
+        // backgroundColor:'red',
+        width:'100%',
+        // height:'8%',
+        padding:[0, 10],
+        // height:100
+    }
 });

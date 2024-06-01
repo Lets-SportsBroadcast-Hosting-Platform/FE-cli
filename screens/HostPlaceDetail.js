@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, ScrollView, Image,TouchableOpacity, Dimensions 
 import { useEffect, useState } from "react";
 import { useNavigation, useRoute } from '@react-navigation/native';
 import TempGopChang from '../assets/images/gopchang.jpeg';
+
 // auth
 import { useAuth } from '../contexts/AuthContext.js';
 
@@ -19,7 +20,7 @@ import users from '../assets/images/free-icon-font-users.png'
 import camera from '../assets/images/free-icon-font-video-camera-alt.png'
 
 function HostPlaceDetail(detail){
-    // const navigation = useNavigation();
+    const navigation = useNavigation();
     const [clientWidth, setClientWidth] = useState(0)
     const [clientHeight, setClientHeight] = useState(0)
 
@@ -82,7 +83,7 @@ function HostPlaceDetail(detail){
                 <Image source={marker} />
                 <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>서울시 반포대로 1길 11</Text>
             </View>
-            <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={()=>{}}>
+            <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={()=>{navigation.navigate('MakingHost');}}>
                 <Text style={[styles.p5, self.hostButton]}>신청하기</Text>
             </TouchableOpacity>
         </ScrollView>

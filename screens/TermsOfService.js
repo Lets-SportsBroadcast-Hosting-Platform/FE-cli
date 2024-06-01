@@ -100,11 +100,11 @@ export default function TermsOfService() {
 
 
                 </Text>
-                <View style={styles.modalButtonContainer}>
+                
                 <Button mode="outlined" onPress={handleCancelModal} style={styles.modalButton}>
                     닫기
                 </Button>
-                </View>
+                
                 
                 </ScrollView>
             </View>
@@ -170,12 +170,8 @@ export default function TermsOfService() {
 
 
                         </Text>
-                        <View style={styles.modalButtonContainer}>
-                        <Button mode="outlined" onPress={handleCancelPrivacyModal} style={styles.modalButton}>
-                        </Button>
-                        </View>
-                            닫기
                         
+                        <Button mode="outlined" onPress={handleCancelPrivacyModal} style={styles.modalButton}>닫기</Button>
                         </ScrollView>
                     </View>
                     </View>
@@ -189,7 +185,7 @@ export default function TermsOfService() {
             ></Toggle>
         </View>
             <Text style={styles.explainText}>호스팅이나 예약이 취소된 경우 알림 드립니다</Text>
-            <Button mode="contained"  style={styles.typeButton}>
+            <Button mode="contained"  style={styles.typeButton} onPress={()=>{navigation.navigate('PlaceList');}}>
             동의
             </Button>
     </View>
