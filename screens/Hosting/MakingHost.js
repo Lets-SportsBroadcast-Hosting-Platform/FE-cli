@@ -224,11 +224,11 @@ export default function MakingHost() {
 
             <Text style={styles.InputTitle}>스크린 사이즈</Text>
             <View style = {styles.ScreenButtonContainer}>
-                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 60인치</Button>
-                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 80인치</Button>
-                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 100인치</Button>
-                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 120인치</Button>
-                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 150인치</Button>
+                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 60</Button>
+                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 80</Button>
+                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 100</Button>
+                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 120</Button>
+                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 150+</Button>
 
             </View>
 

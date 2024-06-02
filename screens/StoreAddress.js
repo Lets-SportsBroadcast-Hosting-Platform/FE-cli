@@ -17,6 +17,49 @@ export default function StoreAddress() {
     const onChangeText = (inputText) => {
         setStore(inputText);
     };
+    //res [{},{}]
+    const [storeInfoList, setStoreInfoList] = React.useState([]);
+    //가게 입력값
+    const [text, setText] = React.useState('');
+
+    //링크 부분
+  //http://52.79.105.190/host/search?keyword=서초&provider=kakao
+    function SearchStore(text){
+        
+        const params = {}
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/host/search?keyword=${text}&provider=kakao`, params)
+        .then((res)=>{
+        const stores = res.stores ?? [];
+        // console.log(stores);
+        // console.log(stores[0]);
+        // console.log(stores.length);//항상 5구나 아님 0
+        setStoreInfoList(stores)
+        console.log(storeInfoList)
+        })
+        .catch((error)=>console.log(error))
+    }
+
+    //res 가게를 출력
+    const StoreList = () => (
+        <>
+        {storeInfoList.length > 0 ? 
+        (storeInfoList.map((store, storeIdx) => 
+        {
+            return (
+                <TouchableOpacity
+                style={styles.storeItem}
+                onPress={() => goNextStep(store.place_name)}
+                key={storeIdx}>
+                <View style={styles.line}></View>
+                <Text style={[styles.storeItemText, styles.storeItemTitle]}>{store.place_name}</Text>
+                <Text style={[styles.storeItemText, styles.storeItemDesc]}>{store.address_name}</Text>
+                </TouchableOpacity>
+            )
+        })
+        ) : (<Text>검색 결과가 없습니다.</Text>)
+        }
+        </>
+    );
 
     return (
         <View style={styles.container}>
@@ -34,13 +77,16 @@ export default function StoreAddress() {
         <View style={styles.textInputContainer}>
         <TextInput
             placeholder='가게 주소를 입력해주세요.'
+            value={text}
             style={styles.storeInputText}
+            onChangeText={(inputText) => {
+                setText(inputText);
+                SearchStore(inputText);
+            }}
             mode='outlined'
-            editable={false}
-            value={storeAddress}
         />
         </View>
-            
+        {StoreList()}
         </View>
         </View>
     );

@@ -14,16 +14,28 @@ export default function HostPlaceList() {
         navigation.navigate('PlaceList')
     }
 
+    function SportsSchedule(){
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports?upperCategoryId=${upperCategoryId}&categoryId=${categoryId}&count=${count}`, {
+        params: {
+            upperCategoryId: kbaseball,
+            categoryId: kbo,
+            count:1
+        }
+    })
+    .then((res)=>{
+        // const stores = res.stores ?? [];
+        // console.log(stores);
+        // console.log(stores[0]);
+        // console.log(stores.length);//항상 5구나 아님 0
+        // setStoreInfoList(stores)
+        console.log(res)
+    })
+    .catch((error)=>console.log(error.config))
+    }
+    
+    
     useEffect(()=>{
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports`, {
-            params: {
-                upperCategoryId: 'kbaseball',
-                categoryId : 'kbo',
-                count: 10,
-            }
-        }).then(res=>{
-            console.log(res)
-        })
+        SportsSchedule();
     }, [])
 
     // const ListItem = ({ 
@@ -104,6 +116,7 @@ export default function HostPlaceList() {
             <View style={self.dailySportsContainer}>
             <View style = {self.titleDate}>
                 <Text>3일 (수)</Text>
+                
             </View>
             </View>
             

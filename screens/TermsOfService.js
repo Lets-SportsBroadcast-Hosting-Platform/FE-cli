@@ -198,10 +198,10 @@ export default function TermsOfService() {
 
                         </Text>
                         <View style={styles.modalButtonContainer}>
-                        <Button mode="outlined" onPress={handleCancelPrivacyModal} style={styles.modalButton}>
-                        </Button>
-                        </View>
-                            닫기
+                            <Button mode="outlined" onPress={handleCancelModal} style={styles.modalButton}>
+                                닫기
+                            </Button>
+                            </View>
                         
                         </ScrollView>
                     </View>
