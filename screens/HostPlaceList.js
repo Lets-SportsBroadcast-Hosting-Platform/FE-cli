@@ -40,21 +40,47 @@ export default function HostPlaceList({navigation}) {
     const [hostPlaceList, setHostPlaceList] = useState([]);
     useEffect(()=>{
         ApiUtil.get(`${ApiConfig.SERVER_URL}/mainpage/party`).then((res)=>{
-            const placeList = res.map(place=>({
+            const placeList = res.map(place=>{
+                // "hosting_id": 3,
+                // "hosting_name": "test",
+                // "business_no": 4294967295,
+                // "introduce": "test",
+                // "current_personnel": 10,
+                // "max_personnel": 15,
+                // "age_group_min": 20,
+                // "age_group_max": 30,
+                // "hosting_date": "2024-05-29T14:30:00"
+                const dayArray = ['월', '화', '수', '목', '금', '토', '일']
+                const hostingDateInfo = new Date(place.hosting_date)
+                const hostMonth = hostingDateInfo.getMonth() + 1
+                const hostDate = hostingDateInfo.getDate()
+                const hostDay = hostingDateInfo.getDay()
+                const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
+                const hostDayNm = dayArray[hostDay]
+
+                // const hosting_id = place.hosting_id
+                // const hosting_name = place.hosting_name
+                // const bussiness_no = place.bussiness_no
+                // const introduce = place.introduce
+                // const current_personnel = place.
+                
+                return {
                 id: place.hosting_id,
-                imageLink: TempGopChang,
+                // imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.bussiness_no}/0`},
+                imageLink: { uri: `https://s3.ap-northeast-2.amazonaws.com/letsapp.store/3288801996/1`},
                 
                 event_title: place.hosting_name,
-                event_place: '여기 값이 없음',
-                event_date: '',
-                event_day: '',
-                event_time: '',
-
-
-
+                event_place: '서초동',
+                event_date: `${hostMonth}.${hostDate}`,
+                event_day: hostDayNm,
+                event_time: hostHHMI,
                 total: place.max_personnel,
-                count: place.current_personnel
-            }))
+                count: place.current_personnel,
+                introduce: place.introduce,
+                age_group_max: place.age_group_max,
+                age_group_min: place.age_group_min,
+                max_personnel: place.max_personnel,
+            }})
 
             setHostPlaceList(placeList)  
         })
@@ -63,12 +89,14 @@ export default function HostPlaceList({navigation}) {
     const ListItem = ({ 
         event_title, imageLink, event_place,
         event_date, event_day, event_time,
-        count, total, id
+        count, total, id, introduce,
+        age_group_max, age_group_min, max_personnel
         }) => (
         <TouchableOpacity onPress={()=>onClickItem({ 
             event_title, imageLink, event_place,
             event_date, event_day, event_time,
-            count, total, id
+            count, total, id, introduce,
+            age_group_max, age_group_min, max_personnel
             })} style={styles.placeItem}>
             <View style={styles.imageContainer}>
                 <Image source={imageLink} style={styles.placeImage}/>
@@ -102,7 +130,10 @@ export default function HostPlaceList({navigation}) {
             imageLink={item.imageLink}
             count={item.count}
             total={item.total}
-
+            introduce={item.introduce}
+            age_group_max={item.age_group_max}
+            age_group_min={item.age_group_min}
+            max_personnel={item.max_personnel}
         />
     );
       
