@@ -67,7 +67,8 @@ export default function HostPlaceList({navigation}) {
                 return {
                 id: place.hosting_id,
                 // imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.bussiness_no}/0`},
-                imageLink: { uri: `https://s3.ap-northeast-2.amazonaws.com/letsapp.store/3288801996/1`},
+                // imageLink: { uri: `https://s3.ap-northeast-2.amazonaws.com/letsapp.store/3288801996/1`},
+                imageLink: { uri: `https://s3.ap-northeast-2.amazonaws.com/letsapp.store/1234/0`},
                 
                 event_title: place.hosting_name,
                 event_place: '서초동',
