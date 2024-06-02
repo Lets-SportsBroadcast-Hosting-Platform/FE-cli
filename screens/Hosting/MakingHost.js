@@ -60,30 +60,30 @@ export default function MakingHost() {
         //클릭하면 다른 이미지로 대체
         const changeImage = async (index) => {
             const options = {
-              selectionLimit: 1, // Allow only single image selection
-              mediaType: 'photo', // Restrict to images only
-              includeBase64: false, // Avoid including base64 data (optional)
+                selectionLimit: 1,
+                mediaType: 'photo',
+                includeBase64: false,
+                };
+            
+                try {
+                const result = await launchImageLibrary(options);
+            
+                if (!result.didCancel) {
+                    const newUri = result.assets[0].uri;
+            
+                    // Update the selectedImageUris array with the new image at the desired index
+                    const updatedSelectedImageUris = [...selectedImageUris];
+                    updatedSelectedImageUris[index] = newUri;
+                    setSelectedImageUris(updatedSelectedImageUris);
+            
+                    // Close the modal and reset the selected index
+                    setIsModalVisible(false);
+                    setSelectedIndex(null);
+                }
+                } catch (error) {
+                console.error('Error selecting image:', error);
+                }
             };
-        
-        try {
-            const result = await launchImageLibrary(options);
-        
-            if (!result.didCancel) {
-            const newUri = result.assets[0].uri; // Get the URI of the newly selected image
-        
-            // Replace the selected image with the new one
-            const updatedSelectedImageUris = [...selectedImageUris];
-            updatedSelectedImageUris.splice(selectedIndex, 1, newUri);
-            setSelectedImageUris(updatedSelectedImageUris);
-        
-            // Close the modal and reset the selected index
-            setIsModalVisible(false);
-            setSelectedIndex(null);
-            }
-        } catch (error) {
-            console.error('Error selecting image:', error);
-        }
-        };
 
     const handleCancelModal = () => {
         setSelectedIndex(null); // 모달 닫을 때 인덱스 초기화
@@ -156,7 +156,7 @@ export default function MakingHost() {
                 ))}
 
                 {selectedImageUris.length < MAX_IMAGES && (
-                    <TouchableOpacity onPress={pickImage()} style={styles.imagePlaceholder}>
+                    <TouchableOpacity onPress={pickImage} style={styles.imagePlaceholder}>
                     <Text style={styles.placeholderText}>사진 추가</Text>
                     </TouchableOpacity>
                 )}
