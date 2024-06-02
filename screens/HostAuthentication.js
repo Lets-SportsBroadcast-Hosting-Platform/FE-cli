@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert,TextInput } from 'react-native';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import kakaoMapIcon from '../assets/images/KakaoMap_logo.png';
 import NaverMap_logo from '../assets/images/NaverMap_logo.png';
@@ -12,9 +12,11 @@ import ApiConfig from '../api/ApiConfig';
 
 export default function HostAuthentication() {
   const navigation = useNavigation();
+  const route = useRoute()
+  const params = route.params;
 
   const arrowbuttonPress = () => {
-    navigation.navigate('ChooseUser');
+    navigation.goBack();
     console.log("arrowbuttonPressed");
   };
 
@@ -43,8 +45,12 @@ export default function HostAuthentication() {
   //링크 부분
   //http://43.202.194.172/host/search?keyword=ㅅ&provider=kakao
   function SearchStore(text){
-    const params = {}
-    ApiUtil.post(`${ApiConfig.SERVER_URL}/host/search?keyword=${text}&provider=${provider}`, params)
+    ApiUtil.get(`${ApiConfig.SERVER_URL}/store/search`, {
+      params: {
+        keyword: text,
+        provider: provider
+      }
+    })
     .then((res)=>{
       const stores = res.stores ?? [];
       // console.log(stores);
@@ -53,13 +59,14 @@ export default function HostAuthentication() {
       setStoreInfoList(stores)
       console.log(storeInfoList)
     })
-    .catch((error)=>console.log(error))
+    .catch((error)=>console.log(error.config))
   }
   //진진자라
   //res에 뜬 가게를 선책하면 사업자등록번호 페이지로 넘어감
-  const goNextStep=(title)=>{
+  const goNextStep=(store)=>{
     navigation.navigate('HostBusinessRegisNumber',{
-    'title': title,
+      ...store,
+      ...params
     });
   }
 
@@ -72,7 +79,7 @@ export default function HostAuthentication() {
           return (
             <TouchableOpacity
             style={styles.storeItem}
-            onPress={() => goNextStep(store.place_name)}
+            onPress={() => goNextStep(store)}
             key={storeIdx}>
               <View style={styles.line}></View>
               <Text style={[styles.storeItemText, styles.storeItemTitle]}>{store.place_name}</Text>
@@ -115,7 +122,7 @@ export default function HostAuthentication() {
             )}
           </TouchableOpacity>
         </View>
-        <Button mode="contained" onPress={() => navigation.navigate('InputStore')} style={styles.typeButton}>
+        <Button mode="contained" onPress={() => navigation.navigate('InputStore', {...params})} style={styles.typeButton}>
           우리 가게를 못찾겠어요
         </Button>
         {StoreList()}

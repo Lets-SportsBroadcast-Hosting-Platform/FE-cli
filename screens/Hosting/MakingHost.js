@@ -9,7 +9,7 @@ export default function MakingHost() {
     
     const [state, setState] = React.useState('');
     const arrowbuttonPress = () => {
-        navigation.navigate('HostAuthentication');
+        navigation.goBack()
         console.log("arrowbuttonPressed");
     };
 

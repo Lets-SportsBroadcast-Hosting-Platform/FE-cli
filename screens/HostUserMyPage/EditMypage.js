@@ -9,7 +9,7 @@ export default function EditMypage() {
     const navigation = useNavigation();
 
     const arrowbuttonPress = () => {
-        navigation.navigate('HostAuthentication');
+        navigation.goBack()
         console.log("arrowbuttonPressed");
     };
 

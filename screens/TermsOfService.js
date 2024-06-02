@@ -2,18 +2,30 @@
 import React,{useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,Linking, ScrollView} from 'react-native';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import Toggle from '../components/toggle.js';
 import { useHTML } from 'react-native-html-render';
+import ApiConfig from '../api/ApiConfig.js';
+import ApiUtil from '../api/ApiUtil.js';
+
+// auth
+import { useAuth } from '../contexts/AuthContext.js';
 
 export default function TermsOfService() {
     const navigation = useNavigation();
+    const route = useRoute();
+    const params = route.params;
+
+    // context에서 userInfo 가져오기
+    const { getUserInfo } = useAuth()
+    const userInfo = getUserInfo();
+
     const [isChecked, setIsChecked] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const arrowbuttonPress = () => {
-        navigation.navigate('ChooseUser');
+        navigation.goBack()
         console.log("arrowbuttonPressed");
     };
     const handleCancelModal = () => {
@@ -28,6 +40,21 @@ export default function TermsOfService() {
     const handleCancelPrivacyModal = () => {
         setIsModalVisible2(false);
     };
+
+    const submitSignUpForm = ()=>{
+        console.log(userInfo, params)
+        // ApiUtil.post(`${ApiConfig.SERVER_URL}/store`, {
+        //     bussiness_no: '',
+        //     id: '',
+        //     store_name: '',
+        //     store_address: '',
+        //     store_road_address: '',
+        //     store_category: '',
+        //     store_number: '',
+        //     alarm: true
+        // })
+    }
+
     return (
     <View style={styles.container}>
 
@@ -100,11 +127,11 @@ export default function TermsOfService() {
 
 
                 </Text>
-                
+                <View style={styles.modalButtonContainer}>
                 <Button mode="outlined" onPress={handleCancelModal} style={styles.modalButton}>
                     닫기
                 </Button>
-                
+                </View>
                 
                 </ScrollView>
             </View>
@@ -170,8 +197,12 @@ export default function TermsOfService() {
 
 
                         </Text>
+                        <View style={styles.modalButtonContainer}>
+                        <Button mode="outlined" onPress={handleCancelPrivacyModal} style={styles.modalButton}>
+                        </Button>
+                        </View>
+                            닫기
                         
-                        <Button mode="outlined" onPress={handleCancelPrivacyModal} style={styles.modalButton}>닫기</Button>
                         </ScrollView>
                     </View>
                     </View>
@@ -185,7 +216,7 @@ export default function TermsOfService() {
             ></Toggle>
         </View>
             <Text style={styles.explainText}>호스팅이나 예약이 취소된 경우 알림 드립니다</Text>
-            <Button mode="contained"  style={styles.typeButton} onPress={()=>{navigation.navigate('PlaceList');}}>
+            <Button mode="contained"  style={styles.typeButton} onPress={submitSignUpForm}>
             동의
             </Button>
     </View>

@@ -1,9 +1,12 @@
 //사업자등록 번호 입력하는 페이지
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react-native';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
+
+// Toast
+import Toast from 'react-native-toast-message';
 
 // api
 import ApiUtil from '../api/ApiUtil';
@@ -12,11 +15,13 @@ import ApiConfig from '../api/ApiConfig';
 export default function HostBusinessRegisNumber() {
     const navigation = useNavigation();
     const route = useRoute()
-    const { title } = route.params;
+    const params = route.params;
     const arrowbuttonPress = () => {
-        navigation.navigate('HostAuthentication');
+        navigation.goBack();
     };
     const [isDisable, setIsDisable] = useState(true);
+    const [authSuccessNo, setAuthSuccessNo] = useState('');
+
     const AuthenticateButton = async () => {
         console.log("인증 버튼 Pressed")
         checkNumber(number)
@@ -24,26 +29,34 @@ export default function HostBusinessRegisNumber() {
     }
     function checkNumber(number){
         // console.log(number)
-        const params = {
-            b_no : number
-        }
-        ApiUtil.post(`${ApiConfig.SERVER_URL}/host/bussiness_num/`, params).then((res)=>{
-        const result = res.result ?? ''
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/business_num`,{ 
+            headers: {
+                bno: number
+            }
+        }).then((res)=>{
+        const businessNo = res.result ?? ''
         const type = res.type ?? ''
         const detail = res.detail ?? ''
+        console.log(res )
 
         // console.log(result)
         // console.log(type)
         // console.log(detail)
 
-        if (detail) {
+        if (detail == '400') {
             //다음 버튼 비활성화
             console.log("존재하지 않는 사업번호")
         }
         else if (type=="계속사업자") {
             //다음 버튼 활성화
-            console.log("계속사업자")
+            Toast.show(({
+                type: 'success',
+                text1: '인증 성공',
+                text2: '사업자번호가 인증되었습니다.'
+              }))
             setIsDisable(false)
+            console.log(number)
+            setAuthSuccessNo(number)
         }
         else {
             //다음 버튼 비활성화
@@ -51,7 +64,7 @@ export default function HostBusinessRegisNumber() {
         }
 
 
-        }).catch((error)=>console.log(error))
+        }).catch((error)=>console.log(error.config))
         }
 
 
@@ -85,6 +98,14 @@ export default function HostBusinessRegisNumber() {
         setNumber(formattedNumber)
     };
 
+    useEffect(()=>{
+        if(!isDisable){
+            setIsDisable(true)
+        } else if(authSuccessNo !== '' && number === authSuccessNo){
+            setIsDisable(false)
+        }
+    }, [number])
+
     return (
         <View style={styles.container}>
         <View style={styles.header}>
@@ -98,7 +119,7 @@ export default function HostBusinessRegisNumber() {
             {/* 클릭하면 다시 전 페이지로 가서 가게 이름 다시 찾기 */}
             <View style={styles.textInputContainer}>
                 <TextInput
-                value={title}
+                value={params.place_name}
                 readOnly
                 onChangeText={onChangeText}
                 style={styles.storeAddressInputText}
@@ -130,7 +151,10 @@ export default function HostBusinessRegisNumber() {
             </Button>
 
             {/* 인증 완료되면 활성화 */}
-            <Button mode="contained" disabled={isDisable} onPress={() => navigation.navigate('TermsOfService')} style={styles.HostBusinessNumberButton}>
+            <Button mode="contained" disabled={isDisable} onPress={() => navigation.navigate('TermsOfService', {
+                business_no: number.replaceAll('-', ''),
+                ...params
+            })} style={styles.HostBusinessNumberButton}>
             다음
             </Button>
 

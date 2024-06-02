@@ -8,7 +8,7 @@ export default function EditStoreMypage() {
     const navigation = useNavigation();
 
     const arrowbuttonPress = () => {
-        navigation.navigate('HostAuthentication');
+        navigation.goBack()
         console.log("arrowbuttonPressed");
     };
 

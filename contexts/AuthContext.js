@@ -22,11 +22,16 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
   };
 
+  const getUserInfo = ()=>{
+    return user
+  }
+
   return (
-    <AuthContext.Provider value={{ user, token, saveLogin, clearLogin }}>
+    <AuthContext.Provider value={{ user, token, saveLogin, clearLogin, getUserInfo }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const 
+useAuth = () => useContext(AuthContext);

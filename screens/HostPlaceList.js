@@ -3,7 +3,7 @@ import arrowToLeft from '../assets/images/location.png';
 import arrowRight from '../assets/images/arrow-right.png';
 import TempGopChang from '../assets/images/gopchang.jpeg';
 import UserImage from '../assets/images/user.png'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ApiConfig from '../api/ApiConfig';
 import ApiUtil from '../api/ApiUtil';
 
@@ -29,16 +29,6 @@ export default function HostPlaceList({navigation}) {
         );
     }
 
-    useEffect(()=>{
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/hosting/read_hostings`, {
-            params: {
-                business_no: 123
-            }
-        }).then((res)=>{
-            console.log(res)
-        })
-    }, [])
-
     const onClickItem = (item)=>{
         navigation.navigate('HostPlaceDetail', {...item})
     }
@@ -47,66 +37,28 @@ export default function HostPlaceList({navigation}) {
         navigation.navigate('ChoosingGame')
     }
 
-    const DATA = [
-        { 
-            id: '1', 
-            imageLink: TempGopChang,
-            place: '서초동',
-            time: '16:30',
+    const [hostPlaceList, setHostPlaceList] = useState([]);
+    useEffect(()=>{
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/mainpage/party`).then((res)=>{
+            const placeList = res.map(place=>({
+                id: place.hosting_id,
+                imageLink: TempGopChang,
+                
+                event_title: place.hosting_name,
+                event_place: '여기 값이 없음',
+                event_date: '',
+                event_day: '',
+                event_time: '',
 
-            event_title: '서울당산곱창 서울 - 당산',
-            event_place: '당산역 N번출구',
-            event_date: '05.05',
-            event_day: '수',
-            event_time: '19:00',
-            count: 13,
-            total: 15, 
-        },
-        { 
-            id: '2',
-            imageLink: TempGopChang,
-            place: '서초동',
-            time: '16:30',
 
-            event_title: '서울당산곱창',
-            event_place: '당산역 N번출구',
-            event_date: '05.05',
-            event_day: '수',
-            event_time: '19:00',
-            count: 13,
-            total: 15, 
-        },
-        { 
-            id: '3',
-            imageLink: TempGopChang,
-            place: '서초동',
-            time: '16:30',
 
-            event_title: '서울당산곱창',
-            event_place: '당산역 N번출구',
-            event_date: '05.05',
-            event_day: '수',
-            event_time: '19:00',
-            // count: 13,
-            total: 15, 
-        },
-        { 
-            id: '4', 
-            imageLink: TempGopChang,
-            place: '서초동',
-            time: '16:30',
+                total: place.max_personnel,
+                count: place.current_personnel
+            }))
 
-            event_title: '서울당산곱창',
-            event_place: '당산역 N번출구',
-            event_date: '05.05',
-            event_day: '수',
-            event_time: '19:00',
-            count: 13,
-            total: 15, 
-        },
-        
-        // 추가적인 데이터 항목들...
-    ];
+            setHostPlaceList(placeList)  
+        })
+    }, [])
 
     const ListItem = ({ 
         event_title, imageLink, event_place,
@@ -174,7 +126,7 @@ export default function HostPlaceList({navigation}) {
             </View>
 
             <FlatList
-                data={DATA}
+                data={hostPlaceList}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
                 showsVerticalScrollIndicator={false}

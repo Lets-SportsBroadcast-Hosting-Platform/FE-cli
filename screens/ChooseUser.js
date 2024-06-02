@@ -4,10 +4,10 @@ import arrowToLeft from '../assets/images/arrowToLeft.png';
 
 export default function LoginPage({navigation}) {
   const handleHostPress = () => {
-    navigation.navigate('HostAuthentication')
+    navigation.navigate('HostAuthentication', {type: 'host'})
   };
   const arrowbuttonPress = () => {
-    navigation.navigate('LoginPage');
+    navigation.goBack();
   };
     return (
         <View style={styles.container}>
