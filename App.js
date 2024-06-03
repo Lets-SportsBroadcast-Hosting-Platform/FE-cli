@@ -21,6 +21,10 @@ import { AuthProvider } from './contexts/AuthContext.js';
 import EditStoreMypage from './screens/HostUserMyPage/EditStoreMypage.js';
 import EditMypage from './screens/HostUserMyPage/EditMypage.js';
 import EditStoreAddress from './screens/HostUserMyPage/EditStoreAddress.js';
+
+//마이홈
+import MyHome from './screens/MyHome/MyPlaceList.js'
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -50,6 +54,10 @@ export default function App() {
           <Stack.Screen name="EditStoreMypage" component={EditStoreMypage} options={{headerShown:false}}/>
           <Stack.Screen name="EditMypage" component={EditMypage} options={{headerShown:false}}/>
           <Stack.Screen name="EditStoreAddress" component={EditStoreAddress} options={{headerShown:false}}/>
+
+          {/*마이홈*/}
+          <Stack.Screen name="MyHome" component={MyHome} options={{headerShown:false}}/>
+        
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />

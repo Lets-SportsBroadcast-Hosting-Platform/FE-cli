@@ -1,44 +1,32 @@
 import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList } from 'react-native';
-import arrowToLeft from '../assets/images/location.png';
-import arrowRight from '../assets/images/arrow-right.png';
-import MyHomePng from '../assets/images/myhome.png';
-import UserImage from '../assets/images/user.png'
+import arrowToLeft from '../../assets/images/location.png';
+import arrowRight from '../../assets/images/arrow-right.png';
+import MyHomePng from '../../assets/images/myhome.png';
+import EditPng from '../../assets/images/edit.png'
+import UserImage from '../../assets/images/user.png'
 import { useEffect, useState } from 'react';
-import ApiConfig from '../api/ApiConfig';
-import ApiUtil from '../api/ApiUtil';
+import ApiConfig from '../../api/ApiConfig';
+import ApiUtil from '../../api/ApiUtil';
 
 export default function HostPlaceList({navigation}) {
-    const onClickLocationChange = () => {
-        Alert.alert(
-          '내 위치',
-          '현재 위치로 새로고침하시겠습니까?',
-          [
-            {
-              text: '취소',
-              style: 'cancel',
-            },
-            {
-              text: '확인',
-              onPress: () => {
-                // 확인 버튼을 눌렀을 때 실행할 작업을 여기에 추가하세요
-                console.log('확인 버튼이 눌렸습니다.');
-              },
-            },
-          ],
-          { cancelable: false }
-        );
-    }
-
-    const goMyHome = ()=>{
-        navigation.navigate('MyHome')
-    }
-
     const onClickItem = (item)=>{
         navigation.navigate('HostPlaceDetail', {...item})
     }
 
+    const onClickEdit = ()=>{
+        console.log('정보 수정')
+    }
+
     const onClickHostBtn = ()=>{
         navigation.navigate('ChoosingGame')
+    }
+
+    const clickING = ()=>{
+        console.log('진행중 버튼 클릭')
+    }
+
+    const clickCOMPLEDTED = ()=>{
+        console.log('마감 버튼 클릭')
     }
 
     const [hostPlaceList, setHostPlaceList] = useState([]);
@@ -141,21 +129,21 @@ export default function HostPlaceList({navigation}) {
       
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={onClickLocationChange} style={styles.touchable}>
-                    <Text style={styles.headerText}>
-                        서초동
-                    </Text>
-                    <Image source={arrowToLeft} style={styles.arrowIcon} />
+            <View style={styles.userInfoContainer}>
+                <Text style={{fontSize: 28, color: 'black', fontWeight: 'blod', fontFamily:'BlackHanSans-Regular',}} >벨지움재즈카페</Text>
+                <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold'}}>010-1234-5678</Text>
+                <Text style={{fontSize: 15, color: 'black'}}>서울시 반포대로 24길 17</Text>
+                <TouchableOpacity onPress={onClickEdit} style={styles.editBtn}>
+                    <Image style={{transform: [{scale: 1.3}]}} source={EditPng}></Image>
                 </TouchableOpacity>
-                
-                <TouchableOpacity onPress={onClickHostBtn} style={styles.touchableRight}>
-                    <Text style={styles.hostingText}>
-                        호스팅하기
-                    </Text>
-                    <Image source={arrowRight} style={styles.arrowRightIcon} />
+            </View>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={clickING} style={styles.statusBtn}>
+                    <Text style={[styles.statusBtnText, styles.boxRight]}>진행중</Text>
                 </TouchableOpacity>
-                
+                <TouchableOpacity onPress={clickCOMPLEDTED} style={styles.statusBtn}>
+                    <Text style={styles.statusBtnText}>마감</Text>
+                </TouchableOpacity>
             </View>
 
             <FlatList
@@ -167,7 +155,7 @@ export default function HostPlaceList({navigation}) {
                 contentContainerStyle={styles.flatListContent}
             />
 
-            <TouchableOpacity onPress={goMyHome} style={styles.MyHomeBtn}>
+            <TouchableOpacity style={styles.MyHomeBtn}>
                 <Image source={MyHomePng}></Image>
             </TouchableOpacity>
         </View>
@@ -183,57 +171,6 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingLeft: 10,
         paddingRight: 10,
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'space-around',
-        marginBottom: 10,
-        paddingTop: 20,
-        paddingBottom: 10,
-        width: '100%',
-        position: 'relative',
-        marginBottom: 55
-    },
-    headerText: {
-        fontWeight: 'bold',
-        fontSize: 25,
-        color:'black',
-        fontFamily:'BlackHanSans-Regular',
-        fontWeight:'200'
-    },
-    hostingText: {
-        fontWeight: '100',
-        fontSize: 20,
-        color: 'black',
-    },
-
-    touchable: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        position: 'absolute',
-        top: '50%', left: 0,
-        transform: [{translateY: 13.1}, {translateX: 20}]
-    },
-    touchableRight: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        position: 'absolute',
-        top: '50%', right: 10,
-        transform: [{translateY: 15}]
-    },
-    arrowIcon: {
-        marginLeft: 10,
-        width: 23.5,
-        height: 23.5,
-        // 이미지와 텍스트 사이의 간격 조정
-    },
-    
-    
-
-    arrowRightIcon: {
-        marginLeft: 10,
-        width: 20,
-        height: 20,
     },
 
     placeItem: {
@@ -299,6 +236,39 @@ const styles = StyleSheet.create({
       MyHomeBtn: {
         position: 'absolute',
         bottom: 20, right: 20,
+      },
+
+      userInfoContainer: {
+        width: '100%',
+        padding: 18,
+        height: 200,
+        borderBottomWidth: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        alignItems: 'center'
+      },
+      editBtn: {
+        position: 'absolute',
+        bottom: 32,
+        right: 10
+      },
+      buttonContainer: {
+        flexDirection: 'row'
+      },
+      statusBtn: {
+        width: '50%',
+        paddingTop: 10,
+      },
+      statusBtnText: {
+        fontSize: 20,
+        fontWeight: 'blod',
+        color: 'black',
+        fontFamily: 'BlackHanSans-Regular',
+        textAlign: 'center'
+      },
+      boxRight: {
+        borderRightWidth: 1
       }
     
 });
