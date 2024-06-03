@@ -41,15 +41,6 @@ export default function HostPlaceList({navigation}) {
     useEffect(()=>{
         ApiUtil.get(`${ApiConfig.SERVER_URL}/mainpage/party`).then((res)=>{
             const placeList = res.map(place=>{
-                // "hosting_id": 3,
-                // "hosting_name": "test",
-                // "business_no": 4294967295,
-                // "introduce": "test",
-                // "current_personnel": 10,
-                // "max_personnel": 15,
-                // "age_group_min": 20,
-                // "age_group_max": 30,
-                // "hosting_date": "2024-05-29T14:30:00"
                 const dayArray = ['월', '화', '수', '목', '금', '토', '일']
                 const hostingDateInfo = new Date(place.hosting_date)
                 const hostMonth = hostingDateInfo.getMonth() + 1
@@ -58,59 +49,83 @@ export default function HostPlaceList({navigation}) {
                 const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
                 const hostDayNm = dayArray[hostDay]
 
-                // const hosting_id = place.hosting_id
-                // const hosting_name = place.hosting_name
-                // const bussiness_no = place.bussiness_no
-                // const introduce = place.introduce
-                // const current_personnel = place.
-                
                 return {
-                id: place.hosting_id,
-                // imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.bussiness_no}/0`},
-                // imageLink: { uri: `https://s3.ap-northeast-2.amazonaws.com/letsapp.store/3288801996/1`},
-                imageLink: { uri: `https://s3.ap-northeast-2.amazonaws.com/letsapp.store/1234/0`},
-                
-                event_title: place.hosting_name,
-                event_place: '서초동',
-                event_date: `${hostMonth}.${hostDate}`,
-                event_day: hostDayNm,
-                event_time: hostHHMI,
-                total: place.max_personnel,
-                count: place.current_personnel,
-                introduce: place.introduce,
-                age_group_max: place.age_group_max,
-                age_group_min: place.age_group_min,
-                max_personnel: place.max_personnel,
-            }})
+                    ...place,
+                    dayArray,
+                    hostingDateInfo,
+                    hostMonth,
+                    hostDate: `${hostMonth}.${hostDate}`,
+                    hostDay,
+                    hostHHMI,
+                    hostDayNm,
+                    imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.business_no}/0`},
+                }
+
+
+                // return {
+                // id: place.hosting_id,
+                // imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.business_no}/0`},
+                // // imageLink: { uri: `https://s3.ap-northeast-2.amazonaws.com/letsapp.store/3288801996/1`},
+                // // imageLink: { uri: `https://s3.ap-northeast-2.amazonaws.com/letsapp.store/1234/0`},
+                // hosting: place.hosting_name,
+                // event_place: '서초동',
+                // event_date: `${hostMonth}.${hostDate}`,
+                // event_day: hostDayNm,
+                // event_time: hostHHMI,
+                // total: place.max_personnel,
+                // count: place.current_personnel,
+                // introduce: place.introduce,
+                // age_group_max: place.age_group_max,
+                // age_group_min: place.age_group_min,
+                // max_personnel: place.max_personnel,
+            })
 
             setHostPlaceList(placeList)  
         })
     }, [])
 
     const ListItem = ({ 
-        event_title, imageLink, event_place,
-        event_date, event_day, event_time,
-        count, total, id, introduce,
-        age_group_max, age_group_min, max_personnel
+            hosting_id,
+            hosting_name,
+            hosting_place,
+            hosting_date,
+            hostDate,
+            hostDayNm,
+            hostHHMI,
+            imageLink,
+            introduce,
+            age_group_max,
+            age_group_min,
+            max_personnel,
+            current_personnel,
         }) => (
-        <TouchableOpacity onPress={()=>onClickItem({ 
-            event_title, imageLink, event_place,
-            event_date, event_day, event_time,
-            count, total, id, introduce,
-            age_group_max, age_group_min, max_personnel
+        <TouchableOpacity onPress={()=>onClickItem({
+                hosting_id,
+                hosting_name,
+                hosting_place,
+                hosting_date,
+                hostDate,
+                hostDayNm,
+                hostHHMI,
+                imageLink,
+                introduce,
+                age_group_max,
+                age_group_min,
+                max_personnel,
+                current_personnel
             })} style={styles.placeItem}>
             <View style={styles.imageContainer}>
                 <Image source={imageLink} style={styles.placeImage}/>
             </View>
-            <Text style={styles.placeTitle}>{event_title}</Text>
+            <Text style={styles.placeTitle}>{hosting_name}</Text>
 
             <View style={styles.placeDetail}>
-                <Text>{event_place} | {event_date}({event_day}) | {event_time}</Text>
+                <Text>{hostDate}({hostDayNm}) | {hostHHMI}</Text>
 
                 <View style={{flexDirection: 'row'}}>
 
                     <Text>
-                        {count} / {total}
+                        {current_personnel} / {max_personnel}
                         
                     </Text>
                     <Image style={styles.userImage} source={UserImage}></Image>
@@ -121,20 +136,20 @@ export default function HostPlaceList({navigation}) {
 
     const renderItem = ({ item }) => (
         <ListItem
-            id={item.id}
+            hosting_id={item.hosting_id}
             style={styles.itemScrollContainer}
-            event_title={item.event_title}
-            event_place={item.event_place}
-            event_date={item.event_date}
-            event_day={item.event_day}
-            event_time={item.event_time}
+            hosting_name={item.hosting_name}
+            hosting_place={item.hosting_place}
+            hosting_date={item.hosting_date}
+            hostDate={item.hostDate}
+            hostDayNm={item.hostDayNm}
+            hostHHMI={item.hostHHMI}
             imageLink={item.imageLink}
-            count={item.count}
-            total={item.total}
             introduce={item.introduce}
             age_group_max={item.age_group_max}
             age_group_min={item.age_group_min}
             max_personnel={item.max_personnel}
+            current_personnel={item.current_personnel}
         />
     );
       
@@ -160,7 +175,7 @@ export default function HostPlaceList({navigation}) {
             <FlatList
                 data={hostPlaceList}
                 renderItem={renderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.hosting_id}
                 showsVerticalScrollIndicator={false}
                 scrollIndicatorInsets={{ right: 1 }}
             />

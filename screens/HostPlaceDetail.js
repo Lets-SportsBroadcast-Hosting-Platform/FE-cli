@@ -25,10 +25,7 @@ function HostPlaceDetail(detail){
 
     const route = useRoute();
     const { 
-        event_title, imageLink, event_place, introduce,
-        event_date, event_day, event_time,
-        count, total, id,
-        age_group_max, age_group_min, max_personnel
+        hosting_id
     } = route.params
     const [partyInfo, setPartyInfo] = useState({})
     useEffect(()=>{
@@ -39,9 +36,8 @@ function HostPlaceDetail(detail){
         setClientWidth(clientWidth)
         setClientHeight(clientHeight)
 
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${id}`).then(res=>{
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`).then(res=>{
             const party = JSON.parse(JSON.stringify(res))
-            console.log(party)
             const dayArray = ['월', '화', '수', '목', '금', '토', '일']
             const hostingDateInfo = new Date(party.hosting_date)
             const hostMonth = hostingDateInfo.getMonth() + 1
@@ -50,9 +46,7 @@ function HostPlaceDetail(detail){
             const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
             const hostDayNm = dayArray[hostDay]
             
-            // party.imageLink = {uri: `${party.store_image_url}0`},
             party.imageLink = {uri: `${party.store_image_url}0`},
-            console.log(party.imageLink)
             party.hostDateNm = `${hostMonth}.${hostDate}`, hostHHMI, hostDayNm
             party.hostHHMI = hostHHMI
             party.hostDayNm = hostDayNm
