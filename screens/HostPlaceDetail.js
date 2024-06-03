@@ -52,6 +52,7 @@ function HostPlaceDetail(detail){
             
             // party.imageLink = {uri: `${party.store_image_url}0`},
             party.imageLink = {uri: `${party.store_image_url}0`},
+            console.log(party.imageLink)
             party.hostDateNm = `${hostMonth}.${hostDate}`, hostHHMI, hostDayNm
             party.hostHHMI = hostHHMI
             party.hostDayNm = hostDayNm
@@ -65,11 +66,12 @@ function HostPlaceDetail(detail){
         <ScrollView
             scrollEnabled={true}
             style={[layouts.container, styles.mb20]}
-        >
+        >   
             <View style={[styles.w100, {height: 267}, styles.mb80]}>
                 <View style={[layouts.imageContainer, styles.w100, self.banner, styles.banner]}>
-                    {partyInfo.imageLink ?? <Image source={partyInfo.imageLink} style={[styles.w100]}/>}
+                    {!!partyInfo.imageLink ? <Image source={partyInfo.imageLink} style={[styles.w100, {height: 400}]}/> : <Text>이미지 없음</Text>}
                 </View>
+                <Text>{!!partyInfo.imageLink ? partyInfo.imageLink.uri : ''}</Text>
                 <View style={[self.bannerTitle, {left: clientWidth / 2, top: 214, transform: [{translateX: -167.5}]}]}>
                     <Text style={[styles.commonFont,{fontSize: 25}]}>{partyInfo.hosting_name ?? ''}</Text>
                     <Text> </Text>
