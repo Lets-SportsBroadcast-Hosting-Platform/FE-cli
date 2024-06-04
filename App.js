@@ -22,8 +22,9 @@ import EditStoreMypage from './screens/HostUserMyPage/EditStoreMypage.js';
 import EditMypage from './screens/HostUserMyPage/EditMypage.js';
 import EditStoreAddress from './screens/HostUserMyPage/EditStoreAddress.js';
 
-//test slider : component의 component파일, Slider 파일 / SliderScreen.js, styles.js
-import SliderScreen from './screens/Hosting/SliderScreen.js';
+//마이홈
+import MyHome from './screens/MyHome/MyPlaceList.js'
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -31,7 +32,7 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="MakingHost">
+        <Stack.Navigator initialRouteName="PlaceList">
           
           <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
           
@@ -53,9 +54,10 @@ export default function App() {
           <Stack.Screen name="EditStoreMypage" component={EditStoreMypage} options={{headerShown:false}}/>
           <Stack.Screen name="EditMypage" component={EditMypage} options={{headerShown:false}}/>
           <Stack.Screen name="EditStoreAddress" component={EditStoreAddress} options={{headerShown:false}}/>
-          {/* 테스트용 Slider */}
-          <Stack.Screen name="SliderScreen" component={SliderScreen} options={{headerShown:false}}/>
 
+          {/*마이홈*/}
+          <Stack.Screen name="MyHome" component={MyHome} options={{headerShown:false}}/>
+        
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />

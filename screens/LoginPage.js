@@ -60,6 +60,7 @@ export default function LoginPage({navigation}) {
     const signInWithKakao = async ()=> {
       try {
         const {accessToken} = await login();
+        console.log(accessToken)
         loginToServer(accessToken)
         
         // navigation.navigate('PlaceList')
@@ -70,12 +71,10 @@ export default function LoginPage({navigation}) {
     };
 
     function loginToServer(token){
-      const params = {
+      ApiUtil.post(`${ApiConfig.SERVER_URL}/login`, {headers: {
         accesstoken: token,
         provider: 'kakao'
-      }
-
-      ApiUtil.post(`${ApiConfig.SERVER_URL}/login`, {}, {headers: params}).then((res)=>{
+      }},).then((res)=>{
         const jwtToken = res.jwt_token ?? ''
         const userInfo = res.userInfo ?? {}
         
