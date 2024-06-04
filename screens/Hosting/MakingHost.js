@@ -107,7 +107,7 @@ export default function MakingHost() {
         };
     });
     
-    
+
     defaultScrollViewProps = {
         keyboardShouldPersistTaps: 'handled',
         contentContainerStyle: {
@@ -249,48 +249,53 @@ export default function MakingHost() {
             />
             </View>
 
-            {/* <View style={styles.capacityContainer}> */}
             <Text style={styles.InputTitleInOneLine}>연령대</Text>
+            {/* <View style={styles.capacityContainer}> */}
             <View style={{ marginTop: 50, marginBottom:50}}>
-            <ProgressSteps>
+            <ProgressSteps 
+                borderWidth={8}
+                completedProgressBarColor="#01162D"
+                activeStepIconBorderColor="#01162D"
+                // progressBarColor="#01162D"
+                activeStepIconColor="#01162D">
                 <ProgressStep
-                    label="Payment"
+                    label="20"
                     onNext={this.onPaymentStepComplete}
                     onPrevious={this.onPrevStep}
                     scrollViewProps={this.defaultScrollViewProps}
                 >
                     <View style={{ alignItems: 'center' }}>
-                    <Text>Payment step content</Text>
+                    {/* <Text>Payment step content</Text> */}
                     </View>
                 </ProgressStep>
                 <ProgressStep
-                    label="Shipping Address"
+                    label="30"
                     onNext={this.onNextStep}
                     onPrevious={this.onPrevStep}
                     scrollViewProps={this.defaultScrollViewProps}
                 >
                     <View style={{ alignItems: 'center' }}>
-                    <Text>Shipping address step content</Text>
+                    {/* <Text>Shipping address step content</Text> */}
                     </View>
                 </ProgressStep>
                 <ProgressStep
-                    label="Billing Address"
+                    label="40"
                     onNext={this.onNextStep}
                     onPrevious={this.onPrevStep}
                     scrollViewProps={this.defaultScrollViewProps}
                 >
                     <View style={{ alignItems: 'center' }}>
-                    <Text>Billing address step content</Text>
+                    {/* <Text>Billing address step content</Text> */}
                     </View>
                 </ProgressStep>
                 <ProgressStep
-                    label="Confirm Order"
+                    label="50+"
                     onPrevious={this.onPrevStep}
                     onSubmit={this.onSubmitSteps}
                     scrollViewProps={this.defaultScrollViewProps}
                 >
                     <View style={{ alignItems: 'center' }}>
-                    <Text>Confirm order step content</Text>
+                    {/* <Text>Confirm order step content</Text> */}
                     </View>
                 </ProgressStep>
             </ProgressSteps>
@@ -558,5 +563,6 @@ export default function MakingHost() {
         flexWrap: 'wrap',
         justifyContent: 'space-evenly', 
         
-    }
+    },
+    
 });
