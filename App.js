@@ -21,6 +21,9 @@ import { AuthProvider } from './contexts/AuthContext.js';
 import EditStoreMypage from './screens/HostUserMyPage/EditStoreMypage.js';
 import EditMypage from './screens/HostUserMyPage/EditMypage.js';
 import EditStoreAddress from './screens/HostUserMyPage/EditStoreAddress.js';
+
+//test slider : component의 component파일, Slider 파일 / SliderScreen.js, styles.js
+import SliderScreen from './screens/Hosting/SliderScreen.js';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -50,6 +53,9 @@ export default function App() {
           <Stack.Screen name="EditStoreMypage" component={EditStoreMypage} options={{headerShown:false}}/>
           <Stack.Screen name="EditMypage" component={EditMypage} options={{headerShown:false}}/>
           <Stack.Screen name="EditStoreAddress" component={EditStoreAddress} options={{headerShown:false}}/>
+          {/* 테스트용 Slider */}
+          <Stack.Screen name="SliderScreen" component={SliderScreen} options={{headerShown:false}}/>
+
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />

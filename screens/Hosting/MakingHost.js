@@ -1,10 +1,18 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useCallback } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput, ScrollView  } from 'react-native';
-import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import { launchImageLibrary } from 'react-native-image-picker';
+//슬라이더 (연령대)
+import Thumb from '../../components/Slider/Thumb';
+import Rail from '../../components/Slider/Rail';
+import RailSelected from '../../components/Slider/RailSelected';
+import Notch from '../../components/Slider/Notch';
+import Label from '../../components/Slider/Label';
+import TextButton from '../../components/components/TextButton';
+import Slider from 'rn-range-slider';
+
 export default function MakingHost() {
     const navigation = useNavigation();
     
@@ -63,104 +71,67 @@ export default function MakingHost() {
             setSelectedIndex(null); // 삭제 완료 후 인덱스 초기화
         }
         };
-        //클릭하면 다른 이미지로 대체
-        const changeImage = async (index) => {
-            const options = {
-                selectionLimit: 1,
-                mediaType: 'photo',
-                includeBase64: false,
-                };
-            
-                try {
-                const result = await launchImageLibrary(options);
-            
-                if (!result.didCancel) {
-                    const newUri = result.assets[0].uri;
-            
-                    // Update the selectedImageUris array with the new image at the desired index
-                    const updatedSelectedImageUris = [...selectedImageUris];
-                    updatedSelectedImageUris[index] = newUri;
-                    setSelectedImageUris(updatedSelectedImageUris);
-            
-                    // Close the modal and reset the selected index
-                    setIsModalVisible(false);
-                    setSelectedIndex(null);
-                }
-                } catch (error) {
-                console.error('Error selecting image:', error);
-                }
+    //클릭하면 다른 이미지로 대체
+    const changeImage = async (index) => {
+        const options = {
+            selectionLimit: 1,
+            mediaType: 'photo',
+            includeBase64: false,
             };
-
+        
+            try {
+            const result = await launchImageLibrary(options);
+        
+            if (!result.didCancel) {
+                const newUri = result.assets[0].uri;
+        
+                // Update the selectedImageUris array with the new image at the desired index
+                const updatedSelectedImageUris = [...selectedImageUris];
+                updatedSelectedImageUris[index] = newUri;
+                setSelectedImageUris(updatedSelectedImageUris);
+        
+                // Close the modal and reset the selected index
+                setIsModalVisible(false);
+                setSelectedIndex(null);
+            }
+            } catch (error) {
+            console.error('Error selecting image:', error);
+            }
+        };
+    
     const handleCancelModal = () => {
         setSelectedIndex(null); // 모달 닫을 때 인덱스 초기화
         setIsModalVisible(false);
         };
-    // 연령대 progress-indicator
-    const ProgressIndicator = ({ selectedAgeRange }) => {
-        const ageRanges = [20, 30, 40, 50]; // Available age ranges
-    
-    // Map selectedAgeRange to circle dot representations
-    const circleDots = ageRanges.map((ageRange) => {
-        return {
-        age: ageRange,
-        isSelected: selectedAgeRange.includes(ageRange), // Check if ageRange is selected
-        };
-    });
-    
+//연령대!!! 오예!!
+    const [low, setLow] = useState(0);
+    const [high, setHigh] = useState(100);
+    const [min, setMin] = useState(10);
+    const [max, setMax] = useState(50);
 
-    defaultScrollViewProps = {
-        keyboardShouldPersistTaps: 'handled',
-        contentContainerStyle: {
-        flex: 1,
-        justifyContent: 'center'
-        }
-    };
-    
-    onNextStep = () => {
-        console.log('called next step');
-    };
-    
-    onPaymentStepComplete = () => {
-        alert('Payment step completed!');
-    };
-    
-    onPrevStep = () => {
-        console.log('called previous step');
-    };
-    
-    onSubmitSteps = () => {
-        console.log('called on submit step.');
-    };
-    return (
-        <View style={styles.progressBarContainer}>
-        <View style={styles.circleDotContainer}>
-            {circleDots.map((circleDot) => (
-            <TouchableOpacity
-                key={circleDot.age}
-                style={[styles.circleDot, { backgroundColor: circleDot.isSelected ? '#2196F3' : '#ccc' }]}
-                onPress={() => {
-                // Handle selection logic
-                if (selectedAgeRange.includes(circleDot.age)) {
-                    // Unselect if already selected
-                    setSelectedAgeRange(selectedAgeRange.filter((age) => age !== circleDot.age));
-                } else {
-                    // Select if not already selected
-                    setSelectedAgeRange([...selectedAgeRange, circleDot.age]);
-                }
-                }}
-            >
-                <Text style={styles.circleDotText}>{circleDot.age}</Text>
-            </TouchableOpacity>
-            ))}
-        </View>
-        <Text style={styles.progressBarLabel}>연령대</Text>
-            {/* <ProgressIndicator selectedAgeRange={selectedAgeRange} /> */}
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <ProgressBarAndroid min={30} max={40} progress={progress} color="#FF0000" />
-            </View>
-        </View>
+    const renderThumb = useCallback(
+        (name) => <Thumb name={name} />,
+        [],
     );
-    };
+    const renderRail = useCallback(() => <Rail />, []);
+    const renderRailSelected = useCallback(() => <RailSelected />, []);
+    const renderLabel = useCallback(value => <Label text={value} />, []);
+    const renderNotch = useCallback(() => <Notch />, []);
+    const handleValueChange = useCallback((lowValue, highValue) => {
+    setLow(lowValue);
+    setHigh(highValue);
+    }, []);
+    const setLowTo20AndHighTo50 = useCallback(() => {
+        setLow(20);
+        setHigh(50);
+    }, []);
+
+    const setMinValue = useCallback((value) => {
+    setMin(value);
+    if (low < value) {
+        setLow(value);
+    }
+    }, [low]);
 
 
     return (
@@ -250,58 +221,25 @@ export default function MakingHost() {
             </View>
 
             <Text style={styles.InputTitleInOneLine}>연령대</Text>
-            {/* <View style={styles.capacityContainer}> */}
-            <View style={{ marginTop: 50, marginBottom:50}}>
-            <ProgressSteps 
-                borderWidth={8}
-                completedProgressBarColor="#01162D"
-                activeStepIconBorderColor="#01162D"
-                // progressBarColor="#01162D"
-                activeStepIconColor="#01162D">
-                <ProgressStep
-                    label="20"
-                    onNext={this.onPaymentStepComplete}
-                    onPrevious={this.onPrevStep}
-                    scrollViewProps={this.defaultScrollViewProps}
-                >
-                    <View style={{ alignItems: 'center' }}>
-                    {/* <Text>Payment step content</Text> */}
-                    </View>
-                </ProgressStep>
-                <ProgressStep
-                    label="30"
-                    onNext={this.onNextStep}
-                    onPrevious={this.onPrevStep}
-                    scrollViewProps={this.defaultScrollViewProps}
-                >
-                    <View style={{ alignItems: 'center' }}>
-                    {/* <Text>Shipping address step content</Text> */}
-                    </View>
-                </ProgressStep>
-                <ProgressStep
-                    label="40"
-                    onNext={this.onNextStep}
-                    onPrevious={this.onPrevStep}
-                    scrollViewProps={this.defaultScrollViewProps}
-                >
-                    <View style={{ alignItems: 'center' }}>
-                    {/* <Text>Billing address step content</Text> */}
-                    </View>
-                </ProgressStep>
-                <ProgressStep
-                    label="50+"
-                    onPrevious={this.onPrevStep}
-                    onSubmit={this.onSubmitSteps}
-                    scrollViewProps={this.defaultScrollViewProps}
-                >
-                    <View style={{ alignItems: 'center' }}>
-                    {/* <Text>Confirm order step content</Text> */}
-                    </View>
-                </ProgressStep>
-            </ProgressSteps>
-        </View>
-            {/* </View> */}
-
+            <Slider
+                style={styles.slider}
+                min={min}
+                max={max}
+                step={10}
+                disableRange={false}
+                renderThumb={renderThumb}
+                renderRail={renderRail}
+                renderRailSelected={renderRailSelected}
+                renderLabel={renderLabel}
+                renderNotch={renderNotch}
+                onValueChanged={handleValueChange}
+                low={low}
+                high={high}
+                />
+            {/* <View style={styles.horizontalContainer}>
+            <Text style={styles.valueText}>{low}</Text>
+            <Text style={styles.valueText}>{high}</Text>
+            </View> */}
             <Text style={styles.InputTitle}>스크린 사이즈</Text>
             <View style = {styles.ScreenButtonContainer}>
                 <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 60</Button>

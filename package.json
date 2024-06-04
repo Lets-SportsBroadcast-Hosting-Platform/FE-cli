@@ -28,6 +28,7 @@
     "react-native-svg": "^15.2.0",
     "react-native-toast-message": "^2.2.0",
     "react-native-toggle-element": "^2.0.1",
+    "rn-range-slider": "^2.2.2",
     "styled-components": "^6.1.9"
   },
   "devDependencies": {
