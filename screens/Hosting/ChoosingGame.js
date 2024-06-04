@@ -15,12 +15,13 @@ export default function HostPlaceList() {
     }
 
     function SportsSchedule(){
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports?upperCategoryId=${upperCategoryId}&categoryId=${categoryId}&count=${count}`, {
-        params: {
-            upperCategoryId: kbaseball,
-            categoryId: kbo,
-            count:1
-        }
+        // ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports?upperCategoryId=${upperCategoryId}&categoryId=${categoryId}&count=${count}`, {
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports?upperCategoryId=kbaseball&categoryId=kbo&count=1`, {
+        //     params: {
+        //     upperCategoryId: kbaseball,
+        //     categoryId: kbo,
+        //     count:1
+        // }
     })
     .then((res)=>{
         // const stores = res.stores ?? [];
@@ -35,7 +36,27 @@ export default function HostPlaceList() {
     
     
     useEffect(()=>{
-        SportsSchedule();
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports?upperCategoryId=kbaseball&categoryId=kbo&count=1`).then(res=>{
+            // const party = JSON.parse(JSON.stringify(res))
+            console.log(res)
+            // const dayArray = ['월', '화', '수', '목', '금', '토', '일']
+            // const hostingDateInfo = new Date(party.hosting_date)
+            // const hostMonth = hostingDateInfo.getMonth() + 1
+            // const hostDate = hostingDateInfo.getDate()
+            // const hostDay = hostingDateInfo.getDay()
+            // const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
+            // const hostDayNm = dayArray[hostDay]
+            
+            // party.imageLink = {uri: `${party.store_image_url}0`},
+            // party.imageLink = {uri: `${party.store_image_url}0`},
+            // console.log(party.imageLink)
+            // party.hostDateNm = `${hostMonth}.${hostDate}`, hostHHMI, hostDayNm
+            // party.hostHHMI = hostHHMI
+            // party.hostDayNm = hostDayNm
+            // setPartyInfo({
+            //     ...party
+            // })
+        })
     }, [])
 
     // const ListItem = ({ 

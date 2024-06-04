@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput, ScrollView, Animated  } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput, ScrollView  } from 'react-native';
+import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
@@ -16,6 +17,11 @@ export default function MakingHost() {
     const setCapacity = () => {
         console.log('정원값 입력')
     }
+    const [progress, setProgress] = React.useState(35);
+
+    setInterval(() => {
+      setProgress(Math.random() * (40 - 30) + 30);
+    }, 1000);
     // 이미지
     const [selectedImageUris, setSelectedImageUris] = useState([]);
     const [hasImage, setHasImage] = useState(false);
@@ -100,8 +106,31 @@ export default function MakingHost() {
         isSelected: selectedAgeRange.includes(ageRange), // Check if ageRange is selected
         };
     });
-    //연령대 스와이퍼? 실험
     
+    
+    defaultScrollViewProps = {
+        keyboardShouldPersistTaps: 'handled',
+        contentContainerStyle: {
+        flex: 1,
+        justifyContent: 'center'
+        }
+    };
+    
+    onNextStep = () => {
+        console.log('called next step');
+    };
+    
+    onPaymentStepComplete = () => {
+        alert('Payment step completed!');
+    };
+    
+    onPrevStep = () => {
+        console.log('called previous step');
+    };
+    
+    onSubmitSteps = () => {
+        console.log('called on submit step.');
+    };
     return (
         <View style={styles.progressBarContainer}>
         <View style={styles.circleDotContainer}>
@@ -125,7 +154,10 @@ export default function MakingHost() {
             ))}
         </View>
         <Text style={styles.progressBarLabel}>연령대</Text>
-            <ProgressIndicator selectedAgeRange={selectedAgeRange} />
+            {/* <ProgressIndicator selectedAgeRange={selectedAgeRange} /> */}
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ProgressBarAndroid min={30} max={40} progress={progress} color="#FF0000" />
+            </View>
         </View>
     );
     };
@@ -139,8 +171,8 @@ export default function MakingHost() {
             <Image source={arrowToLeft} style={styles.arrowIcon} />
             </TouchableOpacity>
             <Text style={styles.headerText}>모임 정보</Text>
-            
         </View>
+
         <View style={styles.contentContainer}>
             <ScrollView showsVerticalScrollIndicator={false}>
             <Text style={styles.InputTitle}>이미지</Text>
@@ -217,10 +249,53 @@ export default function MakingHost() {
             />
             </View>
 
-            <View style={styles.capacityContainer}>
+            {/* <View style={styles.capacityContainer}> */}
             <Text style={styles.InputTitleInOneLine}>연령대</Text>
-                {/* <ProgressIndicator progress={ageProgress} /> */}
-            </View>
+            <View style={{ marginTop: 50, marginBottom:50}}>
+            <ProgressSteps>
+                <ProgressStep
+                    label="Payment"
+                    onNext={this.onPaymentStepComplete}
+                    onPrevious={this.onPrevStep}
+                    scrollViewProps={this.defaultScrollViewProps}
+                >
+                    <View style={{ alignItems: 'center' }}>
+                    <Text>Payment step content</Text>
+                    </View>
+                </ProgressStep>
+                <ProgressStep
+                    label="Shipping Address"
+                    onNext={this.onNextStep}
+                    onPrevious={this.onPrevStep}
+                    scrollViewProps={this.defaultScrollViewProps}
+                >
+                    <View style={{ alignItems: 'center' }}>
+                    <Text>Shipping address step content</Text>
+                    </View>
+                </ProgressStep>
+                <ProgressStep
+                    label="Billing Address"
+                    onNext={this.onNextStep}
+                    onPrevious={this.onPrevStep}
+                    scrollViewProps={this.defaultScrollViewProps}
+                >
+                    <View style={{ alignItems: 'center' }}>
+                    <Text>Billing address step content</Text>
+                    </View>
+                </ProgressStep>
+                <ProgressStep
+                    label="Confirm Order"
+                    onPrevious={this.onPrevStep}
+                    onSubmit={this.onSubmitSteps}
+                    scrollViewProps={this.defaultScrollViewProps}
+                >
+                    <View style={{ alignItems: 'center' }}>
+                    <Text>Confirm order step content</Text>
+                    </View>
+                </ProgressStep>
+            </ProgressSteps>
+        </View>
+            {/* </View> */}
 
             <Text style={styles.InputTitle}>스크린 사이즈</Text>
             <View style = {styles.ScreenButtonContainer}>
@@ -236,7 +311,7 @@ export default function MakingHost() {
                 <Button  mode="contained" onPress={()=> goToHostBusinessRegisNumber(storeAddress)} style={styles.FindAddressButton}>
                 <Text style={styles.nextText}>다음</Text>
                 </Button>
-                </ScrollView>
+        </ScrollView>
         </View>
         
         </View>
