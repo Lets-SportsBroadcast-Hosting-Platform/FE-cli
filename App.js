@@ -21,7 +21,8 @@ import { AuthProvider } from './contexts/AuthContext.js';
 import EditStoreMypage from './screens/HostUserMyPage/EditStoreMypage.js';
 import EditMypage from './screens/HostUserMyPage/EditMypage.js';
 import EditStoreAddress from './screens/HostUserMyPage/EditStoreAddress.js';
-
+//테스트용
+import SliderScreen from './screens/Hosting/SliderScreen.js';
 //마이홈
 import MyHome from './screens/MyHome/MyPlaceList.js'
 
@@ -32,7 +33,7 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="PlaceList">
+        <Stack.Navigator initialRouteName="SliderScreen">
           
           <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
           
@@ -54,10 +55,11 @@ export default function App() {
           <Stack.Screen name="EditStoreMypage" component={EditStoreMypage} options={{headerShown:false}}/>
           <Stack.Screen name="EditMypage" component={EditMypage} options={{headerShown:false}}/>
           <Stack.Screen name="EditStoreAddress" component={EditStoreAddress} options={{headerShown:false}}/>
+          <Stack.Screen name="SliderScreen" component={SliderScreen} options={{headerShown:false}}/>
 
           {/*마이홈*/}
           <Stack.Screen name="MyHome" component={MyHome} options={{headerShown:false}}/>
-        
+
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />
