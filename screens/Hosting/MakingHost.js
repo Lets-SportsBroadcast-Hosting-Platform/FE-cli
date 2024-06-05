@@ -209,7 +209,7 @@ export default function MakingHost() {
                 </View>
 
             <View style={styles.capacityContainer}>
-            <Text style={styles.InputTitleInOneLine}>정원</Text>
+            <Text>정원</Text>
             <TextInput
             placeholder='숫자' // Placeholder text
             keyboardType='numeric' // Set keyboard type to numeric for numbers
