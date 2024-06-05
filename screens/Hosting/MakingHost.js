@@ -209,7 +209,7 @@ export default function MakingHost() {
                 </View>
 
             <View style={styles.capacityContainer}>
-            <Text>정원</Text>
+            <Text style={styles.InputTitleInOneLine}>정원</Text>
             <TextInput
             placeholder='숫자' // Placeholder text
             keyboardType='numeric' // Set keyboard type to numeric for numbers
@@ -220,6 +220,7 @@ export default function MakingHost() {
             />
             </View>
 
+            <View style={styles.capacityContainer1}>
             <Text style={styles.InputTitleInOneLine}>연령대</Text>
             <Slider
                 style={styles.slider}
@@ -236,7 +237,8 @@ export default function MakingHost() {
                 low={low}
                 high={high}
                 />
-            {/* <View style={styles.horizontalContainer}>
+            </View>
+                        {/* <View style={styles.horizontalContainer}>
             <Text style={styles.valueText}>{low}</Text>
             <Text style={styles.valueText}>{high}</Text>
             </View> */}
@@ -300,6 +302,9 @@ export default function MakingHost() {
         justifyContent:'center',
         // position:'relative',
         height:60
+    },
+    capacityContainer1:{
+
     },
     peopleText:{
         width:'50%',
