@@ -60,7 +60,7 @@ export default function LoginPage({navigation}) {
     const signInWithKakao = async ()=> {
       try {
         const {accessToken} = await login();
-        console.log(accessToken)
+        // console.log(accessToken)
         loginToServer(accessToken)
         
         // navigation.navigate('PlaceList')
@@ -70,20 +70,25 @@ export default function LoginPage({navigation}) {
       }
     };
 
-    function loginToServer(token){
-      ApiUtil.post(`${ApiConfig.SERVER_URL}/login`, {headers: {
-        accesstoken: token,
-        provider: 'kakao'
-      }},).then((res)=>{
-        const jwtToken = res.jwt_token ?? ''
-        const userInfo = res.userInfo ?? {}
+    async function loginToServer(token){
+        const kakaoLoginResult = await ApiUtil.post(`${ApiConfig.SERVER_URL}/login`,{}, {headers: {
+            accesstoken: token,
+            provider: 'kakao'
+        }})
         
+        const jwtToken = kakaoLoginResult.jwt_token ?? ''
+        const userInfo = kakaoLoginResult.userInfo ?? {}
+
         AsyncStorage.setItem('jwtToken', jwtToken);
         AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
-        saveLogin(userInfo, jwtToken)
-        navigation.navigate('PlaceList')
+        console.log('/login Success' ,userInfo)
+        console.log(tokenLoginResult)
 
-      }).catch((error)=>console.log(error))
+        saveLogin(userInfo, jwtToken)
+        navigation.navigate('ChooseUser')
+
+      
+      
     }
 
     return (
