@@ -2,15 +2,41 @@ import React,{useEffect } from 'react';
 import { StyleSheet, Text, View,Image  } from 'react-native';
 import icons from '../assets/images/logo.png';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ApiUtil from '../api/ApiUtil';
+import ApiConfig from '../api/ApiConfig';
+
 export default function Home({navigation}) {
     useEffect(() => {
-        // 3초 후에 LoginPage로 이동
-        const timer = setTimeout(() => {
-            navigation.navigate('LoginPage')
-        }, 3000);
+        async function login(){
+
+            console.log('login...')
+            const storageToken = await AsyncStorage.getItem('jwtToken')
+            console.log(storageToken)
+            let tokenLoginResult = null
+            try{
+                tokenLoginResult = await ApiUtil.get(`${ApiConfig.SERVER_URL}/login/token`,{headers: {
+                    jwToken: storageToken
+                }})
     
-        return () => clearTimeout(timer);
-        }, []);
+                if(tokenLoginResult === 'Success'){
+                    console.log('login success')
+                    navigation.navigate('ChooseUser')
+                }
+    
+            }catch(e){
+                console.log(e)
+                // console.log('move sso login page')
+                const timer = setTimeout(() => {
+                    navigation.navigate('LoginPage')
+                }, 3000);
+            
+                return () => clearTimeout(timer);
+            }
+        }
+
+        login();
+    }, []);
 
     return (
         <View style={styles.container}>

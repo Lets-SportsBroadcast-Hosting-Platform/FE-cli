@@ -43,16 +43,16 @@ export default function TermsOfService() {
 
     const submitSignUpForm = ()=>{
         console.log(userInfo, params)
-        // ApiUtil.post(`${ApiConfig.SERVER_URL}/store`, {
-        //     bussiness_no: '',
-        //     id: '',
-        //     store_name: '',
-        //     store_address: '',
-        //     store_road_address: '',
-        //     store_category: '',
-        //     store_number: '',
-        //     alarm: true
-        // })
+        ApiUtil.post(`${ApiConfig.SERVER_URL}/store`, {
+            bussiness_no: params.business_no,
+            id: userInfo.name,
+            store_name: params.place_name,
+            store_address: params.address_name,
+            store_road_address: params.road_address_name,
+            store_category: params.category_group_name,
+            store_number: params.phone,
+            alarm: true
+        }).then((res)=>{console.log(res)})
     }
 
     return (
@@ -198,10 +198,10 @@ export default function TermsOfService() {
 
                         </Text>
                         <View style={styles.modalButtonContainer}>
-                            <Button mode="outlined" onPress={handleCancelModal} style={styles.modalButton}>
-                                닫기
-                            </Button>
-                            </View>
+                        <Button mode="outlined" onPress={handleCancelPrivacyModal} style={styles.modalButton}>
+                        닫기</Button>
+                        </View>
+                            
                         
                         </ScrollView>
                     </View>
