@@ -16,7 +16,14 @@ import Slider from 'rn-range-slider';
 export default function MakingHost() {
     const navigation = useNavigation();
     
-    const [state, setState] = React.useState('');
+    //모임소개
+    const [hostIntroduction, setHostIntroduction] = React.useState('');
+    //정원
+    const [maxPeople, setMaxPeople] = React.useState(0);
+    //연령대 : low, high
+    //스크린 사이즈
+    const [screenSize, setScreenSize] = React.useState(0);
+
     const arrowbuttonPress = () => {
         navigation.goBack()
         console.log("arrowbuttonPressed");
@@ -121,17 +128,7 @@ export default function MakingHost() {
     setLow(lowValue);
     setHigh(highValue);
     }, []);
-    const setLowTo20AndHighTo50 = useCallback(() => {
-        setLow(20);
-        setHigh(50);
-    }, []);
-
-    const setMinValue = useCallback((value) => {
-    setMin(value);
-    if (low < value) {
-        setLow(value);
-    }
-    }, [low]);
+    
 
 
     return (
@@ -201,8 +198,8 @@ export default function MakingHost() {
                 <TextInput
                     multiline={true}
                     numberOfLines={4}
-                    onChangeText={(text) => setState(text)}
-                    value={state}
+                    onChangeText={(text) => setHostIntroduction(text)}
+                    value={hostIntroduction}
                     style={styles.textArea}
                     keyboardType="default"
                 />
