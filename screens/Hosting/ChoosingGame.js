@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList, Button, ImageBackground } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
-import { useEffect } from 'react';
+import React,{useState,useEffect } from 'react';
 import ApiUtil from '../../api/ApiUtil';
 import ApiConfig from '../../api/ApiConfig';
 // import arrowRight from '../assets/images/arrow-right.png';
@@ -14,21 +14,25 @@ export default function HostPlaceList() {
         navigation.navigate('PlaceList')
     }
 
+    const [selectedButton, setSelectedButton] = useState('KBO');
+    
+
+    const [upperCategoryId, setUpperCategoryId] = React.useState('kbaseball');
+    const [categoryId ,setCategoryId ] = React.useState('kbo');
+    const [count, setCount] = useState(1);
+
     function SportsSchedule(){
         // ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports?upperCategoryId=${upperCategoryId}&categoryId=${categoryId}&count=${count}`, {
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports?upperCategoryId=kbaseball&categoryId=kbo&count=1`, {
-        //     params: {
-        //     upperCategoryId: kbaseball,
-        //     categoryId: kbo,
-        //     count:1
-        // }
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports`, {
+        // ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports?upperCategoryId=kbaseball&categoryId=kbo&count=1`, {
+            params: {
+            upperCategoryId: upperCategoryId,
+            categoryId: categoryId,
+            count:count
+        }
     })
     .then((res)=>{
-        // const stores = res.stores ?? [];
-        // console.log(stores);
-        // console.log(stores[0]);
-        // console.log(stores.length);//항상 5구나 아님 0
-        // setStoreInfoList(stores)
+
         console.log(res)
     })
     .catch((error)=>console.log(error.config))
@@ -36,75 +40,13 @@ export default function HostPlaceList() {
     
     
     useEffect(()=>{
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports?upperCategoryId=kbaseball&categoryId=kbo&count=1`).then(res=>{
-            // const party = JSON.parse(JSON.stringify(res))
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports?upperCategoryId=${upperCategoryId}&categoryId=${categoryId}&count=${count}`).then(res=>{
             console.log(res)
-            // const dayArray = ['월', '화', '수', '목', '금', '토', '일']
-            // const hostingDateInfo = new Date(party.hosting_date)
-            // const hostMonth = hostingDateInfo.getMonth() + 1
-            // const hostDate = hostingDateInfo.getDate()
-            // const hostDay = hostingDateInfo.getDay()
-            // const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
-            // const hostDayNm = dayArray[hostDay]
             
-            // party.imageLink = {uri: `${party.store_image_url}0`},
-            // party.imageLink = {uri: `${party.store_image_url}0`},
-            // console.log(party.imageLink)
-            // party.hostDateNm = `${hostMonth}.${hostDate}`, hostHHMI, hostDayNm
-            // party.hostHHMI = hostHHMI
-            // party.hostDayNm = hostDayNm
-            // setPartyInfo({
-            //     ...party
-            // })
         })
     }, [])
 
-    // const ListItem = ({ 
-    //     event_title, imageLink, event_place,
-    //     event_date, event_day, event_time,
-    //     count, total, id
-    //     }) => (
-    //     <TouchableOpacity onPress={()=>onClickItem({ 
-    //         event_title, imageLink, event_place,
-    //         event_date, event_day, event_time,
-    //         count, total, id
-    //         })} style={styles.placeItem}>
-    //         <View style={styles.imageContainer}>
-    //             <Image source={imageLink} style={styles.placeImage}/>
-    //         </View>
-    //         <Text style={styles.placeTitle}>{event_title}</Text>
-
-    //         <View style={styles.placeDetail}>
-    //             <Text>{event_place} | {event_date}({event_day}) | {event_time}</Text>
-
-    //             <View style={{flexDirection: 'row'}}>
-
-    //                 <Text>
-    //                     {count} / {total}
-                        
-    //                 </Text>
-    //                 <Image style={styles.userImage} source={UserImage}></Image>
-    //             </View>
-    //         </View>
-    //     </TouchableOpacity>
-    // );
-
-    // const renderItem = ({ item }) => (
-    //     <ListItem
-    //         id={item.id}
-    //         style={styles.itemScrollContainer}
-    //         event_title={item.event_title}
-    //         event_place={item.event_place}
-    //         event_date={item.event_date}
-    //         event_day={item.event_day}
-    //         event_time={item.event_time}
-    //         imageLink={item.imageLink}
-    //         count={item.count}
-    //         total={item.total}
-
-    //     />
-    // );
-
+    
     return (
         <View style={self.container}>
 
