@@ -79,10 +79,11 @@ export default function LoginPage({navigation}) {
         const jwtToken = kakaoLoginResult.jwt_token ?? ''
         const userInfo = kakaoLoginResult.userInfo ?? {}
 
+        console.log(jwtToken)
+
         AsyncStorage.setItem('jwtToken', jwtToken);
         AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
         console.log('/login Success' ,userInfo)
-        console.log(tokenLoginResult)
 
         saveLogin(userInfo, jwtToken)
         navigation.navigate('ChooseUser')

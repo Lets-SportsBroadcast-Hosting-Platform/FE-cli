@@ -18,9 +18,7 @@ export default function TermsOfService() {
     const params = route.params;
 
     // context에서 userInfo 가져오기
-    const { getUserInfo } = useAuth()
-    const userInfo = getUserInfo();
-
+    const { getUserInfo, saveStoreInfo, getUserToken } = useAuth()
     const [isChecked, setIsChecked] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
@@ -41,18 +39,36 @@ export default function TermsOfService() {
         setIsModalVisible2(false);
     };
 
-    const submitSignUpForm = ()=>{
-        console.log(userInfo, params)
+    const submitSignUpForm = async ()=>{
+        // const userInfo = await getUserInfo();
+        const userToken = await getUserToken();
+        console.log(params)
         ApiUtil.post(`${ApiConfig.SERVER_URL}/store`, {
-            bussiness_no: params.business_no,
-            id: userInfo.name,
+            business_no: params.business_no,
             store_name: params.place_name,
             store_address: params.address_name,
             store_road_address: params.road_address_name,
             store_category: params.category_group_name,
             store_number: params.phone,
             alarm: true
-        }).then((res)=>{console.log(res)})
+        }, {
+            headers: {
+                jwToken: userToken
+            }
+        }).then((res)=>{
+            console.log(res)
+            saveStoreInfo({
+                store_name: params.place_name,
+                store_address: params.address_name,
+                store_road_address: params.road_address_name,
+                store_category: params.category_group_name,
+                store_number: params.phone,
+            })
+            navigation.navigate('PlaceList')
+        }).catch(e=>{
+            console.log(e)
+            // console.log(JSON.stringify(e))
+        })
     }
 
     return (

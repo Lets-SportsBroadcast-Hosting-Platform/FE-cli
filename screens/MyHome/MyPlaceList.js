@@ -22,7 +22,7 @@ export default function HostPlaceList({navigation}) {
     }
 
     const clickING = ()=>{
-        console.log('진행중 버튼 클릭')
+        console.log('진행중 버튼 클릭   ')
     }
 
     const clickCOMPLEDTED = ()=>{
