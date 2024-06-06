@@ -24,9 +24,10 @@ function HostPlaceDetail(detail){
     const [clientHeight, setClientHeight] = useState(0)
 
     const route = useRoute();
-    const { 
-        hosting_id
-    } = route.params
+
+    const hosting_id = route.params.hosting_id;
+    const isNew = route.params.isNew ?? false;
+
     const [partyInfo, setPartyInfo] = useState({})
     useEffect(()=>{
         // 현재 창의 너비와 높이 가져오기
@@ -35,26 +36,27 @@ function HostPlaceDetail(detail){
 
         setClientWidth(clientWidth)
         setClientHeight(clientHeight)
-
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`).then(res=>{
-            const party = JSON.parse(JSON.stringify(res))
-            const dayArray = ['월', '화', '수', '목', '금', '토', '일']
-            const hostingDateInfo = new Date(party.hosting_date)
-            const hostMonth = hostingDateInfo.getMonth() + 1
-            const hostDate = hostingDateInfo.getDate()
-            const hostDay = hostingDateInfo.getDay()
-            const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
-            const hostDayNm = dayArray[hostDay]
-            
-            party.imageLink = {uri: `${party.store_image_url}0`},
-            party.hostDateNm = `${hostMonth}.${hostDate}`, hostHHMI, hostDayNm
-            party.hostHHMI = hostHHMI
-            party.hostDayNm = hostDayNm
-            setPartyInfo({
-                ...party
+        
+        if(!isNew){
+            ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`).then(res=>{
+                const party = JSON.parse(JSON.stringify(res))
+                const dayArray = ['월', '화', '수', '목', '금', '토', '일']
+                const hostingDateInfo = new Date(party.hosting_date)
+                const hostMonth = hostingDateInfo.getMonth() + 1
+                const hostDate = hostingDateInfo.getDate()
+                const hostDay = hostingDateInfo.getDay()
+                const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
+                const hostDayNm = dayArray[hostDay]
+                
+                party.imageLink = {uri: `${party.store_image_url}0`},
+                party.hostDateNm = `${hostMonth}.${hostDate}`, hostHHMI, hostDayNm
+                party.hostHHMI = hostHHMI
+                party.hostDayNm = hostDayNm
+                setPartyInfo({
+                    ...party
+                })
             })
-        })
-    }, [])
+        }}, [])
 
     return (
         <ScrollView
@@ -101,7 +103,7 @@ function HostPlaceDetail(detail){
                 <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>서울시 반포대로 1길 11</Text>
             </View>
             <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={()=>{}}>
-                <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text>
+                {isNew ? <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text> : <Text style={[styles.p5, self.hostButton]}>신청하기</Text> }
             </TouchableOpacity>
         </ScrollView>
     )

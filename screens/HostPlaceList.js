@@ -34,7 +34,7 @@ export default function HostPlaceList({navigation}) {
     }
 
     const onClickItem = (item)=>{
-        navigation.navigate('HostPlaceDetail', {...item})
+        navigation.navigate('HostPlaceDetail', {...item, isNew: false})
     }
 
     const onClickHostBtn = ()=>{
