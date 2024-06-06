@@ -15,7 +15,6 @@ import Slider from 'rn-range-slider';
 
 export default function MakingHost() {
     const navigation = useNavigation();
-    
     //모임소개
     const [hostIntroduction, setHostIntroduction] = React.useState('');
     //정원
@@ -29,14 +28,14 @@ export default function MakingHost() {
         console.log("arrowbuttonPressed");
     };
 
-    const setCapacity = () => {
-        console.log('정원값 입력')
-    }
-    const [progress, setProgress] = React.useState(35);
+    // const setCapacity = () => {
+    //     console.log('정원값 입력')
+    // }
+    // const [progress, setProgress] = React.useState(35);
 
-    setInterval(() => {
-      setProgress(Math.random() * (40 - 30) + 30);
-    }, 1000);
+    // setInterval(() => {
+    //   setProgress(Math.random() * (40 - 30) + 30);
+    // }, 1000);
     // 이미지
     const [selectedImageUris, setSelectedImageUris] = useState([]);
     const [hasImage, setHasImage] = useState(false);
@@ -47,7 +46,7 @@ export default function MakingHost() {
         const options = {
             selectionLimit: MAX_IMAGES - selectedImageUris.length, // Allow only single image selection
             mediaType: 'photo', // Restrict to images only
-            includeBase64: false, // Avoid including base64 data (optional)
+            includeBase64: false,
         };
 
         try {
@@ -57,7 +56,7 @@ export default function MakingHost() {
 
             const newUris = result.assets.map((asset) => asset.uri);
             setSelectedImageUris([...selectedImageUris, ...newUris]);
-            setHasImage(true); // Update image selection state
+            setHasImage(true);
             }
         } catch (error) {
             console.error('Error selecting image:', error);
@@ -65,7 +64,7 @@ export default function MakingHost() {
     };
     //이미지 삭제
     const handleLongPress = (index) => {
-        setSelectedIndex(index); // 선택된 이미지 인덱스 저장
+        setSelectedIndex(index);
         setIsModalVisible(true);
     };
 
@@ -75,10 +74,10 @@ export default function MakingHost() {
             newSelectedImageUris.splice(selectedIndex, 1);
             setSelectedImageUris(newSelectedImageUris);
             setIsModalVisible(false);
-            setSelectedIndex(null); // 삭제 완료 후 인덱스 초기화
+            setSelectedIndex(null);
         }
         };
-    //클릭하면 다른 이미지로 대체
+
     const changeImage = async (index) => {
         const options = {
             selectionLimit: 1,
@@ -91,13 +90,9 @@ export default function MakingHost() {
         
             if (!result.didCancel) {
                 const newUri = result.assets[0].uri;
-        
-                // Update the selectedImageUris array with the new image at the desired index
                 const updatedSelectedImageUris = [...selectedImageUris];
                 updatedSelectedImageUris[index] = newUri;
                 setSelectedImageUris(updatedSelectedImageUris);
-        
-                // Close the modal and reset the selected index
                 setIsModalVisible(false);
                 setSelectedIndex(null);
             }
@@ -107,7 +102,7 @@ export default function MakingHost() {
         };
     
     const handleCancelModal = () => {
-        setSelectedIndex(null); // 모달 닫을 때 인덱스 초기화
+        setSelectedIndex(null);
         setIsModalVisible(false);
         };
 //연령대!!! 오예!!
@@ -128,8 +123,20 @@ export default function MakingHost() {
     setLow(lowValue);
     setHigh(highValue);
     }, []);
-    
-
+    const buttonSizes = [60, 80, 100, 120, 150];
+    //변수값들 넘겨주기
+    const handleNavigateToPreview = () => {
+        navigation.navigate('HostPlaceDetail', {
+        isNew:true,
+        hosting_name:'KBO 야구리그 - 롯데 vs 삼성',
+        hostIntroduction,
+        maxPeople,
+        low,
+        high,
+        screenSize,
+        selectedImageUris,
+    });
+    };
 
     return (
         <View style={styles.container}>
@@ -184,8 +191,6 @@ export default function MakingHost() {
             <View style={styles.textInputContainer}>
                 <TextInput
                     placeholder='KBO 야구리그 - 롯데 vs 삼성'
-                    // value={phone}
-                    // onChangePhone={onChangePhone}
                     style={styles.storeInputText}
                     mode='outlined'
                 />
@@ -208,10 +213,9 @@ export default function MakingHost() {
             <View style={styles.capacityContainer}>
             <Text style={styles.InputTitleInOneLine}>정원</Text>
             <TextInput
-            placeholder='숫자' // Placeholder text
-            keyboardType='numeric' // Set keyboard type to numeric for numbers
-            // value={capacity} // Set value from state
-            onChangeText={(text) => setCapacity(text)} // Update state on change
+            placeholder='숫자'
+            keyboardType='numeric'
+            onChangeText={(text) => setMaxPeople(text)}
             style={styles.peopleText}
             mode='outlined'
             />
@@ -235,23 +239,24 @@ export default function MakingHost() {
                 high={high}
                 />
             </View>
-                        {/* <View style={styles.horizontalContainer}>
-            <Text style={styles.valueText}>{low}</Text>
-            <Text style={styles.valueText}>{high}</Text>
-            </View> */}
+
             <Text style={styles.InputTitle}>스크린 사이즈</Text>
-            <View style = {styles.ScreenButtonContainer}>
-                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 60</Button>
-                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 80</Button>
-                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 100</Button>
-                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 120</Button>
-                <Button style = {styles.ScreenButton} labelStyle={{ fontSize: 11 , color:'#000' }}> 150+</Button>
-
+            <View style={styles.ScreenButtonContainer}>
+            {buttonSizes.map((size) => (
+                <Button
+                key={size}
+                style={styles.ScreenButton}
+                labelStyle={{ fontSize: 11, color: '#000' }}
+                title={size.toString()}
+                onPress={() => {
+                    setScreenSize(size);
+                    console.log(screenSize)
+                }}
+                >{size}</Button>
+            ))}
             </View>
-
-
                 <Button  mode="contained" onPress={()=> goToHostBusinessRegisNumber(storeAddress)} style={styles.FindAddressButton}>
-                <Text style={styles.nextText}>다음</Text>
+                <Text style={styles.nextText} onPress={()=>{handleNavigateToPreview}}>다음</Text>
                 </Button>
         </ScrollView>
         </View>
