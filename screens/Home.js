@@ -6,12 +6,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ApiUtil from '../api/ApiUtil';
 import ApiConfig from '../api/ApiConfig';
 
+// auth
+import { useAuth } from '../contexts/AuthContext.js';
+
+// Toast
+import Toast from 'react-native-toast-message';
+
 export default function Home({navigation}) {
+    const { saveLogin, getUserInfo, getStoreInfo } = useAuth();
+
     useEffect(() => {
         async function login(){
 
             console.log('login...')
             const storageToken = await AsyncStorage.getItem('jwtToken')
+            const userInfo = await getUserInfo()
+            const storeInfo = await getStoreInfo()
             console.log(storageToken)
             let tokenLoginResult = null
             try{
@@ -19,14 +29,29 @@ export default function Home({navigation}) {
                     jwToken: storageToken
                 }})
     
-                if(tokenLoginResult === 'Success'){
-                    console.log('login success')
-                    navigation.navigate('ChooseUser')
+                if(tokenLoginResult === 'Success' && !!userInfo){
+                    if(!!storeInfo){
+                        navigation.navigate('PlaceList')
+                        console.log(userInfo)
+                        Toast.show(({
+                            type: 'success',
+                            text1: `${userInfo?.name ?? ''} 호스트님 안녕하세요👋`,
+                            text2: `경기 일정을 확인하고 새 호스팅을 해보세요!`
+                        }))
+                        
+                    } else {
+                        console.log('login success')
+                        saveLogin(userInfo, storageToken)
+                        navigation.navigate('ChooseUser')
+                    }
+
+                } else {
+                    throw new Error()
                 }
     
             }catch(e){
-                console.log(e)
-                // console.log('move sso login page')
+                // console.log(e)
+                console.log('move sso login page')
                 const timer = setTimeout(() => {
                     navigation.navigate('LoginPage')
                 }, 3000);

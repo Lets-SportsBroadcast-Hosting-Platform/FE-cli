@@ -152,7 +152,7 @@ export default function HostBusinessRegisNumber() {
 
             {/* 인증 완료되면 활성화 */}
             <Button mode="contained" disabled={isDisable} onPress={() => navigation.navigate('TermsOfService', {
-                business_no: number.replaceAll('-', ''),
+                business_no: parseInt(number.replaceAll('-', '')),
                 ...params
             })} style={styles.HostBusinessNumberButton}>
             다음
