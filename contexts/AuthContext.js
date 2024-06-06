@@ -1,10 +1,12 @@
 import React, { createContext, useState, useContext } from 'react';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [store, setStore] = useState(null);
   const [token, setToken] = useState(null);
 
   const saveLogin = (userData, authToken) => {
@@ -17,17 +19,47 @@ export const AuthProvider = ({ children }) => {
     }))
   };
 
+  const getUserToken = async ()=>{
+    if(token === null){
+      const storageToken = await AsyncStorage.getItem('jwtToken')
+      setUser('storageToken', storageToken)
+      console.log(storageToken)
+      return storageToken
+    }
+    console.log('token', token)
+    return token
+  }
+
+  const saveStoreInfo = async (storeInfo) => {
+    setStore(storeInfo)
+    AsyncStorage.setItem('storeInfo', JSON.stringify(storeInfo))
+  }
+
   const clearLogin = () => {
     setUser(null);
     setToken(null);
   };
 
-  const getUserInfo = ()=>{
+  const getUserInfo = async ()=>{
+    if(user === null){
+      const userInfo = JSON.parse(await AsyncStorage.getItem('userInfo'))
+      setUser(userInfo)
+      return userInfo
+    }
     return user
   }
 
+  const getStoreInfo = async ()=>{
+    if(store === null){
+      const storeInfo = JSON.parse(await AsyncStorage.getItem('storeInfo'))
+      setStore(storeInfo)
+      return storeInfo
+    }
+    return store
+  }
+
   return (
-    <AuthContext.Provider value={{ user, token, saveLogin, clearLogin, getUserInfo }}>
+    <AuthContext.Provider value={{ user, token, getUserToken, saveLogin, clearLogin, getStoreInfo, saveStoreInfo, getUserInfo }}>
       {children}
     </AuthContext.Provider>
   );
