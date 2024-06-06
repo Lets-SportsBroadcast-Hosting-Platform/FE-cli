@@ -28,6 +28,15 @@ function HostPlaceDetail(detail){
     const hosting_id = route.params.hosting_id;
     const isNew = route.params.isNew ?? false;
 
+    //MakingHost에서 받아오는 값 (미리보기 페이지)
+    const hosting_name = route.params.hosting_name;
+    const introduce = route.params.hostIntroduction;
+    const max_personnel = route.params.maxPeople;
+    const age_group_min = route.params.low;
+    const age_group_max = route.params.high;
+    const selectedImageUris = route.params.selectedImageUris;
+    const screen_size = route.params.screenSize;
+
     const [partyInfo, setPartyInfo] = useState({})
     useEffect(()=>{
         // 현재 창의 너비와 높이 가져오기
@@ -36,7 +45,8 @@ function HostPlaceDetail(detail){
 
         setClientWidth(clientWidth)
         setClientHeight(clientHeight)
-        
+
+        console.log(hosting_name, introduce, max_personnel, age_group_min, age_group_max, screen_size, selectedImageUris)
         if(!isNew){
             ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`).then(res=>{
                 const party = JSON.parse(JSON.stringify(res))

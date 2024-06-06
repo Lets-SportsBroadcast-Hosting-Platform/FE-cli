@@ -126,6 +126,7 @@ export default function MakingHost() {
     const buttonSizes = [60, 80, 100, 120, 150];
     //변수값들 넘겨주기
     const handleNavigateToPreview = () => {
+        // console.log("handleNavigateToPreview찍힘")
         navigation.navigate('HostPlaceDetail', {
         isNew:true,
         hosting_name:'KBO 야구리그 - 롯데 vs 삼성',
@@ -255,8 +256,8 @@ export default function MakingHost() {
                 >{size}</Button>
             ))}
             </View>
-                <Button  mode="contained" onPress={()=> goToHostBusinessRegisNumber(storeAddress)} style={styles.FindAddressButton}>
-                <Text style={styles.nextText} onPress={()=>{handleNavigateToPreview}}>다음</Text>
+                <Button  mode="contained" style={styles.FindAddressButton}  onPress={handleNavigateToPreview}>
+                <Text style={styles.nextText}>다음</Text>
                 </Button>
         </ScrollView>
         </View>
