@@ -15,6 +15,8 @@ import Slider from 'rn-range-slider';
 
 export default function MakingHost() {
     const navigation = useNavigation();
+    // 제목
+    const [hostTitle, setHostTitle] = React.useState('')
     //모임소개
     const [hostIntroduction, setHostIntroduction] = React.useState('');
     //정원
@@ -130,7 +132,7 @@ export default function MakingHost() {
         // console.log(screenSize)
         navigation.navigate('HostPlaceDetail', {
         isNew:true,
-        hosting_name:'KBO 야구리그 - 롯데 vs 삼성',
+        hosting_name:hostTitle,
         hostIntroduction,
         maxPeople,
         low,
@@ -192,9 +194,10 @@ export default function MakingHost() {
             <Text style={styles.InputTitle}>모임 이름</Text>
             <View style={styles.textInputContainer}>
                 <TextInput
-                    placeholder='KBO 야구리그 - 롯데 vs 삼성'
+                    placeholder='호스팅 제목을 입력하세요'
                     style={styles.storeInputText}
                     mode='outlined'
+                    onChangeText={(text)=>setHostTitle(text)}
                 />
             </View>
 
@@ -206,7 +209,6 @@ export default function MakingHost() {
                     multiline={true}
                     numberOfLines={4}
                     onChangeText={(text) => setHostIntroduction(text)}
-                    value={hostIntroduction}
                     style={styles.textArea}
                     keyboardType="default"
                 />

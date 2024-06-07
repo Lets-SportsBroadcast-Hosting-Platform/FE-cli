@@ -18,11 +18,14 @@ import megaphone from '../assets/images/free-icon-font-megaphone.png'
 import users from '../assets/images/free-icon-font-users.png'
 import camera from '../assets/images/free-icon-font-video-camera-alt.png'
 
-function HostPlaceDetail(detail){
+function HostPlaceDetail(){
     // const navigation = useNavigation();
     const [clientWidth, setClientWidth] = useState(0)
     const [clientHeight, setClientHeight] = useState(0)
+    const [storeInfo, setStoreInfo] = useState({})
 
+    const {getStoreInfo} = useAuth();
+    
     const route = useRoute();
 
     const hosting_id = route.params.hosting_id;
@@ -40,12 +43,18 @@ function HostPlaceDetail(detail){
 
     const [partyInfo, setPartyInfo] = useState({})
     useEffect(()=>{
+        getStoreInfo().then((info)=>{
+            setStoreInfo(info)
+        })
+
         // 현재 창의 너비와 높이 가져오기
         const clientWidth = Dimensions.get('window').width;
         const clientHeight = Dimensions.get('window').height;
 
         setClientWidth(clientWidth)
         setClientHeight(clientHeight)
+
+        
 
         console.log(hosting_name, introduce, max_personnel, age_group_min, age_group_max, screen_size, selectedImageUris[0])
         if(!isNew){
@@ -98,24 +107,21 @@ function HostPlaceDetail(detail){
                 <View style={[self.bannerTitle, {left: clientWidth / 2, top: 214, transform: [{translateX: -167.5}]}]}>
                     {/* <Text style={[styles.commonFont,{fontSize: 25}]}>{partyInfo.hosting_name ?? ''}</Text>
                     <Text> </Text> */}
-                    {isNew ? (
-                        <Text style={[styles.commonFont, {fontSize: 25}]}>{route.params.hosting_name}</Text>
-                    ) : (
-                        <Text style={[styles.commonFont, {fontSize: 25}]}>{partyInfo.hosting_name ?? ''}</Text>
-                    )}
+                    
+                    <Text style={[styles.commonFont, {fontSize: 25}]}>{route.params.hosting_name}</Text>
+                    
                 </View>
 
             </View>
             <View style={[styles.p5, styles.pl15, styles.pr15, layouts.horizontal, layouts.spaceBetween]}>
-                <Text style={[self.textInfo, {color: '#000'}]}>{partyInfo.hosting_name ?? ''}</Text>
-                <Text style={[self.textInfo, {fontSize: 21}]}>02-123-4567</Text>
+                <Text style={[self.textInfo, {color: '#000'}]}>{partyInfo.hosting_name ?? storeInfo?.store_name ?? '가게명'}</Text>
             </View>
             <View style={[styles.p5, styles.pl15, styles.pr15, styles.mb60, layouts.horizontal, layouts.spaceBetween]}>
                 <Text style={[self.textInfo, {color: '#000'}]}>{partyInfo.hostDateNm ?? ''}({partyInfo.hostDayNm ?? ''}) | {partyInfo.hostHHMI ?? ''}</Text>
-                <Text style={[self.textInfo]}>서초동</Text>
+                <Text style={[self.textInfo, {fontSize: 21}]}>{storeInfo?.store_number ?? '가게번호'}</Text>
             </View>
             <View style={[styles.p5, styles.pl15, styles.pr15, styles.mb20]}>
-                <Text style={[self.textInfo, {color: '#000'}]}>{partyInfo.introduce ?? ''}</Text>
+                <Text style={[self.textInfo, {color: '#000'}]}>{partyInfo.introduce ?? introduce}</Text>
             </View>
 
             <View style={[styles.p5, styles.pl15, styles.pr15, styles.mb20, layouts.horizontal]}>
@@ -152,7 +158,7 @@ function HostPlaceDetail(detail){
             </View>
             <View style={[styles.p5, styles.pl15, styles.pr15, styles.mb20, layouts.horizontal]}>
                 <Image source={marker} />
-                <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>서울시 반포대로 1길 11</Text>
+                <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>{storeInfo?.store_address ?? '가게주소'}</Text>
             </View>
             <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={()=>{}}>
                 {isNew ? <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text> : <Text style={[styles.p5, self.hostButton]}>신청하기</Text> }
