@@ -36,6 +36,7 @@ function HostPlaceDetail(detail){
     const age_group_max = route.params.high;
     const selectedImageUris = route.params.selectedImageUris;
     const screen_size = route.params.screenSize;
+    const imageLink = route.params.selectedImageUris[0];
 
     const [partyInfo, setPartyInfo] = useState({})
     useEffect(()=>{
@@ -46,7 +47,7 @@ function HostPlaceDetail(detail){
         setClientWidth(clientWidth)
         setClientHeight(clientHeight)
 
-        console.log(hosting_name, introduce, max_personnel, age_group_min, age_group_max, screen_size, selectedImageUris)
+        console.log(hosting_name, introduce, max_personnel, age_group_min, age_group_max, screen_size, selectedImageUris[0])
         if(!isNew){
             ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`).then(res=>{
                 const party = JSON.parse(JSON.stringify(res))
@@ -75,7 +76,23 @@ function HostPlaceDetail(detail){
         >   
             <View style={[styles.w100, {height: 267}, styles.mb80]}>
                 <View style={[layouts.imageContainer, styles.w100, self.banner, styles.banner]}>
-                    {!!partyInfo.imageLink ? <Image source={partyInfo.imageLink} style={[styles.w100, {height: 400}]}/> : <Text>이미지 없음</Text>}
+                    {/* {!!partyInfo.imageLink ? <Image source={partyInfo.imageLink} style={[styles.w100, {height: 400}]}/> : <Image source={imageLink} style={[styles.w100, {height: 400}]}/>} */}
+                    {isNew ? (
+                        selectedImageUris && selectedImageUris.length > 0 ? (
+                        <Image
+                            source={{ uri: selectedImageUris[0] }}
+                            style={[styles.w100, { height: 400 }]} // Adjust height as needed
+                        />
+                        ) : (
+                        <Text>이미지 없음</Text>
+                        )
+                    ) : (
+                        !!partyInfo.imageLink ? (
+                        <Image source={partyInfo.imageLink} style={[styles.w100, { height: 400 }]} /> // Adjust height as needed
+                        ) : (
+                        <Text>이미지 없음</Text>
+                        )
+                    )}
                 </View>
                 <Text>{!!partyInfo.imageLink ? partyInfo.imageLink.uri : ''}</Text>
                 <View style={[self.bannerTitle, {left: clientWidth / 2, top: 214, transform: [{translateX: -167.5}]}]}>

@@ -126,14 +126,15 @@ export default function MakingHost() {
     const buttonSizes = [60, 80, 100, 120, 150];
     //변수값들 넘겨주기
     const handleNavigateToPreview = () => {
-        // console.log("handleNavigateToPreview찍힘")
+        // console.log("screenSize")
+        // console.log(screenSize)
         navigation.navigate('HostPlaceDetail', {
         isNew:true,
         hosting_name:'KBO 야구리그 - 롯데 vs 삼성',
         hostIntroduction,
         maxPeople,
         low,
-        high,
+        high, 
         screenSize,
         selectedImageUris,
     });
@@ -246,12 +247,11 @@ export default function MakingHost() {
             {buttonSizes.map((size) => (
                 <Button
                 key={size}
-                style={styles.ScreenButton}
-                labelStyle={{ fontSize: 11, color: '#000' }}
+                style={size === screenSize ? styles.ScreenButton1 : styles.ScreenButton}
+                labelStyle={{ fontSize: 11, color: size === screenSize ? '#fff' : '#000' }}
                 title={size.toString()}
                 onPress={() => {
                     setScreenSize(size);
-                    console.log(screenSize)
                 }}
                 >{size}</Button>
             ))}
@@ -500,6 +500,12 @@ export default function MakingHost() {
     ScreenButton :{
         backgroundColor:'#eee',
         // width:40,
+        width:'19%',
+        borderRadius:7,
+        fontSize:7
+    },
+    ScreenButton1:{
+        backgroundColor:'#01162D',
         width:'19%',
         borderRadius:7,
         fontSize:7

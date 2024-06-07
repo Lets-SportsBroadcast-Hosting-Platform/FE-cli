@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList } from 'react-native';
 import arrowToLeft from '../../assets/images/location.png';
-import arrowRight from '../../assets/images/arrow-right.png';
+import raspberries from '../../assets/images/raspberries.jpg';
 import MyHomePng from '../../assets/images/myhome.png';
 import EditPng from '../../assets/images/edit.png'
 import UserImage from '../../assets/images/user.png'
@@ -23,15 +23,24 @@ export default function HostPlaceList({navigation}) {
 
     const clickING = ()=>{
         console.log('진행중 버튼 클릭   ')
+        setStatus(true)
+        console.log(hostPlaceList)
     }
 
     const clickCOMPLEDTED = ()=>{
         console.log('마감 버튼 클릭')
+        setStatus(false)
     }
-
+    const [status, setStatus] = useState(true)
     const [hostPlaceList, setHostPlaceList] = useState([]);
+    // const [imageLink, setImageLink] = useState(uri:{"https://sitem.ssgcdn.com/86/60/02/item/1000385026086_i1_1100.jpg"});
     useEffect(()=>{
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/mainpage/party`).then((res)=>{
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/party`, {
+            params: {
+                business_no: 3372300444,
+                status: status
+        }
+        }).then((res)=>{
             const placeList = res.map(place=>{
                 const dayArray = ['월', '화', '수', '목', '금', '토', '일']
                 const hostingDateInfo = new Date(place.hosting_date)
@@ -40,7 +49,7 @@ export default function HostPlaceList({navigation}) {
                 const hostDay = hostingDateInfo.getDay()
                 const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
                 const hostDayNm = dayArray[hostDay]
-
+                
                 return {
                     ...place,
                     dayArray,
@@ -52,16 +61,17 @@ export default function HostPlaceList({navigation}) {
                     hostDayNm,
                     imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.business_no}/0`},
                 }
+                
             })
-
-            setHostPlaceList(placeList)  
+            setHostPlaceList(placeList)
+            console.log(placeList)
         })
-    }, [])
+    }, [status])
 
     const ListItem = ({ 
             hosting_id,
             hosting_name,
-            hosting_place,
+            // hosting_place,
             hosting_date,
             hostDate,
             hostDayNm,
@@ -76,7 +86,7 @@ export default function HostPlaceList({navigation}) {
         <TouchableOpacity onPress={()=>onClickItem({
                 hosting_id,
                 hosting_name,
-                hosting_place,
+                // hosting_place,
                 hosting_date,
                 hostDate,
                 hostDayNm,
@@ -113,7 +123,7 @@ export default function HostPlaceList({navigation}) {
             hosting_id={item.hosting_id}
             style={styles.itemScrollContainer}
             hosting_name={item.hosting_name}
-            hosting_place={item.hosting_place}
+            // hosting_place={item.hosting_place}
             hosting_date={item.hosting_date}
             hostDate={item.hostDate}
             hostDayNm={item.hostDayNm}
@@ -126,7 +136,7 @@ export default function HostPlaceList({navigation}) {
             current_personnel={item.current_personnel}
         />
     );
-      
+
     return (
         <View style={styles.container}>
             <View style={styles.userInfoContainer}>
@@ -254,7 +264,8 @@ const styles = StyleSheet.create({
         right: 10
       },
       buttonContainer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom:30
       },
       statusBtn: {
         width: '50%',
