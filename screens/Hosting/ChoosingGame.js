@@ -4,6 +4,7 @@ import arrowToLeft from '../../assets/images/arrowToLeft.png';
 import React,{useState,useEffect } from 'react';
 import ApiUtil from '../../api/ApiUtil';
 import ApiConfig from '../../api/ApiConfig';
+import { RadioButton } from 'react-native-paper';
 // import arrowRight from '../assets/images/arrow-right.png';
 
 
@@ -18,29 +19,33 @@ export default function HostPlaceList() {
     const [categoryId, setCategoryId] = useState(0)
     const [count, setCount] = useState(0)
 
-    const tabList = ['KBO', '해외축구']
+    const tabList = ['KBO', '해외축구', 'E-스포츠']
     const upperCategoryNm = ['kbaseball', 'wfootball']
     const categoryNmList = [['kbo'], ['epl', 'primera', 'ligue1', 'bundesliga']]
 
     const [sportsGameList, setSportsGameList] = useState([]);
-
-    const ListItem = ({
-        awayTeamEmblemUrl,
-        awayTeamName,
-        date,
-        homeTeamEmblemUrl,
-        homeTeamName,
-        time,
-        weekDay
-    })=>{
+    //라디오버튼들 중 선택된 경기
+    const [selectedGame, setSelectedGame] = useState(null);
+    const ListItem = ({gameData})=>{
+        // console.log("Game Data:", gameData);
         return (
             // <TouchableOpacity>
             //     <View style={[self.checkboxItem]}>
             //         <Text>18:30</Text><Text>{homeTeamName} vs {awayTeamName}</Text>
             //     </View>
             // </TouchableOpacity>
+            
             <View>
-                <Text>{homeTeamName} vs {awayTeamName}</Text>
+                <Text>{gameData.date} {gameData.weekDay}요일</Text>
+                {/* <Text style={{fontFamily:'BalooDa2-Medium', fontSize:17, color:'black'}}>{gameData.time.slice(0, 2)}:{gameData.time.slice(2)}     {gameData.homeTeamName}<Image source={{ uri: gameData.homeTeamEmblemUrl }} style={{ height: 19, width: 19 }} /> <Text style={{fontFamily:'BlackHanSans-Regular', fontSize:10}}>vs</Text> <Image source={{ uri: gameData.awayTeamEmblemUrl }} style={{ height: 19, width: 19 }} />{gameData.awayTeamName}</Text> */}
+                <RadioButton
+                    // key={gameData.date + gameData.awayTeamName + gameData.homeTeamName}
+                    label={`${gameData.homeTeamName} vs ${gameData.awayTeamName}`}
+                    value={gameData} // Pass the entire game object as the value
+                    selected={selectedGame === gameData}
+                    onPress={() => setSelectedGame(gameData)}
+                    // onPress={() => console.log(gameData)}
+                /><TouchableOpacity><Text style={{fontFamily:'BalooDa2-Medium', fontSize:17, color:'black'}}>{gameData.time.slice(0, 2)}:{gameData.time.slice(2)}     {gameData.homeTeamName}<Image source={{ uri: gameData.homeTeamEmblemUrl }} style={{ height: 19, width: 19 }} /> <Text style={{fontFamily:'BlackHanSans-Regular', fontSize:10}}>vs</Text> <Image source={{ uri: gameData.awayTeamEmblemUrl }} style={{ height: 19, width: 19 }} />{gameData.awayTeamName}</Text></TouchableOpacity>
             </View>
         );
     }
@@ -65,7 +70,7 @@ export default function HostPlaceList() {
             }
         }).then(res=>{
             res.games.forEach(game => {
-                console.log(game)
+                // console.log(game)
             });
             setSportsGameList(res.games)
         })
@@ -102,8 +107,8 @@ export default function HostPlaceList() {
             <View style={{backgroundColor:'#eee', height:50}}></View> */}
                 {/* keyExtractor={item=>`${item.date}${item.awayTeamName}${item.homeTeamName}`} */}
             <FlatList
-            contentContainerStyle={{backgroundColor:'green'}}
-                renderItem={renderItem}
+            // contentContainerStyle={{backgroundColor:'green'}}
+            renderItem={({ item }) => <ListItem gameData={item} />}
                 data={sportsGameList}
                 showsVerticalScrollIndicator={false}
                 scrollIndicatorInsets={{ right: 1 }}
@@ -184,6 +189,5 @@ const self = StyleSheet.create({
         paddingTop: 20,
         paddingLeft: 10,
         paddingRight: 10,
-        backgroundColor: 'green'
     }
 });
