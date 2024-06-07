@@ -96,8 +96,13 @@ function HostPlaceDetail(detail){
                 </View>
                 <Text>{!!partyInfo.imageLink ? partyInfo.imageLink.uri : ''}</Text>
                 <View style={[self.bannerTitle, {left: clientWidth / 2, top: 214, transform: [{translateX: -167.5}]}]}>
-                    <Text style={[styles.commonFont,{fontSize: 25}]}>{partyInfo.hosting_name ?? ''}</Text>
-                    <Text> </Text>
+                    {/* <Text style={[styles.commonFont,{fontSize: 25}]}>{partyInfo.hosting_name ?? ''}</Text>
+                    <Text> </Text> */}
+                    {isNew ? (
+                        <Text style={[styles.commonFont, {fontSize: 25}]}>{route.params.hosting_name}</Text>
+                    ) : (
+                        <Text style={[styles.commonFont, {fontSize: 25}]}>{partyInfo.hosting_name ?? ''}</Text>
+                    )}
                 </View>
 
             </View>
@@ -115,15 +120,35 @@ function HostPlaceDetail(detail){
 
             <View style={[styles.p5, styles.pl15, styles.pr15, styles.mb20, layouts.horizontal]}>
                 <Image source={users} />
-                <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>모집인원 : {partyInfo.current_personnel ?? '0'} / {partyInfo.max_personnel ?? '0'}</Text>
+                {isNew ?
+                (
+                    <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>모집인원 :  {isNew ? partyInfo.max_personnel ?? '0' : partyInfo.current_personnel ?? '0'} / {route.params.maxPeople ?? '0'}</Text>
+                    ):(
+                    <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>모집인원 : {partyInfo.current_personnel ?? '0'} / {partyInfo.max_personnel ?? '0'}</Text>
+                )}
+                
+                {/* <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>모집인원 :  {isNew ? partyInfo.max_personnel ?? '0' : partyInfo.current_personnel ?? '0'} / {route.params.maxPeople ?? '0'}</Text> */}
             </View>
             <View style={[styles.p5, styles.pl15, styles.pr15, styles.mb20, layouts.horizontal]}>
                 <Image source={megaphone} />
-                <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>연령대 : {partyInfo.age_group_min ?? ''}~{partyInfo.age_group_max ?? ''}세</Text>
+                {isNew ?
+                (
+                    <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>연령대 : {route.params.low ?? ''}~{route.params.high ?? ''}대</Text>
+                    ):(
+                        <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>연령대 : {partyInfo.age_group_min ?? ''}~{partyInfo.age_group_max ?? ''}세</Text>
+                    
+                )}
             </View>
             <View style={[styles.p5, styles.pl15, styles.pr15, styles.mb20, layouts.horizontal]}>
                 <Image source={camera} />
-                <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>160인치</Text>
+                {isNew ?
+                (
+                    <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>{route.params.screenSize ?? ''}인치</Text>
+                    ):(
+                        <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>160인치</Text>
+                        
+                    
+                )}
             </View>
             <View style={[styles.p5, styles.pl15, styles.pr15, styles.mb20, layouts.horizontal]}>
                 <Image source={marker} />
