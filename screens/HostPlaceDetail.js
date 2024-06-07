@@ -23,6 +23,8 @@ function HostPlaceDetail(){
     const [clientWidth, setClientWidth] = useState(0)
     const [clientHeight, setClientHeight] = useState(0)
     const [storeInfo, setStoreInfo] = useState({})
+    const [partyInfo, setPartyInfo] = useState({})
+
 
     const {getStoreInfo} = useAuth();
     
@@ -39,9 +41,8 @@ function HostPlaceDetail(){
     const age_group_max = route.params.high;
     const selectedImageUris = route.params.selectedImageUris;
     const screen_size = route.params.screenSize;
-    const imageLink = route.params.selectedImageUris[0];
+    // const imageLink = route.params.selectedImageUris[0];
 
-    const [partyInfo, setPartyInfo] = useState({})
     useEffect(()=>{
         getStoreInfo().then((info)=>{
             setStoreInfo(info)
@@ -56,10 +57,11 @@ function HostPlaceDetail(){
 
         
 
-        console.log(hosting_name, introduce, max_personnel, age_group_min, age_group_max, screen_size, selectedImageUris[0])
+        // console.log(hosting_name, introduce, max_personnel, age_group_min, age_group_max, screen_size, selectedImageUris[0])
         if(!isNew){
             ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`).then(res=>{
                 const party = JSON.parse(JSON.stringify(res))
+                console.log(party)
                 const dayArray = ['월', '화', '수', '목', '금', '토', '일']
                 const hostingDateInfo = new Date(party.hosting_date)
                 const hostMonth = hostingDateInfo.getMonth() + 1
@@ -68,15 +70,29 @@ function HostPlaceDetail(){
                 const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
                 const hostDayNm = dayArray[hostDay]
                 
-                party.imageLink = {uri: `${party.store_image_url}0`},
-                party.hostDateNm = `${hostMonth}.${hostDate}`, hostHHMI, hostDayNm
+                party.imageLink = {uri: `${party.store_image_url}0`}
+                party.hostDateNm = `${hostMonth}.${hostDate}`
                 party.hostHHMI = hostHHMI
                 party.hostDayNm = hostDayNm
                 setPartyInfo({
                     ...party
                 })
             })
-        }}, [])
+        } else {
+            const dayArray = ['월', '화', '수', '목', '금', '토', '일']
+            const hostingDateInfo = new Date()
+            const hostMonth = hostingDateInfo.getMonth() + 1
+            const hostDate = hostingDateInfo.getDate()
+            const hostDay = hostingDateInfo.getDay()
+            const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
+            const hostDayNm = dayArray[hostDay]
+
+            setPartyInfo({
+                hostMonth, hostDate, hostDay, hostHHMI, hostDayNm, hostDateNm : `${hostMonth}.${hostDate}`, 
+            })
+        }
+        
+    }, [])
 
     return (
         <ScrollView
@@ -118,7 +134,7 @@ function HostPlaceDetail(){
             </View>
             <View style={[styles.p5, styles.pl15, styles.pr15, styles.mb60, layouts.horizontal, layouts.spaceBetween]}>
                 <Text style={[self.textInfo, {color: '#000'}]}>{partyInfo.hostDateNm ?? ''}({partyInfo.hostDayNm ?? ''}) | {partyInfo.hostHHMI ?? ''}</Text>
-                <Text style={[self.textInfo, {fontSize: 21}]}>{storeInfo?.store_number ?? '가게번호'}</Text>
+                <Text style={[self.textInfo, {fontSize: 21}]}>{partyInfo.store_number ?? storeInfo?.store_number ?? '가게번호'}</Text>
             </View>
             <View style={[styles.p5, styles.pl15, styles.pr15, styles.mb20]}>
                 <Text style={[self.textInfo, {color: '#000'}]}>{partyInfo.introduce ?? introduce}</Text>
