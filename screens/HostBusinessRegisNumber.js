@@ -53,7 +53,7 @@ export default function HostBusinessRegisNumber() {
                 type: 'success',
                 text1: '인증 성공',
                 text2: '사업자번호가 인증되었습니다.'
-              }))
+            }))
             setIsDisable(false)
             console.log(number)
             setAuthSuccessNo(number)
