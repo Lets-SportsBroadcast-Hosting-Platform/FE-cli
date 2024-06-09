@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, ScrollView, Image,TouchableOpacity, Dimensions } from "react-native";
 import { useEffect, useState } from "react";
 import { useNavigation, useRoute } from '@react-navigation/native';
-import TempGopChang from '../assets/images/gopchang.jpeg';
+
 // auth
 import { useAuth } from '../contexts/AuthContext.js';
 
@@ -24,12 +24,12 @@ function HostPlaceDetail(){
     const [clientHeight, setClientHeight] = useState(0)
     const [storeInfo, setStoreInfo] = useState({})
     const [partyInfo, setPartyInfo] = useState({})
+    const [imageBlobList, setImageBlobList] = useState([])
 
 
     const {getStoreInfo} = useAuth();
     
     const route = useRoute();
-
     const hosting_id = route.params.hosting_id;
     const isNew = route.params.isNew ?? false;
 
@@ -41,8 +41,23 @@ function HostPlaceDetail(){
     const age_group_max = route.params.high;
     const selectedImageUris = route.params.selectedImageUris;
     const screen_size = route.params.screenSize;
-    // const imageLink = route.params.selectedImageUris[0];
+    
+    const uriToBlob = (uri) => {
+        return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        xhr.onload = function () {
+            // return the blob
+            resolve(xhr.response)
+        }
+        xhr.onerror = function () {
+            reject(new Error('uriToBlob failed'))
+        }
+        xhr.responseType = 'blob'
+        xhr.open('GET', uri, true)
+    
+        xhr.send(null)})}
 
+    // const imageLink = route.params.selectedImageUris[0];
     useEffect(()=>{
         getStoreInfo().then((info)=>{
             setStoreInfo(info)
@@ -61,7 +76,7 @@ function HostPlaceDetail(){
         if(!isNew){
             ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`).then(res=>{
                 const party = JSON.parse(JSON.stringify(res))
-                console.log(party)
+
                 const dayArray = ['월', '화', '수', '목', '금', '토', '일']
                 const hostingDateInfo = new Date(party.hosting_date)
                 const hostMonth = hostingDateInfo.getMonth() + 1
@@ -90,9 +105,48 @@ function HostPlaceDetail(){
             setPartyInfo({
                 hostMonth, hostDate, hostDay, hostHHMI, hostDayNm, hostDateNm : `${hostMonth}.${hostDate}`, 
             })
+            
+            Promise.all((selectedImageUris.map(uri => uriToBlob(uri)))).then((responsetList)=>{
+                setImageBlobList(responsetList)
+            })
+            
         }
         
     }, [])
+
+    
+
+    const postHosting = ()=>{
+        const formData = new FormData();
+        formData.append('data', JSON.stringify({
+            hosting_name: route.params.hosting_name,
+            //business_no: storeInfo.business_no,
+            business_no:    3372300444,
+            introduce: route.params.hostIntroduction,
+            max_personnel: route.params.maxPeople,
+            age_group_min: route.params.low,
+            age_group_max: route.params.high,
+            hosting_date: new Date(), // 임시
+            screen_size: route.params.screenSize
+        }))
+        
+
+        for(let i=0; i<imageBlobList.length; i++){
+            const blob = imageBlobList[i].data;
+            formData.append('photos', blob)
+        }
+
+        ApiUtil.post(`${ApiConfig.SERVER_URL}/party`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(res=>console.log(res))
+         .catch(e=>console.log(JSON.stringify(e)))
+    }
+
+    const applyHosting = ()=>{
+
+    }
 
     return (
         <ScrollView
@@ -176,7 +230,7 @@ function HostPlaceDetail(){
                 <Image source={marker} />
                 <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>{storeInfo?.store_address ?? '가게주소'}</Text>
             </View>
-            <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={()=>{}}>
+            <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={isNew ? postHosting : applyHosting}>
                 {isNew ? <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text> : <Text style={[styles.p5, self.hostButton]}>신청하기</Text> }
             </TouchableOpacity>
         </ScrollView>

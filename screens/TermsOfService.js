@@ -42,7 +42,6 @@ export default function TermsOfService() {
     const submitSignUpForm = async ()=>{
         // const userInfo = await getUserInfo();
         const userToken = await getUserToken();
-        console.log(params)
         ApiUtil.post(`${ApiConfig.SERVER_URL}/store`, {
             business_no: params.business_no,
             store_name: params.place_name,
@@ -63,6 +62,7 @@ export default function TermsOfService() {
                 store_road_address: params.road_address_name,
                 store_category: params.category_group_name,
                 store_number: params.phone,
+                business_no: params.business_no
             })
             navigation.navigate('PlaceList')
         }).catch(e=>{

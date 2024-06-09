@@ -39,6 +39,7 @@ export default function MakingHost() {
     //   setProgress(Math.random() * (40 - 30) + 30);
     // }, 1000);
     // 이미지
+    const [selectedImageAssets ,setSelectedImageAssets] = useState([])
     const [selectedImageUris, setSelectedImageUris] = useState([]);
     const [hasImage, setHasImage] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -55,9 +56,9 @@ export default function MakingHost() {
             const result = await launchImageLibrary(options);
 
             if (!result.didCancel) {
-
             const newUris = result.assets.map((asset) => asset.uri);
             setSelectedImageUris([...selectedImageUris, ...newUris]);
+            setSelectedImageAssets([...selectedImageAssets, ...(result.assets)])
             setHasImage(true);
             }
         } catch (error) {
@@ -89,7 +90,7 @@ export default function MakingHost() {
         
             try {
             const result = await launchImageLibrary(options);
-        
+            console.log(result)
             if (!result.didCancel) {
                 const newUri = result.assets[0].uri;
                 const updatedSelectedImageUris = [...selectedImageUris];
@@ -139,6 +140,7 @@ export default function MakingHost() {
         high, 
         screenSize,
         selectedImageUris,
+        selectedImageAssets
     });
     };
 
