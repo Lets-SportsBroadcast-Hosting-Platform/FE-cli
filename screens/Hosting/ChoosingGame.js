@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList, Button, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList, Button, ImageBackground, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
 import React,{useState,useEffect } from 'react';
@@ -26,28 +26,51 @@ export default function HostPlaceList() {
     const [sportsGameList, setSportsGameList] = useState([]);
     //라디오버튼들 중 선택된 경기
     const [selectedGame, setSelectedGame] = useState(null);
+    // const [checked, setChecked] = React.useState('first');
     const ListItem = ({gameData})=>{
-        // console.log("Game Data:", gameData);
+        console.log("Game Data:", gameData);
         return (
-            // <TouchableOpacity>
-            //     <View style={[self.checkboxItem]}>
-            //         <Text>18:30</Text><Text>{homeTeamName} vs {awayTeamName}</Text>
-            //     </View>
-            // </TouchableOpacity>
-            
-            <View>
-                <Text>{gameData.date} {gameData.weekDay}요일</Text>
-                {/* <Text style={{fontFamily:'BalooDa2-Medium', fontSize:17, color:'black'}}>{gameData.time.slice(0, 2)}:{gameData.time.slice(2)}     {gameData.homeTeamName}<Image source={{ uri: gameData.homeTeamEmblemUrl }} style={{ height: 19, width: 19 }} /> <Text style={{fontFamily:'BlackHanSans-Regular', fontSize:10}}>vs</Text> <Image source={{ uri: gameData.awayTeamEmblemUrl }} style={{ height: 19, width: 19 }} />{gameData.awayTeamName}</Text> */}
-                <RadioButton
-                    // key={gameData.date + gameData.awayTeamName + gameData.homeTeamName}
-                    label={`${gameData.homeTeamName} vs ${gameData.awayTeamName}`}
-                    value={gameData} // Pass the entire game object as the value
-                    selected={selectedGame === gameData}
-                    onPress={() => setSelectedGame(gameData)}
-                    // onPress={() => console.log(gameData)}
-                /><TouchableOpacity><Text style={{fontFamily:'BalooDa2-Medium', fontSize:17, color:'black'}}>{gameData.time.slice(0, 2)}:{gameData.time.slice(2)}     {gameData.homeTeamName}<Image source={{ uri: gameData.homeTeamEmblemUrl }} style={{ height: 19, width: 19 }} /> <Text style={{fontFamily:'BlackHanSans-Regular', fontSize:10}}>vs</Text> <Image source={{ uri: gameData.awayTeamEmblemUrl }} style={{ height: 19, width: 19 }} />{gameData.awayTeamName}</Text></TouchableOpacity>
+            <View style={{width:'98%', backgroundColor:'#ddd', marginBottom:20, justifyContent:'center'}}>
+                {/* <Text>{gameData.date} ({gameData.weekDay})</Text> */}
+                <Text style={{ fontFamily: 'BalooDa2-SemiBold', fontSize: 18, color: 'black',marginBottom:10 }}>{formatKoreanDate(gameData.date)} ({gameData.weekDay})</Text>
+                    {gameData.games.map((game, index) => ( // Map through games array
+                        <TouchableOpacity key={index} style={{flex:1, flexDirection:'row', marginLeft:9, marginBottom:8}}>
+                        <RadioButton
+                        label=''
+                        value={gameData.games}
+                        selected={selectedGame === gameData.games}
+                        onPress={() => {setSelectedGame(gameData.games[index])}}
+                        status={ selectedGame === gameData.games[index] ? 'checked' : 'unchecked' }
+                        />
+                        <Text style={{ fontFamily: 'BalooDa2-Medium', fontSize: 17, color: 'black',marginLeft: 20, marginRight: 20  }}>{game.time.slice(0, 2)}:{game.time.slice(2)}             {game.homeTeamName}     <Image source={{ uri: game.homeTeamEmblemUrl }} style={{ height: 28, width: 28}} />
+                            <Text style={{ fontFamily: 'BlackHanSans-Regular', fontSize: 10}}>     vs     </Text>
+                            <Image source={{ uri: game.awayTeamEmblemUrl }} style={{ height: 28, width: 28}} />     {game.awayTeamName}
+                        </Text>
+                        </TouchableOpacity>
+                    ))
+                    }
+                {/* <Button  mode="contained" onPress={()=> {console.log("다음")}} style={styles.FindAddressButton}>
+                <Text style={styles.nextText}>다음</Text>
+                </Button> */}
             </View>
         );
+        
+    }
+
+    function formatKoreanDate(dateString) {
+        // Modify the date string to a format parsable by Date constructor (e.g., YYYY-MM-DD)
+        const yearr = dateString.slice(0, 4);
+        const monthh = dateString.slice(4, 6);
+        const dayy = dateString.slice(6);
+        const formattedDateString = `${yearr}-${monthh}-${dayy}`;
+        
+        const date = new Date(formattedDateString); // Convert string to Date object
+        const month = date.getMonth() + 1; // Get month (0-indexed, so add 1)
+        const day = date.getDate(); // Get day of the month
+        // const dayWithoutZero = date.getDate().toString().padStart(2, '0');
+        const dayWithoutZero = day < 10 ? `0${day}` : day.toString();
+
+        return `${month}월 ${dayWithoutZero}일`; // Formatted date string
     }
 
     const renderItem = (game)=>(<ListItem
@@ -60,6 +83,32 @@ export default function HostPlaceList() {
             weekDay={game.weekDay}
         />
     )
+    function groupGamesByDate(gamesArray) {
+        const groupedGames = {};
+    
+        for (const game of gamesArray) {
+            const date = game.date;
+            const weekDay = game.weekDay; // Add weekDay to the grouping
+            const gameKey = `${date}-${weekDay}`; // Combine date and weekDay as key
+        
+        if (!groupedGames[gameKey]) {
+            groupedGames[gameKey] = [game];
+        } else {
+            groupedGames[gameKey].push(game);
+        }
+        }
+    
+        const transformedGames = Object.entries(groupedGames).map(([gameKey, games]) => {
+        const [date, weekDay] = gameKey.split('-');
+        return {
+            date,
+            weekDay,
+            games,
+        };
+        });
+    
+        return transformedGames;
+    }
 
     useEffect(()=>{
         ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports`, {
@@ -69,11 +118,10 @@ export default function HostPlaceList() {
                 count:count
             }
         }).then(res=>{
-            res.games.forEach(game => {
-                // console.log(game)
-            });
-            setSportsGameList(res.games)
-        })
+            // console.log(res.games)
+            // console.log(groupGamesByDate(res.games))
+            setSportsGameList(groupGamesByDate(res.games))
+        }).catch(err=>console.log(JSON.stringify(err)))
     }, [upperCategoryId, categoryId, count])
 
     const getTabList = ()=>{
@@ -103,18 +151,21 @@ export default function HostPlaceList() {
             <View style={self.tabButtonContainer}>
                 { getTabList() }
             </View>
+            
             {/* <View style={{backgroundColor:'#fff', height:699, flex:1}}></View>
             <View style={{backgroundColor:'#eee', height:50}}></View> */}
-                {/* keyExtractor={item=>`${item.date}${item.awayTeamName}${item.homeTeamName}`} */}
-            <FlatList
-            // contentContainerStyle={{backgroundColor:'green'}}
-            renderItem={({ item }) => <ListItem gameData={item} />}
-                data={sportsGameList}
-                showsVerticalScrollIndicator={false}
-                scrollIndicatorInsets={{ right: 1 }}
-                // contentContainerStyle={self.flatListContent}
-                />
-            {/* </FlatList> */}
+            {/* keyExtractor={item=>`${item.date}${item.awayTeamName}${item.homeTeamName}`} */}
+
+            <View style={{width:'96%' }}>
+                <FlatList
+                // contentContainerStyle={{backgroundColor:'green'}}
+                renderItem={({ item }) => <ListItem gameData={item} />}
+                    data={sportsGameList}
+                    showsVerticalScrollIndicator={false}
+                    scrollIndicatorInsets={{ right: 1 }}
+                    // contentContainerStyle={self.flatListContent}
+                    />
+            </View>
         </View>
     );
 }
@@ -137,7 +188,7 @@ const self = StyleSheet.create({
         paddingBottom: 10,
         width: '100%',
         position: 'relative',
-        backgroundColor:'red'
+        // backgroundColor:'red'
     },
     arrowIcon: {
         width: 20,
@@ -176,7 +227,8 @@ const self = StyleSheet.create({
         alignItems: 'center',
         width:'100%',
         // height: 30,
-        backgroundColor: 'red'
+        // backgroundColor: 'red',
+        marginBottom:40
     },
     checkboxItem: {
         flexDirection: 'row'
@@ -189,5 +241,17 @@ const self = StyleSheet.create({
         paddingTop: 20,
         paddingLeft: 10,
         paddingRight: 10,
+    },
+    FindAddressButton :{
+        height:50,
+        backgroundColor:'#B7B7B7',
+        marginTop:40
+    },
+    nextText :{
+        color:'#fff',
+        fontFamily:'NotoSansKR-Medium',
+        alignItems:'center',
+        fontSize:15,
+        lineHeight:25.5
     }
 });
