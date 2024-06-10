@@ -40,8 +40,10 @@ export default function HostPlaceList() {
                         <RadioButton
                         label=''
                         value={gameData.games}
-                        selected={selectedGame === gameData.games}
-                        onPress={() => {setSelectedGame(gameData.games[index])}}
+                        selected={selectedGame === gameData.games[index]}
+                        onPress={() => {
+                            setSelectedGame(game)
+                        }}
                         status={ selectedGame === gameData.games[index] ? 'checked' : 'unchecked' }
                         />
                         <Text style={{ fontFamily: 'BalooDa2-Medium', fontSize: 18, color: 'black',marginLeft: 20, marginRight: 20  }}>{game.time.slice(0, 2)}:{game.time.slice(2)}             {game.homeTeamName}     <Image source={{ uri: game.homeTeamEmblemUrl }} style={{ height: 28, width: 28}} />
@@ -130,7 +132,7 @@ export default function HostPlaceList() {
         })
     }
 
-    const gotoMakingHosyButton = (selectedGame) =>{
+    const gotoMakingHosyButton = () =>{
         navigation.navigate('MakingHost',{
             selectedGame
         });

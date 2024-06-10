@@ -16,7 +16,7 @@ import Slider from 'rn-range-slider';
 export default function MakingHost() {
     const navigation = useNavigation();
     const route = useRoute()
-    const { selectedGame } = route.params;
+    const selectedGame = route.params.selectedGame;
     useEffect(() => {
         console.log("Received selectedGame:", selectedGame); 
     }, []);
