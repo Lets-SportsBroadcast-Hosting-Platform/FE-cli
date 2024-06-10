@@ -32,7 +32,7 @@ export default function HostPlaceList() {
     const ListItem = ({gameData})=>{
         console.log("Game Data:", gameData);
         return (
-            <View style={{width:'98%', marginBottom:20}}>
+            <View style={{width:'98%'}}>
                 
                 <Text style={{ fontFamily: 'BalooDa2-SemiBold', fontSize: 18, color: 'black',marginBottom:10 }}>{formatKoreanDate(gameData.date)} ({gameData.weekDay})</Text>
                     {gameData.games.map((game, index) => ( 
@@ -154,28 +154,29 @@ export default function HostPlaceList() {
                 <Text style={self.noGamesText}>아직 진행되는 경기가 없습니다.</Text>
             )}
             {sportsGameList.length > 0 && (
-                <View style={{width:'96%' }}>
-                <FlatList
-                    renderItem={({ item }) => <ListItem gameData={item} />}
-                    data={sportsGameList}
-                    showsVerticalScrollIndicator={false}
-                    scrollIndicatorInsets={{ right: 1 }}
-                    // ListFooterComponent={() => (
-                    // <View style={self.footerContainer}>
-                    //     <Button style={self.AfterChoosingGameButton} onPress={() => loadMoreGames()}><Text style={self.nextText}>다음</Text></Button>
-                    // </View>
-                    // )}
+                <View style={{width:'96%', flex: 1}}>
+                    <FlatList
+                        renderItem={({ item }) => <ListItem gameData={item} />}
+                        data={sportsGameList}
+                        showsVerticalScrollIndicator={false}
+                        scrollIndicatorInsets={{ right: 1 }}
+                        // ListFooterComponent={() => (
+                        // <View style={self.footerContainer}>
+                        //     <Button style={self.AfterChoosingGameButton} onPress={() => loadMoreGames()}><Text style={self.nextText}>다음</Text></Button>
+                        // </View>
+                        // )}
                     />
                     <View style={self.footerContainer}>
                         <Button style={self.AfterChoosingGameButton} onPress={gotoMakingHosyButton}><Text style={self.nextText}>다음</Text></Button>
                     </View>
-            </View>)}
+                </View>)}
         </View>
     );
 }
 
 const self = StyleSheet.create({
     container: {
+        height: '100%',
         backgroundColor: '#fff',
         // height: '100%',
         flex: 1,
@@ -254,14 +255,12 @@ const self = StyleSheet.create({
         flexDirection: 'row'
     },
     footerContainer:{
-        height:80,
-        justifyContent: 'flex-end', 
+        margin: 5,
         // flex: 1,
-        position: 'sticky',
+
         // right:0,
         // top: 0,
         // left:0,
-        bottom:-60,
 
         // backgroundColor: 'red',
         // width: '100%',
@@ -271,8 +270,6 @@ const self = StyleSheet.create({
     AfterChoosingGameButton :{
         height:50,
         backgroundColor:'#01162D',
-        // marginTop:40
-        marginBottom:0,
     },
     nextText :{
         color:'#fff',
