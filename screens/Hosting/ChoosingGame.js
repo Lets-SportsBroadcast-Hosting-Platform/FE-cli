@@ -17,7 +17,7 @@ export default function HostPlaceList() {
     
     const [upperCategoryId, setUpperCategoryId] = useState(0)
     const [categoryId, setCategoryId] = useState(0)
-    const [count, setCount] = useState(0)
+    const [count, setCount] = useState(6)
 
     const tabList = ['KBO', '해외축구', 'E-스포츠']
     const upperCategoryNm = ['kbaseball', 'wfootball']
@@ -155,8 +155,10 @@ export default function HostPlaceList() {
             {/* <View style={{backgroundColor:'#fff', height:699, flex:1}}></View>
             <View style={{backgroundColor:'#eee', height:50}}></View> */}
             {/* keyExtractor={item=>`${item.date}${item.awayTeamName}${item.homeTeamName}`} */}
-
-            <View style={{width:'96%' }}>
+            {sportsGameList.length === 0 && ( // Check for empty list
+                <Text style={self.noGamesText}>아직 진행되는 경기가 없습니다.</Text>
+            )}
+            {sportsGameList.length > 0 && (<View style={{width:'96%' }}>
                 <FlatList
                 // contentContainerStyle={{backgroundColor:'green'}}
                 renderItem={({ item }) => <ListItem gameData={item} />}
@@ -165,7 +167,7 @@ export default function HostPlaceList() {
                     scrollIndicatorInsets={{ right: 1 }}
                     // contentContainerStyle={self.flatListContent}
                     />
-            </View>
+            </View>)}
         </View>
     );
 }
