@@ -1,7 +1,7 @@
-import React,{useState,useCallback } from 'react';
+import React,{useState,useCallback,useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput, ScrollView  } from 'react-native';
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import { launchImageLibrary } from 'react-native-image-picker';
 //슬라이더 (연령대)
@@ -15,6 +15,12 @@ import Slider from 'rn-range-slider';
 
 export default function MakingHost() {
     const navigation = useNavigation();
+    const route = useRoute()
+    const { selectedGame } = route.params;
+    useEffect(() => {
+        console.log("Received selectedGame:", selectedGame); 
+    }, []);
+
     // 제목
     const [hostTitle, setHostTitle] = React.useState('')
     //모임소개
