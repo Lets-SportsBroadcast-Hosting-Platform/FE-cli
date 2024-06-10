@@ -18,7 +18,7 @@ export default function HostPlaceList() {
     
     const [upperCategoryId, setUpperCategoryId] = useState(0)
     const [categoryId, setCategoryId] = useState(0)
-    const [count, setCount] = useState(2)
+    const [count, setCount] = useState(0)
 
     const tabList = ['KBO', '해외축구', 'E-스포츠']
     const [selectedTabIndex, setSelectedTabIndex] = useState(upperCategoryId);
@@ -30,7 +30,7 @@ export default function HostPlaceList() {
     const [selectedGame, setSelectedGame] = useState(null);
     
     const ListItem = ({gameData})=>{
-        // console.log("Game Data:", gameData);
+        console.log("Game Data:", gameData);
         return (
             <View style={{width:'98%'}}>
                 
@@ -40,9 +40,10 @@ export default function HostPlaceList() {
                         <RadioButton
                         label=''
                         value={gameData.games}
-                        selected={selectedGame === gameData.games}
-                        // onPress={() => {setSelectedGame(gameData.games[index])}}
-                        onPress={() => {console.log(gameData.games[index])}}
+                        selected={selectedGame === gameData.games[index]}
+                        onPress={() => {
+                            setSelectedGame(game)
+                        }}
                         status={ selectedGame === gameData.games[index] ? 'checked' : 'unchecked' }
                         />
                         <Text style={{ fontFamily: 'BalooDa2-Medium', fontSize: 18, color: 'black',marginLeft: 20, marginRight: 20  }}>{game.time.slice(0, 2)}:{game.time.slice(2)}             {game.homeTeamName}     <Image source={{ uri: game.homeTeamEmblemUrl }} style={{ height: 28, width: 28}} />
@@ -131,11 +132,10 @@ export default function HostPlaceList() {
         })
     }
 
-    const gotoMakingHosyButton = (selectedGame) =>{
-        console.log("selectedGame : ", selectedGame)
-        // navigation.navigate('MakingHost',{
-        //     selectedGame
-        // });
+    const gotoMakingHosyButton = () =>{
+        navigation.navigate('MakingHost',{
+            selectedGame
+        });
     }
     return (
         <View style={self.container}>
@@ -240,10 +240,10 @@ const self = StyleSheet.create({
         backgroundColor: '#01162D',
     },
     buttonText: {
-        color: '#C5C5C7', 
-        fontSize: 18,
-        fontWeight: '700',
-        padding: 10
+    color: '#C5C5C7', 
+    fontSize: 18,
+    fontWeight: '700',
+    padding: 10
     },
     tabButtonContainer:{
         // backgroundColor: 'purple',
