@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList, ImageBackground, ScrollView } from 'react-native';
+import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList, ActivityIndicator , ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
 import React,{useState,useEffect } from 'react';
@@ -28,7 +28,9 @@ export default function HostPlaceList() {
     const [sportsGameList, setSportsGameList] = useState([]);
     //라디오버튼들 중 선택된 경기
     const [selectedGame, setSelectedGame] = useState(null);
-    
+    //pagination
+    const LIMIT = 20
+    const [pageCount, setPageCount] = useState(0);
     const ListItem = ({gameData})=>{
         console.log("Game Data:", gameData);
         return (
@@ -102,19 +104,43 @@ export default function HostPlaceList() {
         return transformedGames;
     }
 
-    useEffect(()=>{
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports`, {
-            params: {
+    // useEffect(()=>{
+    //     ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports`, {
+    //         params: {
+    //             upperCategoryId: upperCategoryNm[upperCategoryId],
+    //             categoryId: categoryNmList[upperCategoryId][categoryId],
+    //             count:count
+    //         }
+    //     }).then(res=>{
+            
+    //         setSportsGameList(groupGamesByDate(res.games))
+    //     }).catch(err=>console.log(JSON.stringify(err)))
+    // }, [upperCategoryId, categoryId, count])
+
+    const fetchGames = async () => {
+        try {
+            const response = await ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports`, {
+                params: {
                 upperCategoryId: upperCategoryNm[upperCategoryId],
                 categoryId: categoryNmList[upperCategoryId][categoryId],
-                count:count
+                count: pageCount, // Fetch based on current page and LIMIT
+                },
+            });
+        
+            const newGames = groupGamesByDate(response.games);
+            setSportsGameList([...sportsGameList, ...newGames]); // Append new games
+            setPageCount(pageCount + 1); // Increment page count for next request
+            } catch (err) {
+            console.error(err);
             }
-        }).then(res=>{
-            
-            setSportsGameList(groupGamesByDate(res.games))
-        }).catch(err=>console.log(JSON.stringify(err)))
-    }, [upperCategoryId, categoryId, count])
-
+        };
+    useEffect(() => {
+        fetchGames(); // Fetch initial data on mount
+        }, [upperCategoryId, categoryId]); // Re-fetch on category change
+    
+        const handleLoadMore = () => {
+            fetchGames(); // Fetch more games on scroll
+        };
     const getTabList = ()=>{
         return tabList.map((title, idx)=>{
             return <TouchableOpacity
@@ -164,6 +190,12 @@ export default function HostPlaceList() {
                         data={sportsGameList}
                         showsVerticalScrollIndicator={false}
                         scrollIndicatorInsets={{ right: 1 }}
+                        keyExtractor={(item) => `${item.date}-${item.weekDay}`}
+                        onEndReached={handleLoadMore}
+                        onEndReachedThreshold={0.5}
+                        ListFooterComponent={
+                            sportsGameList.length > 0 && <ActivityIndicator size="large" />
+                        }
                         // ListFooterComponent={() => (
                         // <View style={self.footerContainer}>
                         //     <Button style={self.AfterChoosingGameButton} onPress={() => loadMoreGames()}><Text style={self.nextText}>다음</Text></Button>
