@@ -22,8 +22,8 @@ export default function HostPlaceList() {
 
     const tabList = ['KBO', '해외축구', 'E-스포츠']
     const [selectedTabIndex, setSelectedTabIndex] = useState(upperCategoryId);
-    const upperCategoryNm = ['kbaseball', 'wfootball']
-    const categoryNmList = [['kbo'], ['epl', 'primera', 'ligue1', 'bundesliga']]
+    const upperCategoryNm = ['kbaseball', 'wfootball','esports']
+    const categoryNmList = [['kbo'], ['epl', 'primera', 'ligue1', 'bundesliga'],['lck']]
 
     const [sportsGameList, setSportsGameList] = useState([]);
     //라디오버튼들 중 선택된 경기
