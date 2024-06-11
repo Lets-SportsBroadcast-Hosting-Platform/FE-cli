@@ -123,9 +123,12 @@ export default function HostPlaceList() {
                 console.log("No more games to load");
                 setHasMoreGames(false);
             }else {
-            const newGames = groupGamesByDate(response.games);
-            setSportsGameList([...sportsGameList, ...newGames]);
-            setPageCount(pageCount + 1);
+                const newGames = groupGamesByDate(response.games);
+                // sportsGameList.forEach((gameData, index) => {
+                //     gameData.games = newGames[index].games;
+                // });
+                setSportsGameList([...sportsGameList, ...newGames]);
+                setPageCount(pageCount + 1);
             }
             // const newGames = groupGamesByDate(response.games);
             // setSportsGameList([...sportsGameList, ...newGames]); // Append new games
@@ -146,6 +149,7 @@ export default function HostPlaceList() {
             // Display message to user (if applicable)
             }
         };
+        
     const getTabList = ()=>{
         return tabList.map((title, idx)=>{
             return <TouchableOpacity
@@ -155,6 +159,7 @@ export default function HostPlaceList() {
                     setSelectedTabIndex(idx);
                     setUpperCategoryId(idx);
                     setCategoryId(0);
+                    // setSportsGameList([]);
                 }}>
                 
                 <Text style={selectedTabIndex === idx ? self.selectedButtonText : self.buttonText}>{title}</Text>
