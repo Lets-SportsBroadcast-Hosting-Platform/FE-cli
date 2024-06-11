@@ -32,6 +32,7 @@ export default function HostPlaceList() {
     
     const [pageCount, setPageCount] = useState(0);
     const [hasMoreGames, setHasMoreGames] = useState(true);
+    const [prevSelectedTabIndex, setPrevSelectedTabIndex] = useState(0);
 
     const ListItem = ({gameData})=>{
         console.log("Game Data:", gameData);
@@ -145,11 +146,19 @@ export default function HostPlaceList() {
             if (hasMoreGames) {
                 fetchGames();
             } else {
-            console.log("No more games to load");
+            console.log("No more games to load2");
             // Display message to user (if applicable)
             }
         };
-        
+    useEffect(() => {
+        if (prevSelectedTabIndex !== selectedTabIndex) {
+            setSportsGameList([]); // Clear existing game list
+            setPrevSelectedTabIndex(selectedTabIndex);
+            setPageCount(0);
+            setHasMoreGames(true);
+            fetchGames(); // Fetch games for the selected tab
+        }
+        }, [selectedTabIndex]);
     const getTabList = ()=>{
         return tabList.map((title, idx)=>{
             return <TouchableOpacity
@@ -159,7 +168,7 @@ export default function HostPlaceList() {
                     setSelectedTabIndex(idx);
                     setUpperCategoryId(idx);
                     setCategoryId(0);
-                    // setSportsGameList([]);
+                    setSportsGameList([]);
                 }}>
                 
                 <Text style={selectedTabIndex === idx ? self.selectedButtonText : self.buttonText}>{title}</Text>
