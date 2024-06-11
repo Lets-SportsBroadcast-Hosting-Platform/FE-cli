@@ -29,8 +29,10 @@ export default function HostPlaceList() {
     //라디오버튼들 중 선택된 경기
     const [selectedGame, setSelectedGame] = useState(null);
     //pagination
-    const LIMIT = 20
+    
     const [pageCount, setPageCount] = useState(0);
+    const [hasMoreGames, setHasMoreGames] = useState(true);
+
     const ListItem = ({gameData})=>{
         console.log("Game Data:", gameData);
         return (
@@ -104,18 +106,6 @@ export default function HostPlaceList() {
         return transformedGames;
     }
 
-    // useEffect(()=>{
-    //     ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports`, {
-    //         params: {
-    //             upperCategoryId: upperCategoryNm[upperCategoryId],
-    //             categoryId: categoryNmList[upperCategoryId][categoryId],
-    //             count:count
-    //         }
-    //     }).then(res=>{
-            
-    //         setSportsGameList(groupGamesByDate(res.games))
-    //     }).catch(err=>console.log(JSON.stringify(err)))
-    // }, [upperCategoryId, categoryId, count])
 
     const fetchGames = async () => {
         try {
@@ -123,13 +113,23 @@ export default function HostPlaceList() {
                 params: {
                 upperCategoryId: upperCategoryNm[upperCategoryId],
                 categoryId: categoryNmList[upperCategoryId][categoryId],
-                count: pageCount, // Fetch based on current page and LIMIT
+                count: pageCount, 
                 },
             });
-        
+            if (response.games && response.games.length === 0) {
+                console.log("No more games to fetch");
+                setHasMoreGames(false);
+            } else if (pageCount >= response.total_count) {
+                console.log("No more games to load");
+                setHasMoreGames(false);
+            }else {
             const newGames = groupGamesByDate(response.games);
-            setSportsGameList([...sportsGameList, ...newGames]); // Append new games
-            setPageCount(pageCount + 1); // Increment page count for next request
+            setSportsGameList([...sportsGameList, ...newGames]);
+            setPageCount(pageCount + 1);
+            }
+            // const newGames = groupGamesByDate(response.games);
+            // setSportsGameList([...sportsGameList, ...newGames]); // Append new games
+            // setPageCount(pageCount + 1); // Increment page count for next request
             } catch (err) {
             console.error(err);
             }
@@ -139,7 +139,12 @@ export default function HostPlaceList() {
         }, [upperCategoryId, categoryId]); // Re-fetch on category change
     
         const handleLoadMore = () => {
-            fetchGames(); // Fetch more games on scroll
+            if (hasMoreGames) {
+                fetchGames();
+            } else {
+            console.log("No more games to load");
+            // Display message to user (if applicable)
+            }
         };
     const getTabList = ()=>{
         return tabList.map((title, idx)=>{
