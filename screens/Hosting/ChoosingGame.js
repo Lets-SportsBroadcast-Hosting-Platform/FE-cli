@@ -134,7 +134,9 @@ export default function HostPlaceList() {
 
     const gotoMakingHosyButton = () =>{
         navigation.navigate('MakingHost',{
-            selectedGame
+            selectedGame,
+            upperCategoryId,
+            categoryId
         });
     }
     return (

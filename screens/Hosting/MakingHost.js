@@ -17,10 +17,17 @@ export default function MakingHost() {
     const navigation = useNavigation();
     const route = useRoute()
     const selectedGame = route.params.selectedGame;
+    const upperCategoryId = route.params.upperCategoryId;
+    const categoryId = route.params.categoryId;
+    const tabList = ['KBO', '해외축구', 'E-스포츠']
     useEffect(() => {
         console.log("Received selectedGame:", selectedGame); 
+        console.log("Received upperCategoryId:", upperCategoryId);
+        console.log("Received categoryId:", categoryId);
     }, []);
 
+    const textInputGame = tabList[upperCategoryId]
+    const [textInputTitle, setTextInputTitle] = React.useState(`${textInputGame} - ${selectedGame.awayTeamName} vs ${selectedGame.homeTeamName}`);
     // 제목
     const [hostTitle, setHostTitle] = React.useState('')
     //모임소개
@@ -202,7 +209,7 @@ export default function MakingHost() {
             <Text style={styles.InputTitle}>모임 이름</Text>
             <View style={styles.textInputContainer}>
                 <TextInput
-                    placeholder='호스팅 제목을 입력하세요'
+                    placeholder={textInputTitle}
                     style={styles.storeInputText}
                     mode='outlined'
                     onChangeText={(text)=>setHostTitle(text)}
