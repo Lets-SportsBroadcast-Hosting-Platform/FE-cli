@@ -16,8 +16,8 @@ export default function HostPlaceList() {
         navigation.goBack()
     }   
     
-    const [upperCategoryId, setUpperCategoryId] = useState(0)
-    const [categoryId, setCategoryId] = useState(0)
+    const [upperCategoryId, setUpperCategoryId] = useState(0) //상위 카테고리
+    const [categoryId, setCategoryId] = useState(0) //서브 분류 index
     const [count, setCount] = useState(0)
 
     const tabList = ['KBO', '해외축구', 'E-스포츠']
@@ -35,7 +35,7 @@ export default function HostPlaceList() {
     const [prevSelectedTabIndex, setPrevSelectedTabIndex] = useState(0);
 
     const ListItem = ({gameData})=>{
-        console.log("Game Data:", gameData);
+        // console.log("Game Data:", gameData);
         return (
             <View style={{width:'98%'}}>
                 
@@ -108,19 +108,19 @@ export default function HostPlaceList() {
     }
 
 
-    const fetchGames = async () => {
+    const fetchGames = async (count) => {
         try {
             const response = await ApiUtil.get(`${ApiConfig.SERVER_URL}/schedule/sports`, {
                 params: {
                 upperCategoryId: upperCategoryNm[upperCategoryId],
                 categoryId: categoryNmList[upperCategoryId][categoryId],
-                count: pageCount, 
+                count: count, 
                 },
             });
             if (response.games && response.games.length === 0) {
                 console.log("No more games to fetch");
                 setHasMoreGames(false);
-            } else if (pageCount >= response.total_count) {
+            } else if (count >= response.total_count) {
                 console.log("No more games to load");
                 setHasMoreGames(false);
             }else {
@@ -129,7 +129,7 @@ export default function HostPlaceList() {
                 //     gameData.games = newGames[index].games;
                 // });
                 setSportsGameList([...sportsGameList, ...newGames]);
-                setPageCount(pageCount + 1);
+                setPageCount(count + 1);
             }
             // const newGames = groupGamesByDate(response.games);
             // setSportsGameList([...sportsGameList, ...newGames]); // Append new games
@@ -139,26 +139,22 @@ export default function HostPlaceList() {
             }
         };
     useEffect(() => {
-        fetchGames(); // Fetch initial data on mount
+            setSportsGameList([]); // Clear existing game list
+            setPrevSelectedTabIndex(selectedTabIndex);
+            setPageCount(0);
+            setHasMoreGames(true);
+            fetchGames(0); // Fetch games for the selected tab
         }, [upperCategoryId, categoryId]); // Re-fetch on category change
     
         const handleLoadMore = () => {
             if (hasMoreGames) {
-                fetchGames();
+                fetchGames(pageCount);
             } else {
             console.log("No more games to load2");
             // Display message to user (if applicable)
             }
         };
-    useEffect(() => {
-        if (prevSelectedTabIndex !== selectedTabIndex) {
-            setSportsGameList([]); // Clear existing game list
-            setPrevSelectedTabIndex(selectedTabIndex);
-            setPageCount(0);
-            setHasMoreGames(true);
-            fetchGames(); // Fetch games for the selected tab
-        }
-        }, [selectedTabIndex]);
+
     const getTabList = ()=>{
         return tabList.map((title, idx)=>{
             return <TouchableOpacity
@@ -173,6 +169,22 @@ export default function HostPlaceList() {
                 
                 <Text style={selectedTabIndex === idx ? self.selectedButtonText : self.buttonText}>{title}</Text>
                 <View style={selectedTabIndex === idx ? self.selectedButtonbar : self.buttonBar} />
+            </TouchableOpacity>
+        })
+    }
+
+    const getSubTabList = ()=>{
+        return categoryNmList[selectedTabIndex].map((title, idx)=>{
+            return <TouchableOpacity
+                key={idx}
+                style={self.button}
+                onPress={() => {
+                    setCategoryId(idx);
+                    setSportsGameList([]);
+                }}>
+                
+                <Text style={categoryId === idx ? self.selectedButtonText : self.buttonText}>{title}</Text>
+                {/* <View style={categoryId === idx ? self.selectedButtonbar : self.buttonBar} /> */}
             </TouchableOpacity>
         })
     }
@@ -197,6 +209,10 @@ export default function HostPlaceList() {
             <View style={self.tabButtonContainer}>
                 { getTabList() }
             </View>
+            <View style={self.subTabButtonContainer}>
+                { getSubTabList() }
+            </View>
+
             
         
             {sportsGameList.length === 0 && ( 
@@ -304,7 +320,14 @@ const self = StyleSheet.create({
         justifyContent:'space-around',
         alignItems: 'center',
         width:'100%',
-        marginBottom:40
+        marginBottom:10
+    },
+    subTabButtonContainer:{
+        flexDirection:'row',
+        justifyContent:'space-around',
+        alignItems: 'center',
+        width:'100%',
+        marginBottom:10
     },
     checkboxItem: {
         flexDirection: 'row'
