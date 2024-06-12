@@ -61,6 +61,7 @@ function HostPlaceDetail(){
     useEffect(()=>{
         getStoreInfo().then((info)=>{
             setStoreInfo(info)
+            console.log("image : ",route.params.selectedImageUris, " ** ")
         })
 
         // 현재 창의 너비와 높이 가져오기
@@ -119,14 +120,23 @@ function HostPlaceDetail(){
     const postHosting = ()=>{
         const formData = new FormData();
         formData.append('data', JSON.stringify({
+            // hosting_name: "test",
+            // //business_no: storeInfo.business_no,
+            // business_no:    "3372300444",
+            // introduce: "test",
+            // max_personnel: 15,
+            // age_group_min: 20,
+            // age_group_max: 50,
+            // hosting_date: "2024-06-30T14:30:00",
+            // screen_size: 100
             hosting_name: route.params.hosting_name,
-            //business_no: storeInfo.business_no,
-            business_no:    3372300444,
+            // //business_no: storeInfo.business_no,
+            business_no:    "3372300444",
             introduce: route.params.hostIntroduction,
             max_personnel: route.params.maxPeople,
             age_group_min: route.params.low,
             age_group_max: route.params.high,
-            hosting_date: new Date(), // 임시
+            hosting_date: "2024-06-30T14:30:00",
             screen_size: route.params.screenSize
         }))
         
@@ -141,7 +151,7 @@ function HostPlaceDetail(){
                 'Content-Type': 'multipart/form-data'
             }
         }).then(res=>console.log(res))
-         .catch(e=>console.log(JSON.stringify(e)))
+        .catch(e=>console.log(JSON.stringify(e)))
     }
 
     const applyHosting = ()=>{
