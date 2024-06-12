@@ -213,6 +213,7 @@ export default function MakingHost() {
                     style={styles.storeInputText}
                     mode='outlined'
                     onChangeText={(text)=>setHostTitle(text)}
+                    editable={false}
                 />
             </View>
 
@@ -314,7 +315,7 @@ export default function MakingHost() {
         borderWidth: 1,
         borderColor: '#C5C5C7',
         elevation: 3,
-        color: '#B7B7B7'
+        color: 'black'
     },
     capacityContainer: {
         flexDirection: 'row', // Arrange elements horizontally
@@ -334,7 +335,7 @@ export default function MakingHost() {
         borderWidth: 1, // Border width
         borderColor: '#C5C5C7', // Border color
         elevation: 3, 
-        color:'#B7B7B7'
+        color: 'black'
     },
     headerText: {
         fontWeight: 'bold',
@@ -381,7 +382,7 @@ export default function MakingHost() {
         borderWidth: 1, // Border width
         borderColor: '#C5C5C7', // Border color
         elevation: 3, 
-        color:'#B7B7B7'
+        color: 'black'
     },
     InputTitle :{
         color:'black',
