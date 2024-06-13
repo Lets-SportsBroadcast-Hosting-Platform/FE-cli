@@ -143,16 +143,19 @@ function HostPlaceDetail(){
 
         for(let i=0; i<imageBlobList.length; i++){
             const blob = imageBlobList[i].data;
-            // console.log('blob : ',blob)
+            blob.uri = selectedImageUris[i]
+            console.log('imageBlobList : ',imageBlobList)
             formData.append('photos', blob)
         }
 
         ApiUtil.post(`${ApiConfig.SERVER_URL}/party`, formData, {
             headers: {
+                Accept:'*/*',
                 'Content-Type': 'multipart/form-data'
-            }
-        }).then(res=>console.log(res))
-        .catch(e=>console.log('blob - error: ',formData))
+            },
+            transformRequest:data => data,
+        }).then(res=>console.log(res, "성공!"))
+        .catch(e=>console.log('blob - error: ',formData, "실패!"))
     }
 
     const applyHosting = ()=>{
