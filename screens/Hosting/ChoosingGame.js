@@ -34,6 +34,18 @@ export default function HostPlaceList() {
     const [hasMoreGames, setHasMoreGames] = useState(true);
     const [prevSelectedTabIndex, setPrevSelectedTabIndex] = useState(0);
 
+    const [currentDate, setCurrentDate] = useState(new Date());
+    useEffect(() => {
+        const updateDate = () => {
+        setCurrentDate(new Date());
+    };
+    const interval = setInterval(updateDate, 1000);
+
+    return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 해제
+    }, []);
+
+    const currentMonth = currentDate.getMonth() + 1;
+    const formattedDate = currentDate.toLocaleDateString();
     const ListItem = ({gameData})=>{
         // console.log("Game Data:", gameData);
         return (
@@ -203,7 +215,7 @@ export default function HostPlaceList() {
                 <TouchableOpacity onPress={goBackPage} style={self.touchable}>
                 <Image style={self.arrowIcon} source={arrowToLeft}  />
                 </TouchableOpacity>
-                <Text style={self.headerText}>4월</Text>
+                <Text style={self.headerText}>{currentMonth}월</Text>
             </View>
             
             <View style={self.tabButtonContainer}>

@@ -143,6 +143,7 @@ function HostPlaceDetail(){
 
         for(let i=0; i<imageBlobList.length; i++){
             const blob = imageBlobList[i].data;
+            // console.log('blob : ',blob)
             formData.append('photos', blob)
         }
 
@@ -151,7 +152,7 @@ function HostPlaceDetail(){
                 'Content-Type': 'multipart/form-data'
             }
         }).then(res=>console.log(res))
-        .catch(e=>console.log(JSON.stringify(e)))
+        .catch(e=>console.log('blob - error: ',formData))
     }
 
     const applyHosting = ()=>{
