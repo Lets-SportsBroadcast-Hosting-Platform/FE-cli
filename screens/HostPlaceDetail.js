@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, ScrollView, Image,TouchableOpacity, Dimensions } from "react-native";
 import { useEffect, useState } from "react";
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { Button } from 'react-native-paper';
 
 // auth
 import { useAuth } from '../contexts/AuthContext.js';
@@ -28,7 +29,10 @@ function HostPlaceDetail(){
 
 
     const {getStoreInfo} = useAuth();
-    
+    const handleButtonClick = async () => {
+        const storeData = await getStoreInfo();
+        console.log('Store Info:', storeData);
+    };    
     const route = useRoute();
     const hosting_id = route.params.hosting_id;
     const isNew = route.params.isNew ?? false;
@@ -132,7 +136,7 @@ function HostPlaceDetail(){
             //business_no: storeInfo.business_no,
             // business_no: `${storeInfo.business_no}`,
             // business_no: "3372300444",
-            business_no: "1234",
+            business_no: 1234,
             introduce: route.params.hostIntroduction,
             max_personnel: parseInt(route.params.maxPeople),
             age_group_min: route.params.low,
@@ -178,6 +182,11 @@ function HostPlaceDetail(){
             scrollEnabled={true}
             style={[layouts.container, styles.mb20]}
         >   
+        <TouchableOpacity>
+            <Button mode="contained" onPress={handleButtonClick}>
+            Button
+            </Button>
+        </TouchableOpacity>
             <View style={[styles.w100, {height: 267}, styles.mb80]}>
                 <View style={[layouts.imageContainer, styles.w100, self.banner, styles.banner]}>
                     {/* {!!partyInfo.imageLink ? <Image source={partyInfo.imageLink} style={[styles.w100, {height: 400}]}/> : <Image source={imageLink} style={[styles.w100, {height: 400}]}/>} */}
@@ -257,6 +266,7 @@ function HostPlaceDetail(){
             </View>
             <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={isNew ? postHosting : applyHosting}>
                 {isNew ? <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text> : <Text style={[styles.p5, self.hostButton]}>신청하기</Text> }
+                
             </TouchableOpacity>
         </ScrollView>
     )
