@@ -40,8 +40,10 @@ function HostPlaceDetail(){
     const age_group_min = route.params.low;
     const age_group_max = route.params.high;
     const selectedImageUris = route.params.selectedImageUris;
+    const selectedImageAssets = route.params.selectedImageAssets;
+
     const screen_size = route.params.screenSize;
-    
+
     const uriToBlob = (uri) => {
         return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
@@ -61,7 +63,6 @@ function HostPlaceDetail(){
     useEffect(()=>{
         getStoreInfo().then((info)=>{
             setStoreInfo(info)
-            console.log("image : ",route.params.selectedImageUris, " ** ")
         })
 
         // 현재 창의 너비와 높이 가져오기
@@ -108,7 +109,13 @@ function HostPlaceDetail(){
             })
             
             Promise.all((selectedImageUris.map(uri => uriToBlob(uri)))).then((responsetList)=>{
+                for(let i=0; i<responsetList.length; i++){
+                    const file = new File([responsetList[i]], responsetList[i].data.name)
+                    console.log(file)
+                }
+
                 setImageBlobList(responsetList)
+                // console.log('responsetList', responsetList)
             })
             
         }
@@ -119,39 +126,45 @@ function HostPlaceDetail(){
 
     const postHosting = ()=>{
         const formData = new FormData();
-        formData.append('data', JSON.stringify({
-            // hosting_name: "test",
-            // //business_no: storeInfo.business_no,
-            // business_no:    "3372300444",
-            // introduce: "test",
-            // max_personnel: 15,
-            // age_group_min: 20,
-            // age_group_max: 50,
-            // hosting_date: "2024-06-30T14:30:00",
-            // screen_size: 100
+        
+        const json_data = JSON.stringify({
             hosting_name: route.params.hosting_name,
-            // //business_no: storeInfo.business_no,
-            business_no:    "3372300444",
+            //business_no: storeInfo.business_no,
+            business_no: `${storeInfo.business_no}`,
             introduce: route.params.hostIntroduction,
-            max_personnel: route.params.maxPeople,
+            max_personnel: parseInt(route.params.maxPeople),
             age_group_min: route.params.low,
             age_group_max: route.params.high,
-            hosting_date: "2024-06-30T14:30:00",
+            hosting_date: new Date(), // 임시
             screen_size: route.params.screenSize
-        }))
-        
+        })
 
-        for(let i=0; i<imageBlobList.length; i++){
-            const blob = imageBlobList[i].data;
-            formData.append('photos', blob)
+
+        // const blob_data =  new Blob([json_data], {
+        //     type: "application/json",
+        // });
+
+        formData.append('data',  json_data)
+        
+        for(let i=0; i<selectedImageAssets.length; i++){
+            const asset = selectedImageAssets[i];
+            formData.append('photos', {
+                uri: asset.uri,
+                type: asset.type,
+                name: asset.fileName,
+            })
         }
+
+        console.log(formData)
 
         ApiUtil.post(`${ApiConfig.SERVER_URL}/party`, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                // Accept: 'application/json',
+                "Content-Type": 'multipart/form-data'
+            },
+            transformRequest: formData => formData,
         }).then(res=>console.log(res))
-        .catch(e=>console.log(JSON.stringify(e)))
+         .catch(e=>console.log(JSON.stringify(e)))
     }
 
     const applyHosting = ()=>{
