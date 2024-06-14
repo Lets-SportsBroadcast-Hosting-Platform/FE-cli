@@ -130,7 +130,9 @@ function HostPlaceDetail(){
         const json_data = JSON.stringify({
             hosting_name: route.params.hosting_name,
             //business_no: storeInfo.business_no,
-            business_no: `${storeInfo.business_no}`,
+            // business_no: `${storeInfo.business_no}`,
+            // business_no: "3372300444",
+            business_no: "1234",
             introduce: route.params.hostIntroduction,
             max_personnel: parseInt(route.params.maxPeople),
             age_group_min: route.params.low,
