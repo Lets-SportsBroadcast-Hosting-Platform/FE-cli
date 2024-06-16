@@ -29,7 +29,7 @@ export default function MakingHost() {
     const textInputGame = tabList[upperCategoryId]
     const [textInputTitle, setTextInputTitle] = React.useState(`${textInputGame} - ${selectedGame.awayTeamName} vs ${selectedGame.homeTeamName}`);
     // 제목
-    const [hostTitle, setHostTitle] = React.useState('')
+    const [hostTitle, setHostTitle] = React.useState(`${textInputGame} - ${selectedGame.awayTeamName} vs ${selectedGame.homeTeamName}`)
     //모임소개
     const [hostIntroduction, setHostIntroduction] = React.useState('');
     //정원

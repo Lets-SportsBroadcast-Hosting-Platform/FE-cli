@@ -25,9 +25,10 @@ function HostPlaceDetail(){
     const [storeInfo, setStoreInfo] = useState({})
     const [partyInfo, setPartyInfo] = useState({})
     const [imageBlobList, setImageBlobList] = useState([])
+    const [token, setToken] = useState(null)
 
-
-    const {getStoreInfo} = useAuth();
+    const {getStoreInfo, getUserToken} = useAuth();
+    
     
     const route = useRoute();
     const hosting_id = route.params.hosting_id;
@@ -61,6 +62,7 @@ function HostPlaceDetail(){
 
     // const imageLink = route.params.selectedImageUris[0];
     useEffect(()=>{
+        getUserToken().then(response_token=>setToken(response_token))
         getStoreInfo().then((info)=>{
             setStoreInfo(info)
         })
@@ -125,12 +127,13 @@ function HostPlaceDetail(){
     
 
     const postHosting = ()=>{
+
         const formData = new FormData();
         
         const json_data = JSON.stringify({
             hosting_name: route.params.hosting_name,
             //business_no: storeInfo.business_no,
-            business_no: `${storeInfo.business_no}`,
+            // business_no: `${storeInfo.business_no}`,
             introduce: route.params.hostIntroduction,
             max_personnel: parseInt(route.params.maxPeople),
             age_group_min: route.params.low,
@@ -160,7 +163,8 @@ function HostPlaceDetail(){
         ApiUtil.post(`${ApiConfig.SERVER_URL}/party`, formData, {
             headers: {
                 // Accept: 'application/json',
-                "Content-Type": 'multipart/form-data'
+                "Content-Type": 'multipart/form-data',
+                jwToken: token
             },
             transformRequest: formData => formData,
         }).then(res=>console.log(res))
