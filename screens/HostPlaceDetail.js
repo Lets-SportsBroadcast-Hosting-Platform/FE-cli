@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, ScrollView, Image,TouchableOpacity, Dimensions } from "react-native";
 import { useEffect, useState } from "react";
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Button } from 'react-native-paper';
 
 // auth
 import { useAuth } from '../contexts/AuthContext.js';
@@ -26,13 +25,11 @@ function HostPlaceDetail(){
     const [storeInfo, setStoreInfo] = useState({})
     const [partyInfo, setPartyInfo] = useState({})
     const [imageBlobList, setImageBlobList] = useState([])
+    const [token, setToken] = useState(null)
 
-
-    const {getStoreInfo} = useAuth();
-    const handleButtonClick = async () => {
-        const storeData = await getStoreInfo();
-        console.log('Store Info:', storeData);
-    };    
+    const {getStoreInfo, getUserToken} = useAuth();
+    
+    
     const route = useRoute();
     const hosting_id = route.params.hosting_id;
     const isNew = route.params.isNew ?? false;
@@ -65,8 +62,10 @@ function HostPlaceDetail(){
 
     // const imageLink = route.params.selectedImageUris[0];
     useEffect(()=>{
+        getUserToken().then(response_token=>setToken(response_token))
         getStoreInfo().then((info)=>{
             setStoreInfo(info)
+            console.log("image : ",route.params.selectedImageUris, " ** ")
         })
 
         // 현재 창의 너비와 높이 가져오기
@@ -129,19 +128,18 @@ function HostPlaceDetail(){
     
 
     const postHosting = ()=>{
+
         const formData = new FormData();
         
         const json_data = JSON.stringify({
             hosting_name: route.params.hosting_name,
             //business_no: storeInfo.business_no,
             // business_no: `${storeInfo.business_no}`,
-            // business_no: "3372300444",
-            business_no: 1234,
             introduce: route.params.hostIntroduction,
             max_personnel: parseInt(route.params.maxPeople),
             age_group_min: route.params.low,
             age_group_max: route.params.high,
-            hosting_date: new Date(), // 임시
+            hosting_date: "2024-06-30T14:30:00",
             screen_size: route.params.screenSize
         })
 
@@ -166,11 +164,12 @@ function HostPlaceDetail(){
         ApiUtil.post(`${ApiConfig.SERVER_URL}/party`, formData, {
             headers: {
                 // Accept: 'application/json',
-                "Content-Type": 'multipart/form-data'
+                "Content-Type": 'multipart/form-data',
+                jwToken: token
             },
             transformRequest: formData => formData,
         }).then(res=>console.log(res))
-         .catch(e=>console.log(JSON.stringify(e)))
+        .catch(e=>console.log('blob - error: ',formData))
     }
 
     const applyHosting = ()=>{
@@ -182,11 +181,6 @@ function HostPlaceDetail(){
             scrollEnabled={true}
             style={[layouts.container, styles.mb20]}
         >   
-        <TouchableOpacity>
-            <Button mode="contained" onPress={handleButtonClick}>
-            Button
-            </Button>
-        </TouchableOpacity>
             <View style={[styles.w100, {height: 267}, styles.mb80]}>
                 <View style={[layouts.imageContainer, styles.w100, self.banner, styles.banner]}>
                     {/* {!!partyInfo.imageLink ? <Image source={partyInfo.imageLink} style={[styles.w100, {height: 400}]}/> : <Image source={imageLink} style={[styles.w100, {height: 400}]}/>} */}
@@ -266,7 +260,6 @@ function HostPlaceDetail(){
             </View>
             <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={isNew ? postHosting : applyHosting}>
                 {isNew ? <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text> : <Text style={[styles.p5, self.hostButton]}>신청하기</Text> }
-                
             </TouchableOpacity>
         </ScrollView>
     )
