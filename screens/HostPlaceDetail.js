@@ -132,16 +132,19 @@ function HostPlaceDetail(){
         const formData = new FormData();
         
         const json_data = JSON.stringify({
-            hosting_name: route.params.hosting_name,
+            // hosting_name: route.params.hosting_name,
+            hosting_name: `${route.params.hosting_name}`,
+            // hosting_name: 'koh',
             //business_no: storeInfo.business_no,
             // business_no: `${storeInfo.business_no}`,
             introduce: route.params.hostIntroduction,
             max_personnel: parseInt(route.params.maxPeople),
             age_group_min: route.params.low,
             age_group_max: route.params.high,
-            hosting_date: "2024-06-30T14:30:00",
+            hosting_date: new Date(),
             screen_size: route.params.screenSize
         })
+        // console.log("json_data : ", json_data)
 
 
         // const blob_data =  new Blob([json_data], {
