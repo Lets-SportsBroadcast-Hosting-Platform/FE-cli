@@ -25,6 +25,7 @@ import EditStoreAddress from './screens/HostUserMyPage/EditStoreAddress.js';
 import SliderScreen from './screens/Hosting/SliderScreen.js';
 //마이홈
 import MyHome from './screens/MyHome/MyPlaceList.js'
+import MyHomeEdit from './screens/MyHome/MyPlaceEdit.js'
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +60,7 @@ export default function App() {
 
           {/*마이홈*/}
           <Stack.Screen name="MyHome" component={MyHome} options={{headerShown:false}}/>
+          <Stack.Screen name="MyHomeEdit" component={MyHomeEdit} options={{headerShown:false}}/>
 
         </Stack.Navigator>
       </NavigationContainer>

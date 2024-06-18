@@ -52,7 +52,6 @@ export default function HostPlaceList({navigation}) {
                 const hostDay = hostingDateInfo.getDay()
                 const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
                 const hostDayNm = dayArray[hostDay]
-
                 return {
                     ...place,
                     dayArray,
@@ -62,7 +61,7 @@ export default function HostPlaceList({navigation}) {
                     hostDay,
                     hostHHMI,
                     hostDayNm,
-                    imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.business_no}/0`},
+                    imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.business_no}/${place.hosting_id}/0`},
                 }
             })
 

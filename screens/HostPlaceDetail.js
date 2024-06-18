@@ -19,7 +19,7 @@ import users from '../assets/images/free-icon-font-users.png'
 import camera from '../assets/images/free-icon-font-video-camera-alt.png'
 
 function HostPlaceDetail(){
-    // const navigation = useNavigation();
+    const navigation = useNavigation();
     const [clientWidth, setClientWidth] = useState(0)
     const [clientHeight, setClientHeight] = useState(0)
     const [storeInfo, setStoreInfo] = useState({})
@@ -66,8 +66,6 @@ function HostPlaceDetail(){
         getUserToken().then(response_token=>setToken(response_token))
         getStoreInfo().then((info)=>{
             setStoreInfo(info)
-            console.log("image : ",route.params.selectedImageUris, " ** ")
-            console.log("!!!!!!!!!!!!hosting_name:", route.params.hosting_name);
         })
 
         // 현재 창의 너비와 높이 가져오기
@@ -116,7 +114,6 @@ function HostPlaceDetail(){
             Promise.all((selectedImageUris.map(uri => uriToBlob(uri)))).then((responsetList)=>{
                 for(let i=0; i<responsetList.length; i++){
                     const file = new File([responsetList[i]], responsetList[i].data.name)
-                    console.log(file)
                 }
 
                 setImageBlobList(responsetList)
@@ -165,8 +162,6 @@ function HostPlaceDetail(){
             })
         }
 
-        console.log(formData)
-
         ApiUtil.post(`${ApiConfig.SERVER_URL}/party`, formData, {
             headers: {
                 // Accept: 'application/json',
@@ -174,7 +169,9 @@ function HostPlaceDetail(){
                 jwToken: token
             },
             transformRequest: formData => formData,
-        }).then(res=>console.log(res))
+        }).then(res=>{
+            navigation.navigate('MyHome')
+        })
         .catch(e=>console.log('blob - error: ',formData))
     }
 

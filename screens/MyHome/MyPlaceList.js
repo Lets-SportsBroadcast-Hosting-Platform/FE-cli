@@ -8,13 +8,17 @@ import { useEffect, useState } from 'react';
 import ApiConfig from '../../api/ApiConfig';
 import ApiUtil from '../../api/ApiUtil';
 
+// auth
+import { useAuth } from '../../contexts/AuthContext.js';
+
 export default function HostPlaceList({navigation}) {
+    const {getUserToken} = useAuth()
     const onClickItem = (item)=>{
         navigation.navigate('HostPlaceDetail', {...item})
     }
 
     const onClickEdit = ()=>{
-        console.log('정보 수정')
+        navigation.navigate('MyHomeEdit')
     }
 
     const onClickHostBtn = ()=>{
@@ -24,7 +28,6 @@ export default function HostPlaceList({navigation}) {
     const clickING = ()=>{
         console.log('진행중 버튼 클릭   ')
         setStatus(true)
-        console.log(hostPlaceList)
     }
 
     const clickCOMPLEDTED = ()=>{
@@ -35,37 +38,41 @@ export default function HostPlaceList({navigation}) {
     const [hostPlaceList, setHostPlaceList] = useState([]);
     // const [imageLink, setImageLink] = useState(uri:{"https://sitem.ssgcdn.com/86/60/02/item/1000385026086_i1_1100.jpg"});
     useEffect(()=>{
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/party`, {
-            params: {
-                business_no: 3372300444,
-                status: status
-        }
-        }).then((res)=>{
-            const placeList = res.map(place=>{
-                const dayArray = ['월', '화', '수', '목', '금', '토', '일']
-                const hostingDateInfo = new Date(place.hosting_date)
-                const hostMonth = hostingDateInfo.getMonth() + 1
-                const hostDate = hostingDateInfo.getDate()
-                const hostDay = hostingDateInfo.getDay()
-                const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
-                const hostDayNm = dayArray[hostDay]
-                
-                return {
-                    ...place,
-                    dayArray,
-                    hostingDateInfo,
-                    hostMonth,
-                    hostDate: `${hostMonth}.${hostDate}`,
-                    hostDay,
-                    hostHHMI,
-                    hostDayNm,
-                    imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.business_no}/0`},
+        getUserToken().then((token)=>{
+            ApiUtil.get(`${ApiConfig.SERVER_URL}/party`, {
+                params: {
+                    status: status
+                },
+                headers: {
+                    jwToken: token
                 }
-                
+            }).then((res)=>{
+                const placeList = res.map(place=>{
+                    const dayArray = ['월', '화', '수', '목', '금', '토', '일']
+                    const hostingDateInfo = new Date(place.hosting_date)
+                    const hostMonth = hostingDateInfo.getMonth() + 1
+                    const hostDate = hostingDateInfo.getDate()
+                    const hostDay = hostingDateInfo.getDay()
+                    const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
+                    const hostDayNm = dayArray[hostDay]
+                    
+                    return {
+                        ...place,
+                        dayArray,
+                        hostingDateInfo,
+                        hostMonth,
+                        hostDate: `${hostMonth}.${hostDate}`,
+                        hostDay,
+                        hostHHMI,
+                        hostDayNm,
+                        imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.business_no}/0`},
+                    }
+                    
+                })
+                setHostPlaceList(placeList)
             })
-            setHostPlaceList(placeList)
-            console.log(placeList)
         })
+        
     }, [status])
 
     const ListItem = ({ 
