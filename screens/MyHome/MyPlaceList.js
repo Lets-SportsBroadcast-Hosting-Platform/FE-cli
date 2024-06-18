@@ -4,6 +4,7 @@ import raspberries from '../../assets/images/raspberries.jpg';
 import MyHomePng from '../../assets/images/myhome.png';
 import EditPng from '../../assets/images/edit.png'
 import UserImage from '../../assets/images/user.png'
+import CancelImage from '../../assets/images/cancel.png'
 import { useEffect, useState } from 'react';
 import ApiConfig from '../../api/ApiConfig';
 import ApiUtil from '../../api/ApiUtil';
@@ -12,7 +13,7 @@ import ApiUtil from '../../api/ApiUtil';
 import { useAuth } from '../../contexts/AuthContext.js';
 
 export default function HostPlaceList({navigation}) {
-    const {getUserToken} = useAuth()
+    const {getUserToken, getStoreInfo} = useAuth()
     const onClickItem = (item)=>{
         navigation.navigate('HostPlaceDetail', {...item})
     }
@@ -30,6 +31,30 @@ export default function HostPlaceList({navigation}) {
         setStatus(true)
     }
 
+    const onClickCancelButton = (id)=>{
+        Alert.alert(
+            '호스팅 취소',
+            '호스팅된 모임을 취소하시겠습니까?',
+            [
+              {
+                text: '취소',
+                style: 'cancel',
+              },
+              {
+                text: '확인',
+                onPress: () => {
+                  ApiUtil.delete(`${ApiConfig.SERVER_URL}/party/${id}`).then(res=>{
+                    console.log(res)
+                    searchHostings()
+                  })
+
+                },
+              },
+            ],
+            { cancelable: false }
+          );
+    }
+
     const clickCOMPLEDTED = ()=>{
         console.log('마감 버튼 클릭')
         setStatus(false)
@@ -38,6 +63,10 @@ export default function HostPlaceList({navigation}) {
     const [hostPlaceList, setHostPlaceList] = useState([]);
     // const [imageLink, setImageLink] = useState(uri:{"https://sitem.ssgcdn.com/86/60/02/item/1000385026086_i1_1100.jpg"});
     useEffect(()=>{
+        searchHostings()
+    }, [status])
+
+    const searchHostings = ()=>{
         getUserToken().then((token)=>{
             ApiUtil.get(`${ApiConfig.SERVER_URL}/party`, {
                 params: {
@@ -46,7 +75,8 @@ export default function HostPlaceList({navigation}) {
                 headers: {
                     jwToken: token
                 }
-            }).then((res)=>{
+            }).then(async (res)=>{
+                const storeInfo = await getStoreInfo();
                 const placeList = res.map(place=>{
                     const dayArray = ['월', '화', '수', '목', '금', '토', '일']
                     const hostingDateInfo = new Date(place.hosting_date)
@@ -65,15 +95,16 @@ export default function HostPlaceList({navigation}) {
                         hostDay,
                         hostHHMI,
                         hostDayNm,
-                        imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.business_no}/0`},
+                        // imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${storeInfo.business_no}/${place.hosting_id}/0`},
+                        imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${storeInfo.business_no}/0`},
                     }
                     
                 })
+                console.log('검색...')
                 setHostPlaceList(placeList)
             })
         })
-        
-    }, [status])
+    }
 
     const ListItem = ({ 
             hosting_id,
@@ -105,6 +136,9 @@ export default function HostPlaceList({navigation}) {
                 max_personnel,
                 current_personnel
             })} style={styles.placeItem}>
+            <TouchableOpacity onPress={()=>onClickCancelButton(hosting_id)} style={styles.editdetailBtn}>
+                <Image style={{transform: [{scale: 1}], width: 20, height: 20}} source={CancelImage}></Image>
+            </TouchableOpacity>
             <View style={styles.imageContainer}>
                 <Image source={imageLink} style={styles.placeImage}/>
             </View>
@@ -197,7 +231,8 @@ const styles = StyleSheet.create({
         marginBottom: 50,
         paddingBottom: 15,
         borderBottomWidth: 1,
-        borderBottomColor: '#eee'
+        borderBottomColor: '#eee',
+        position: 'relative'
     },
 
     placeTitle: {
@@ -218,7 +253,7 @@ const styles = StyleSheet.create({
     },
 
     itemScrollContainer: {
-        
+        position: 'relative'
     },
 
     imageContainer: {
@@ -287,6 +322,10 @@ const styles = StyleSheet.create({
       },
       boxRight: {
         borderRightWidth: 1
+      },
+      editdetailBtn: {
+          position: 'absolute', top: 5, right: 5, padding: 5,
+          zIndex: 10,
       }
     
 });
