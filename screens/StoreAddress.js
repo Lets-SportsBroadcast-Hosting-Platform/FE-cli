@@ -49,7 +49,7 @@ export default function StoreAddress() {
             return (
                 <TouchableOpacity
                 style={styles.storeItem}
-                onPress={() => goNextStep(store.place_name)}
+                onPress={() => goNextStep(store)}
                 key={storeIdx}>
                 <View style={styles.line}></View>
                 <Text style={[styles.storeItemText, styles.storeItemTitle]}>{store.place_name}</Text>
@@ -61,6 +61,9 @@ export default function StoreAddress() {
         }
         </>
     );
+    const goNextStep = (selectedStore) => {
+        navigation.navigate('InputStore', { selectedStore }); 
+    };
 
     return (
         <View style={styles.container}>

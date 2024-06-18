@@ -56,12 +56,12 @@ export default function App() {
           {/* 호스트 마이페이지 */}
           <Stack.Screen name="EditStoreMypage" component={EditStoreMypage} options={{headerShown:false}}/>
           <Stack.Screen name="EditMypage" component={EditMypage} options={{headerShown:false}}/>
-          <Stack.Screen name="EditStoreAddress" component={EditStoreAddress} options={{headerShown:false}}/>
           <Stack.Screen name="SliderScreen" component={SliderScreen} options={{headerShown:false}}/>
 
           {/*마이홈*/}
           <Stack.Screen name="MyHome" component={MyHome} options={{headerShown:false}}/>
           <Stack.Screen name="MyHomeEdit" component={MyHomeEdit} options={{headerShown:false}}/>
+          <Stack.Screen name="EditStoreAddress" component={EditStoreAddress} options={{headerShown:false}}/>
 
         </Stack.Navigator>
       </NavigationContainer>
