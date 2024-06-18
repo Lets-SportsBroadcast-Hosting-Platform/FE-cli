@@ -62,10 +62,12 @@ function HostPlaceDetail(){
 
     // const imageLink = route.params.selectedImageUris[0];
     useEffect(()=>{
+        
         getUserToken().then(response_token=>setToken(response_token))
         getStoreInfo().then((info)=>{
             setStoreInfo(info)
             console.log("image : ",route.params.selectedImageUris, " ** ")
+            console.log("!!!!!!!!!!!!hosting_name:", route.params.hosting_name);
         })
 
         // 현재 창의 너비와 높이 가져오기
@@ -135,6 +137,7 @@ function HostPlaceDetail(){
             // hosting_name: route.params.hosting_name,
             hosting_name: `${route.params.hosting_name}`,
             // hosting_name: 'koh',
+            // hosting_name: 'KBO - 롯데 vs KT',
             //business_no: storeInfo.business_no,
             // business_no: `${storeInfo.business_no}`,
             introduce: route.params.hostIntroduction,
@@ -143,7 +146,7 @@ function HostPlaceDetail(){
             age_group_max: route.params.high,
             hosting_date: new Date(),
             screen_size: route.params.screenSize
-        })
+        }).replaceAll("\\r", "");
         // console.log("json_data : ", json_data)
 
 
