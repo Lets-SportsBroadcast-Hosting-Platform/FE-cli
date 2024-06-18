@@ -20,12 +20,13 @@ import { AuthProvider } from './contexts/AuthContext.js';
 //호스트 마이페이지
 import EditStoreMypage from './screens/HostUserMyPage/EditStoreMypage.js';
 import EditMypage from './screens/HostUserMyPage/EditMypage.js';
-import EditStoreAddress from './screens/HostUserMyPage/EditStoreAddress.js';
+
 //테스트용
 import SliderScreen from './screens/Hosting/SliderScreen.js';
 //마이홈
 import MyHome from './screens/MyHome/MyPlaceList.js'
 import MyHomeEdit from './screens/MyHome/MyPlaceEdit.js'
+import EditStoreAddress from './screens/MyHome/EditStoreAddress.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,7 +35,7 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="StoreAddress">
           
           <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
           

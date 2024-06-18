@@ -8,7 +8,7 @@ import { Button } from 'react-native-paper';
 import ApiUtil from '../../api/ApiUtil';
 import ApiConfig from '../../api/ApiConfig';
 
-export default function HostAuthentication() {
+export default function EditStoreAddress() {
   const navigation = useNavigation();
 
   const arrowbuttonPress = () => {
