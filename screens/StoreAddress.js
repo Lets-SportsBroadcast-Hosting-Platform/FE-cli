@@ -3,7 +3,8 @@ import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react
 import arrowToLeft from '../assets/images/arrowToLeft.png';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
-
+import ApiConfig from '../api/ApiConfig';
+import ApiUtil from '../api/ApiUtil';
 export default function StoreAddress() {
     const navigation = useNavigation();
 
@@ -27,7 +28,7 @@ export default function StoreAddress() {
     function SearchStore(text){
         
         const params = {}
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/host/search?keyword=${text}&provider=kakao`, params)
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/search?keyword=${text}&provider=kakao`, params)
         .then((res)=>{
         const stores = res.stores ?? [];
         // console.log(stores);
@@ -159,5 +160,37 @@ export default function StoreAddress() {
         elevation: 3, 
         color:'#B7B7B7'
     },
-    
+    storeItem: {
+        width: '100%',
+        marginTop: 10,
+        padding: 5,
+    },
+    storeItemText: {
+    width: '100%',
+    },
+    storeItemTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginTop:15,
+    color:'black',
+    fontFamily:'NotoSansKR-Black',
+    fontWeight:'900'
+    },
+    storeItemDesc: {
+    color: '#888',
+    fontSize:13
+    },
+    kakaoMapIcon :{
+    height:50,
+    width:50,
+    borderRadius:50,
+    marginLeft:14
+    },
+    line: {
+    borderBottomColor: '#D8D8D8',
+    borderBottomWidth: 1,
+    // marginVertical: 4, // 수평선의 상단과 하단 여백 조정,
+    marginRight:"2%",
+    marginLeft:"2%",
+    },
     });
