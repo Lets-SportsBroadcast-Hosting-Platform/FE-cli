@@ -18,7 +18,7 @@ export default function TermsOfService() {
     const params = route.params;
 
     // context에서 userInfo 가져오기
-    const { getUserInfo, saveStoreInfo, getUserToken } = useAuth()
+    const { getUserInfo, saveStoreInfo, getUserToken, setIsAdmin } = useAuth()
     const [isChecked, setIsChecked] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
@@ -56,13 +56,14 @@ export default function TermsOfService() {
             }
         }).then((res)=>{
             console.log(res)
+            setIsAdmin(true) // Host인 경우
             saveStoreInfo({
                 store_name: params.place_name,
                 store_address: params.address_name,
                 store_road_address: params.road_address_name,
                 store_category: params.category_group_name,
                 store_number: params.phone,
-                business_no: params.business_no
+                business_no: params.business_no,
             })
             navigation.navigate('PlaceList')
         }).catch(e=>{

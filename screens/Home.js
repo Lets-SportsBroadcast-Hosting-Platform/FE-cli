@@ -13,7 +13,7 @@ import { useAuth } from '../contexts/AuthContext.js';
 import Toast from 'react-native-toast-message';
 
 export default function Home({navigation}) {
-    const { saveLogin, getUserInfo, getStoreInfo } = useAuth();
+    const { saveLogin, getUserInfo, getStoreInfo, setIsAdmin } = useAuth();
 
     useEffect(() => {
         async function login(){
@@ -30,7 +30,8 @@ export default function Home({navigation}) {
                 }})
     
                 if(tokenLoginResult === 'Success' && !!userInfo){
-                    if(!!storeInfo){
+                    if(!!storeInfo){ // 호스트인 경우
+                        setIsAdmin(true)
                         navigation.navigate('PlaceList')
                         console.log(userInfo)
                         Toast.show(({

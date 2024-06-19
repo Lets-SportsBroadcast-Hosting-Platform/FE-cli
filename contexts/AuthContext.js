@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [store, setStore] = useState(null);
   const [token, setToken] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const saveLogin = (userData, authToken) => {
     setUser(userData);
@@ -59,7 +60,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, getUserToken, saveLogin, clearLogin, getStoreInfo, saveStoreInfo, getUserInfo }}>
+    <AuthContext.Provider value={{ user, token, getUserToken, saveLogin, clearLogin, getStoreInfo, saveStoreInfo, getUserInfo, isAdmin, setIsAdmin }}>
       {children}
     </AuthContext.Provider>
   );

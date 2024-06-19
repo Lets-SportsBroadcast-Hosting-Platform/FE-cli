@@ -27,7 +27,7 @@ function HostPlaceDetail(){
     const [imageBlobList, setImageBlobList] = useState([])
     const [token, setToken] = useState(null)
 
-    const {getStoreInfo, getUserToken} = useAuth();
+    const {getStoreInfo, getUserToken, isAdmin} = useAuth();
     
     
     const route = useRoute();
@@ -62,9 +62,9 @@ function HostPlaceDetail(){
 
     // const imageLink = route.params.selectedImageUris[0];
     useEffect(()=>{
-        
         getUserToken().then(response_token=>setToken(response_token))
         getStoreInfo().then((info)=>{
+            console.log(info)
             setStoreInfo(info)
         })
 
@@ -90,7 +90,8 @@ function HostPlaceDetail(){
                 const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
                 const hostDayNm = dayArray[hostDay]
                 
-                party.imageLink = {uri: `${party.store_image_url}0`}
+                party.imageLink = {uri: `${party.store_image_url}${party.hosting_id}/0`}
+
                 party.hostDateNm = `${hostMonth}.${hostDate}`
                 party.hostHHMI = hostHHMI
                 party.hostDayNm = hostDayNm
@@ -204,7 +205,6 @@ function HostPlaceDetail(){
                         )
                     )}
                 </View>
-                <Text>{!!partyInfo.imageLink ? partyInfo.imageLink.uri : ''}</Text>
                 <View style={[self.bannerTitle, {left: clientWidth / 2, top: 214, transform: [{translateX: -167.5}]}]}>
                     {/* <Text style={[styles.commonFont,{fontSize: 25}]}>{partyInfo.hosting_name ?? ''}</Text>
                     <Text> </Text> */}
@@ -262,7 +262,10 @@ function HostPlaceDetail(){
                 <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>{storeInfo?.store_address ?? '가게주소'}</Text>
             </View>
             <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={isNew ? postHosting : applyHosting}>
-                {isNew ? <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text> : <Text style={[styles.p5, self.hostButton]}>신청하기</Text> }
+                
+                {isNew && isAdmin && <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text>}
+                { !isNew && <Text style={[styles.p5, self.hostButton]}>신청하기</Text>}
+                {/* { !isNew && isAdmin && <Text style={[styles.p5, self.hostButton]}>수정하기</Text>} */}
             </TouchableOpacity>
         </ScrollView>
     )

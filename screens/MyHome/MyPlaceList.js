@@ -96,7 +96,7 @@ export default function HostPlaceList({navigation}) {
                         hostHHMI,
                         hostDayNm,
                         // imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${storeInfo.business_no}/${place.hosting_id}/0`},
-                        imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${storeInfo.business_no}/0`},
+                        imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${storeInfo.business_no}/${place.hosting_id}/0`},
                     }
                     
                 })
