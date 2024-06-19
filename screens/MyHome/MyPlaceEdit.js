@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
 import { useNavigation,useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
+// auth
+import { useAuth } from '../../contexts/AuthContext.js';
 
 export default function MyPlaceEdit() {
     const navigation = useNavigation();
@@ -37,9 +40,38 @@ export default function MyPlaceEdit() {
     const MyStoreEdit = ()=> {
         navigation.navigate('MyHome');
     }
-    const checkRoadAddress= ()=> {
-        console.log("가게 주소 입력하세요");
+    // const checkRoadAddress= ()=> {
+    //     console.log("가게 주소 입력하세요");
+    // }
+    function checkRoadAddress(text){
+    
+        const params = {}
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/search?keyword=${text}&provider=other`, params)
+        .then((res)=>{
+            // console.log(res)
+            if (res === 1) {
+                // Success toast
+                Toast.show({
+                type: 'success',
+                text1: '성공했습니다!',
+            });
+            } else {
+            // Error toast
+            Toast.show({
+                type: 'error',
+                text1: '존재하지 않는 주소입니다.',
+            });
+            }
+            })
+            .catch((error)=>console.log(error))
     }
+    const {getStoreInfo, getUserToken, isAdmin} = useAuth();
+    useEffect(()=>{
+        getStoreInfo().then((info)=>{
+            console.log(info)
+            setStoreInfo(info)
+        })
+    },[])
     return (
         <View style={styles.container}>
         

@@ -28,7 +28,7 @@ export default function Home({navigation}) {
                 tokenLoginResult = await ApiUtil.get(`${ApiConfig.SERVER_URL}/login/token`,{headers: {
                     jwToken: storageToken
                 }})
-    
+                throw new Error()
                 if(tokenLoginResult === 'Success' && !!userInfo){
                     if(!!storeInfo){ // 호스트인 경우
                         navigation.navigate('PlaceList')
