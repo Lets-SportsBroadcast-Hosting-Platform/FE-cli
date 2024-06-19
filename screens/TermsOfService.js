@@ -18,7 +18,7 @@ export default function TermsOfService() {
     const params = route.params;
 
     // context에서 userInfo 가져오기
-    const { getUserInfo, saveStoreInfo, getUserToken, setIsAdmin } = useAuth()
+    const { getUserInfo, saveStoreInfo, getUserToken } = useAuth()
     const [isChecked, setIsChecked] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
@@ -55,8 +55,6 @@ export default function TermsOfService() {
                 jwToken: userToken
             }
         }).then((res)=>{
-            console.log(res)
-            setIsAdmin(true) // Host인 경우
             saveStoreInfo({
                 store_name: params.place_name,
                 store_address: params.address_name,

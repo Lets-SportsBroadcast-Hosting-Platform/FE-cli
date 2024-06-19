@@ -14,6 +14,7 @@ import { useAuth } from '../../contexts/AuthContext.js';
 
 export default function HostPlaceList({navigation}) {
     const {getUserToken, getStoreInfo} = useAuth()
+    const [store, setStoreInfo] = useState({})
     const onClickItem = (item)=>{
         navigation.navigate('HostPlaceDetail', {...item})
     }
@@ -77,6 +78,7 @@ export default function HostPlaceList({navigation}) {
                 }
             }).then(async (res)=>{
                 const storeInfo = await getStoreInfo();
+                setStoreInfo(storeInfo)
                 const placeList = res.map(place=>{
                     const dayArray = ['월', '화', '수', '목', '금', '토', '일']
                     const hostingDateInfo = new Date(place.hosting_date)
@@ -181,9 +183,9 @@ export default function HostPlaceList({navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.userInfoContainer}>
-                <Text style={{fontSize: 28, color: 'black', fontWeight: 'blod', fontFamily:'BlackHanSans-Regular',}} >벨지움재즈카페</Text>
-                <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold'}}>010-1234-5678</Text>
-                <Text style={{fontSize: 15, color: 'black'}}>서울시 반포대로 24길 17</Text>
+                <Text style={{fontSize: 28, color: 'black', fontWeight: 'blod', fontFamily:'BlackHanSans-Regular',}} >{store?.store_name}</Text>
+                <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold'}}>{store?.store_number}</Text>
+                <Text style={{fontSize: 15, color: 'black'}}>{store?.store_road_address}</Text>
                 <TouchableOpacity onPress={onClickEdit} style={styles.editBtn}>
                     <Image style={{transform: [{scale: 1.3}]}} source={EditPng}></Image>
                 </TouchableOpacity>
