@@ -1,13 +1,14 @@
 import React,{useState,useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react-native';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useRoute  } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import ApiConfig from '../api/ApiConfig';
 import ApiUtil from '../api/ApiUtil';
 export default function StoreAddress() {
     const navigation = useNavigation();
-
+    const route = useRoute();
+    const selectedStore = route.params?.selectedStore;
     const arrowbuttonPress = () => {
         navigation.goBack()
     };
@@ -52,8 +53,8 @@ export default function StoreAddress() {
                 onPress={() => goNextStep(store)}
                 key={storeIdx}>
                 <View style={styles.line}></View>
-                <Text style={[styles.storeItemText, styles.storeItemTitle]}>{store.place_name}</Text>
-                <Text style={[styles.storeItemText, styles.storeItemDesc]}>{store.address_name}</Text>
+                <Text style={[styles.storeItemText, styles.storeItemTitle]}>{store.road_address_name}</Text>
+                <Text style={[styles.storeItemText, styles.storeItemDesc]}>{store.place_name}</Text>
                 </TouchableOpacity>
             )
         })
@@ -81,7 +82,7 @@ export default function StoreAddress() {
         <View style={styles.textInputContainer}>
         <TextInput
             placeholder='가게 주소를 입력해주세요.'
-            value={text}
+            value={selectedStore?.address_name}
             style={styles.storeInputText}
             onChangeText={(inputText) => {
                 setText(inputText);

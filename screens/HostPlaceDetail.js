@@ -144,7 +144,7 @@ function HostPlaceDetail(){
             hosting_date: new Date(),
             screen_size: route.params.screenSize
         }).replaceAll("\\r", "");
-        // console.log("json_data : ", json_data)
+        console.log("json_data : ", json_data)
 
 
         // const blob_data =  new Blob([json_data], {
