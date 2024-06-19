@@ -44,6 +44,7 @@ export default function HostPlaceList({navigation}) {
               {
                 text: '확인',
                 onPress: () => {
+                    console.log('호스팅 삭제...')
                   ApiUtil.delete(`${ApiConfig.SERVER_URL}/party/${id}`).then(res=>{
                     console.log(res)
                     searchHostings()

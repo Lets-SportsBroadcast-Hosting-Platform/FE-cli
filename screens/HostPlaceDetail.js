@@ -155,10 +155,11 @@ function HostPlaceDetail(){
         formData.append('data',  json_data)
         
         for(let i=0; i<selectedImageAssets.length; i++){
+            const imageUri = selectedImageUris[i]
             const asset = selectedImageAssets[i];
             formData.append('photos', {
-                uri: asset.uri,
-                type: asset.type,
+                uri: imageUri,
+                type: 'image/jpeg',
                 name: asset.fileName,
             })
         }
@@ -180,7 +181,7 @@ function HostPlaceDetail(){
 
     }
     const editHosting = ()=>{
-        navigation.navigate('MyHomeEdit', {business_no: partyInfo.business_no})
+        // navigation.navigate('MakingHost', {...route.params, gameTitle: 'zzz'})
     }
 
     return (
@@ -216,7 +217,7 @@ function HostPlaceDetail(){
                     
                 </View>
 
-            </View>
+            </View> 
             <View style={[styles.p5, styles.pl15, styles.pr15, layouts.horizontal, layouts.spaceBetween]}>
                 <Text style={[self.textInfo, {color: '#000'}]}>{partyInfo.hosting_name ?? storeInfo?.store_name ?? '가게명'}</Text>
             </View>

@@ -4,6 +4,8 @@ import arrowToLeft from '../../assets/images/arrowToLeft.png';
 import { useNavigation,useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 import { launchImageLibrary } from 'react-native-image-picker';
+import ImageResizer from 'react-native-image-resizer';
+
 //슬라이더 (연령대)
 import Thumb from '../../components/Slider/Thumb';
 import Rail from '../../components/Slider/Rail';
@@ -58,6 +60,17 @@ export default function MakingHost() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const MAX_IMAGES = 5;
+
+    const resizeImages = async (uris) => {
+        const resizePromises = uris.map(uri =>ImageResizer.createResizedImage(uri, 800, 600, 'JPEG', 80));
+    
+        return Promise.all(resizePromises)
+          .then(responses => {
+            const resizedUris = responses.map(response => response.uri);
+            return resizedUris
+          })
+      };
+
     const pickImage = async () => {
         const options = {
             selectionLimit: MAX_IMAGES - selectedImageUris.length, // Allow only single image selection
@@ -70,7 +83,8 @@ export default function MakingHost() {
 
             if (!result.didCancel) {
             const newUris = result.assets.map((asset) => asset.uri);
-            setSelectedImageUris([...selectedImageUris, ...newUris]);
+            const smallImages = await resizeImages(newUris)
+            setSelectedImageUris([...selectedImageUris, ...smallImages]);
             setSelectedImageAssets([...selectedImageAssets, ...(result.assets)])
             setHasImage(true);
             }
