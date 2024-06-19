@@ -1,3 +1,5 @@
+//이 페이지 날리고 EditStoreAddress의 가게주소를 InputText로 변환하고 옆에 버튼을 둬서 
+//버튼 클릭 시 존재하는 주소인지 true , flase값을 반환받아 수정완료 버튼이 활성화
 import React,{useState,useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert,TextInput } from 'react-native';
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
@@ -13,7 +15,7 @@ export default function EditStoreAddress() {
 
   const arrowbuttonPress = () => {
     navigation.goBack()
-    console.log("arrowbuttonPressed");
+    // console.log("arrowbuttonPressed");
   };
 
   //res [{},{}]
@@ -27,7 +29,7 @@ export default function EditStoreAddress() {
   function SearchStore(text){
     
     const params = {}
-    ApiUtil.get(`${ApiConfig.SERVER_URL}/host/search?keyword=${text}&provider=kakao`, params)
+    ApiUtil.get(`${ApiConfig.SERVER_URL}/store/search?keyword=${text}&provider=other`, params)
     .then((res)=>{
       const stores = res.stores ?? [];
       // console.log(stores);
@@ -39,7 +41,9 @@ export default function EditStoreAddress() {
     .catch((error)=>console.log(error))
   }
 
-
+  const goNextStep = (selectedStore) => {
+    navigation.navigate('MyHomeEdit', { selectedStore }); 
+};
   //res 가게를 출력
   const StoreList = () => (
     <>
@@ -49,10 +53,10 @@ export default function EditStoreAddress() {
           return (
             <TouchableOpacity
             style={styles.storeItem}
-            onPress={() => goNextStep(store.place_name)}
+            onPress={() => goNextStep(store)}
             key={storeIdx}>
               <View style={styles.line}></View>
-              <Text style={[styles.storeItemText, styles.storeItemTitle]}>{store.place_name}</Text>
+              <Text style={[styles.storeItemText, styles.storeItemTitle]}>{store.road_address_name}</Text>
               <Text style={[styles.storeItemText, styles.storeItemDesc]}>{store.address_name}</Text>
             </TouchableOpacity>
           )
@@ -144,6 +148,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     borderRadius: 10,
     borderBottomWidth: 0,
+    marginBottom:10,
     // backgroundColor:'red',
     flexDirection: 'row'
   },
@@ -199,5 +204,38 @@ storeInputText :{
   borderColor: '#C5C5C7', // Border color
   elevation: 3, 
   color:'#B7B7B7'
+},
+storeItem: {
+  width: '100%',
+  marginTop: 10,
+  padding: 5,
+},
+storeItemText: {
+  width: '100%',
+},
+storeItemTitle: {
+  fontSize: 15,
+  fontWeight: 'bold',
+  marginTop:15,
+  color:'black',
+  fontFamily:'NotoSansKR-Black',
+  fontWeight:'900'
+},
+storeItemDesc: {
+  color: '#888',
+  fontSize:13
+},
+kakaoMapIcon :{
+  height:50,
+  width:50,
+  borderRadius:50,
+  marginLeft:14
+},
+line: {
+  borderBottomColor: '#D8D8D8',
+  borderBottomWidth: 1,
+  // marginVertical: 4, // 수평선의 상단과 하단 여백 조정,
+  marginRight:"2%",
+  marginLeft:"2%",
 },
 });

@@ -1,16 +1,17 @@
 import React,{useState,useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react-native';
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 
 export default function MyPlaceEdit() {
     const navigation = useNavigation();
-
+    const route = useRoute();
+    const selectedStore = route.params?.selectedStore;
     const arrowbuttonPress = () => {
         navigation.navigate('MyHome')
         // MyHome
-        console.log("arrowbuttonPressed");
+        // console.log(selectedStore);
     };
 
 
@@ -21,22 +22,23 @@ export default function MyPlaceEdit() {
     };
 //가게 연락처를 입력하세요
     const [phone, setPhone] = React.useState('');
-    const onChangePhone = (inputPhoneNumber) =>{
+    const onChangePhoneNumber  = (inputPhoneNumber) =>{
         setPhone(inputPhoneNumber);
     };
-//주소를 입력
-    const [storeAddress, setStoreAddress] = useState('');
-
+//주소를 입력010
+    const [storeAddress, setStoreAddress] = React.useState('');
+    const onChangeStoreAddress = (inputStoreAddress) =>{
+        setStoreAddress(inputStoreAddress);
+    };
     const goToHostBusinessRegisNumber=(title)=>{
         navigation.navigate('HostBusinessRegisNumber',{'title':title});
-        // if(title === ''){
-        //   Alert.alert('먼저 가게 이름을 입력해주세요!')
-        //   return;
-        // }
-        // console.log(`${title} 사업장 선택!`)
-        // navigation.navigate('HostBusinessRegisNumber', {
-        //   'title': title,
-        // })
+        
+    }
+    const MyStoreEdit = ()=> {
+        navigation.navigate('MyHome');
+    }
+    const checkRoadAddress= ()=> {
+        console.log("가게 주소 입력하세요");
     }
     return (
         <View style={styles.container}>
@@ -66,7 +68,8 @@ export default function MyPlaceEdit() {
                 <TextInput
                     placeholder='010-1234-5678'
                     value={phone}
-                    onChangePhone={onChangePhone}
+                    onChangeText={onChangePhoneNumber}
+                    keyboardType='phone-pad'
                     style={styles.storeInputText}
                     mode='outlined'
                 />
@@ -76,17 +79,28 @@ export default function MyPlaceEdit() {
             <Text style={styles.InputTitle}>가게 주소</Text>
 
                 <View style={styles.textInputContainer} >
-                <TouchableOpacity onPress={() => navigation.navigate('EditStoreAddress')} style={styles.textInputContainer}>
-                <TextInput
+                {/* onPress={() => navigation.navigate('EditStoreAddress')} */}
+                <TouchableOpacity  style={styles.textInputContainer}>
+                    <TextInput
+                        placeholder='가게 주소를 입력해주세요.'
+                        value={storeAddress}
+                        onChangeText={onChangeStoreAddress}
+                        style={styles.storeInputText2}
+                        mode='outlined'
+                    />
+                    <Button  mode="contained" onPress={checkRoadAddress} style={styles.FindAddressButton2}>
+                    <Text style={{fontSize:12, lineHeight:25.5}}>check</Text>
+                    </Button>
+                {/* <TextInput
                     placeholder='가게 주소를 입력해주세요.'
                     style={styles.storeAddressInputText}
                     mode='outlined'
                     editable={false}
-                    value={storeAddress}
-                />
+                    value={selectedStore?.road_address_name}
+                /> */}
                 </TouchableOpacity>
                 </View>
-        <Button  mode="contained" onPress={()=> goToHostBusinessRegisNumber(storeAddress)} style={styles.FindAddressButton}>
+        <Button  mode="contained" onPress={MyStoreEdit} style={styles.FindAddressButton}>
         <Text style={styles.nextText}>수정 완료</Text>
         </Button>
         
@@ -165,6 +179,16 @@ export default function MyPlaceEdit() {
         elevation: 3, 
         color:'#B7B7B7'
     },
+    storeInputText2 :{
+        width: '80%',
+        backgroundColor: '#fff',
+        borderRadius:10,
+        paddingLeft:14,
+        borderWidth: 1, // Border width
+        borderColor: '#C5C5C7', // Border color
+        elevation: 3, 
+        color:'#B7B7B7'
+    },
     InputTitle :{
         color:'black',
         fontFamily:'NotoSansKR-Medium',
@@ -189,7 +213,19 @@ export default function MyPlaceEdit() {
     FindAddressButton :{
         height:50,
         backgroundColor:'#B7B7B7',
-        marginTop:40
+        marginTop:40,
+        borderRadius: 10,
+    },
+    FindAddressButton2 :{
+        // height:50,
+        backgroundColor:'#B7B7B7',
+        // marginTop:40,
+        borderRadius: 10,
+        marginLeft:3,
+        borderWidth: 1, // Border width
+        borderColor: '#C5C5C7', // Border color
+        elevation: 3, 
+
     },
     withdrawalText:{
         color:'#C5C5C7',
@@ -204,6 +240,7 @@ export default function MyPlaceEdit() {
       fontFamily:'NotoSansKR-Medium',
       alignItems:'center',
       fontSize:15,
-      lineHeight:25.5
+      lineHeight:25.5,
+      borderRadius: 4,
   }
     });

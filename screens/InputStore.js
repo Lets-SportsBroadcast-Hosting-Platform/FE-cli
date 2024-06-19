@@ -1,15 +1,18 @@
 import React,{useState,useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react-native';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 
 export default function InputStore() {
     const navigation = useNavigation();
+    const route = useRoute();
+    const selectedStore = route.params?.selectedStore;
 
     const arrowbuttonPress = () => {
         navigation.goBack()
         console.log("arrowbuttonPressed");
+        console.log(selectedStore);
     };
 
 
@@ -60,6 +63,7 @@ export default function InputStore() {
             <View style={styles.textInputContainer}>
                 <TextInput
                     placeholder='가게 이름을 입력해주세요.'
+                    // value={selectedStore.place_name}
                     value={store}
                     onChangeText={onChangeText}
                     style={styles.storeInputText}
@@ -71,6 +75,7 @@ export default function InputStore() {
             <View style={styles.textInputContainer}>
                 <TextInput
                     placeholder='가게 연락처를 입력해주세요.'
+                    // value={selectedStore.phone}
                     value={phone}
                     onChangePhone={onChangePhone}
                     style={styles.storeInputText}
@@ -88,7 +93,7 @@ export default function InputStore() {
                     style={styles.storeAddressInputText}
                     mode='outlined'
                     editable={false}
-                    value={storeAddress}
+                    value={selectedStore?.address_name}
                 />
                 </TouchableOpacity>
                 </View>
@@ -167,7 +172,7 @@ export default function InputStore() {
         borderWidth: 1, // Border width
         borderColor: '#C5C5C7', // Border color
         elevation: 3, 
-        color:'#B7B7B7'
+        color:'black'
     },
     InputTitle :{
         color:'black',
@@ -179,7 +184,7 @@ export default function InputStore() {
         borderRadius:10,
         paddingLeft:14,
         width:'100%',
-        color:'#B7B7B7'
+        color:'#'
     },
     modalContent: {
         backgroundColor: 'white',
