@@ -88,7 +88,7 @@ export default function MyPlaceEdit() {
                 store_road_address: storeAddress || getStore.store_road_address,
                 store_number: phone || getStore.store_number,
             }).then(()=>{
-                navigation.navigate('MyHome');
+                navigation.navigate('PlaceList');
             })
             // console.log("phone :",phone || getStore.store_number, "store :",store || getStore.store_name,"storeAddress :",storeAddress || getStore.store_road_address,business_no )
             console.log("Store updated successfully:", res)
