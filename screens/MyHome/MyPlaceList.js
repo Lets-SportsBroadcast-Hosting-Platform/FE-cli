@@ -20,7 +20,7 @@ export default function HostPlaceList({navigation}) {
     }
 
     const onClickEdit = ()=>{
-        navigation.navigate('MyHomeEdit')
+        navigation.navigate('MyHomeEdit', {business_no: store.business_no})
     }
 
     const onClickHostBtn = ()=>{
@@ -64,6 +64,7 @@ export default function HostPlaceList({navigation}) {
     const [status, setStatus] = useState(true)
     const [hostPlaceList, setHostPlaceList] = useState([]);
     // const [imageLink, setImageLink] = useState(uri:{"https://sitem.ssgcdn.com/86/60/02/item/1000385026086_i1_1100.jpg"});
+
     useEffect(()=>{
         searchHostings()
     }, [status])
