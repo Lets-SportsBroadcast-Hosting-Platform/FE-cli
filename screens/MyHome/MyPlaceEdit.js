@@ -6,30 +6,46 @@ import { Button } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 // auth
 import { useAuth } from '../../contexts/AuthContext.js';
+// api
+import ApiUtil from '../../api/ApiUtil.js';
+import ApiConfig from '../../api/ApiConfig';
 
 export default function MyPlaceEdit() {
     const navigation = useNavigation();
     const route = useRoute();
-    const selectedStore = route.params?.selectedStore;
+    const { getStoreInfo, saveStoreInfo } = useAuth();
+
+    // const { business_no } = route.params || {};
+    const business_no = "4543101350"
     const arrowbuttonPress = () => {
         navigation.navigate('MyHome')
+        console.log("Business number:", business_no);
         // MyHome
         // console.log(selectedStore);
     };
-
-
+    const [getStore, getSetStore] = React.useState([]);
+    
+    useEffect(()=>{
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/${business_no}`)
+        .then((res)=>{ 
+            console.log('res', res)
+            getSetStore(res)
+        })
+        .catch((error)=>console.log(error.config))
+    },[route.params?.business_no]);
 //가게 이름을 입력하세요
-    const [store, setStore] = React.useState('');
+    const [store, setStore] = React.useState(getStore.store_name);
     const onChangeText = (inputText) => {
         setStore(inputText);
     };
 //가게 연락처를 입력하세요
-    const [phone, setPhone] = React.useState('');
+    const [phone, setPhone] = React.useState(getStore.store_number);
     const onChangePhoneNumber  = (inputPhoneNumber) =>{
         setPhone(inputPhoneNumber);
+        console.log(phone)
     };
 //주소를 입력010
-    const [storeAddress, setStoreAddress] = React.useState('');
+    const [storeAddress, setStoreAddress] = React.useState(getStore.store_road_address);
     const onChangeStoreAddress = (inputStoreAddress) =>{
         setStoreAddress(inputStoreAddress);
     };
@@ -37,25 +53,76 @@ export default function MyPlaceEdit() {
         navigation.navigate('HostBusinessRegisNumber',{'title':title});
         
     }
-    const MyStoreEdit = ()=> {
-        navigation.navigate('MyHome');
+    const updatedStoreData = {
+        store_address: "Updated store address",
+        store_road_address: "Updated store road address",
+        store_name: "Updated store name"
+    };
+    const DoMyStoreEdit = async () => {
+        console.log("수정 완료 Pressed")
+        MyStoreEdit(phone, store, storeAddress)
+        // console.log(number)
     }
-    // const checkRoadAddress= ()=> {
-    //     console.log("가게 주소 입력하세요");
-    // }
-    function checkRoadAddress(text){
-    
-        const params = {}
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/search?keyword=${text}&provider=other`, params)
+    async function MyStoreEdit(phone, store, storeAddress){
+        // console.log(phone, store, storeAddress,business_no)
+        const storeInfo = await  getStoreInfo()
+        ApiUtil.put(`${ApiConfig.SERVER_URL}/store/${business_no}`, {
+                
+                    
+                    // store_name: "H 2호점",
+                    // store_address: "서울 강북구 도봉로 375-1",
+                    // store_road_address: "서울 강북구 도봉로 375-1",
+                    // store_number: "02-991-1440",
+                    store_name: store || getStore.store_name,
+                    store_address: storeAddress || getStore.store_road_address,
+                    store_road_address: storeAddress || getStore.store_road_address,
+                    store_number: phone || getStore.store_number,
+                
+            
+            })
+        .then(async (res)=>{
+            saveStoreInfo({
+                ...storeInfo,
+                store_name: store || getStore.store_name,
+                store_address: storeAddress || getStore.store_road_address,
+                store_road_address: storeAddress || getStore.store_road_address,
+                store_number: phone || getStore.store_number,
+            }).then(()=>{
+                navigation.navigate('MyHome');
+            })
+            // console.log("phone :",phone || getStore.store_number, "store :",store || getStore.store_name,"storeAddress :",storeAddress || getStore.store_road_address,business_no )
+            console.log("Store updated successfully:", res)
+            Toast.show({
+                type: 'success',
+                text1: '가게 정보가 성공적으로 수정되었습니다.',
+            });
+        })
+        .catch((error)=>{
+            // console.log("phone :",phone || getStore.store_number, "store :",store || getStore.store_name,"storeAddress :",storeAddress || getStore.store_road_address )
+            console.log("error : ",error.config)
+            Toast.show({
+                type: 'error',
+                text1: '가게 정보 수정에 실패했습니다.',
+            });
+    })
+    }
+    const checkRoadAddress = async () =>{
+        console.log("check 누름")
+        // console.log("phone :",phone || getStore.store_number, "store :",store || getStore.store_name,"storeAddress :",storeAddress || getStore.store_road_address )
+        checkStoreAddress(storeAddress)
+    }
+    function checkStoreAddress(storeAddress){
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/search/check-address?keyword=${storeAddress}&provider=check-address`)
         .then((res)=>{
-            // console.log(res)
-            if (res === 1) {
+            // console.log("Check pressed")
+            console.log("res : ",res)
+            if (res == "1") {
                 // Success toast
                 Toast.show({
                 type: 'success',
-                text1: '성공했습니다!',
+                text1: '유효한 주소입니다.',
             });
-            } else {
+            } if (res=="0") {
             // Error toast
             Toast.show({
                 type: 'error',
@@ -65,13 +132,7 @@ export default function MyPlaceEdit() {
             })
             .catch((error)=>console.log(error))
     }
-    const {getStoreInfo, getUserToken, isAdmin} = useAuth();
-    useEffect(()=>{
-        getStoreInfo().then((info)=>{
-            console.log(info)
-            setStoreInfo(info)
-        })
-    },[])
+    
     return (
         <View style={styles.container}>
         
@@ -87,7 +148,7 @@ export default function MyPlaceEdit() {
             <Text style={styles.InputTitle}>가게 이름</Text>
             <View style={styles.textInputContainer}>
                 <TextInput
-                    placeholder='벨지움재즈카페'
+                    placeholder={getStore.store_name}
                     value={store}
                     onChangeText={onChangeText}
                     style={styles.storeInputText}
@@ -98,7 +159,7 @@ export default function MyPlaceEdit() {
             <Text style={styles.InputTitle}>가게 연락처</Text>
             <View style={styles.textInputContainer}>
                 <TextInput
-                    placeholder='010-1234-5678'
+                    placeholder={getStore.store_number}
                     value={phone}
                     onChangeText={onChangePhoneNumber}
                     keyboardType='phone-pad'
@@ -114,14 +175,14 @@ export default function MyPlaceEdit() {
                 {/* onPress={() => navigation.navigate('EditStoreAddress')} */}
                 <TouchableOpacity  style={styles.textInputContainer}>
                     <TextInput
-                        placeholder='가게 주소를 입력해주세요.'
+                        placeholder={getStore.store_road_address}
                         value={storeAddress}
                         onChangeText={onChangeStoreAddress}
                         style={styles.storeInputText2}
                         mode='outlined'
                     />
                     <Button  mode="contained" onPress={checkRoadAddress} style={styles.FindAddressButton2}>
-                    <Text style={{fontSize:12, lineHeight:25.5}}>check</Text>
+                    <Text style={{fontSize:12, lineHeight:25.5}} onPress={checkRoadAddress}>check</Text>
                     </Button>
                 {/* <TextInput
                     placeholder='가게 주소를 입력해주세요.'
@@ -132,7 +193,7 @@ export default function MyPlaceEdit() {
                 /> */}
                 </TouchableOpacity>
                 </View>
-        <Button  mode="contained" onPress={MyStoreEdit} style={styles.FindAddressButton}>
+        <Button  mode="contained" onPress={DoMyStoreEdit} style={styles.FindAddressButton}>
         <Text style={styles.nextText}>수정 완료</Text>
         </Button>
         

@@ -5,6 +5,7 @@ import { Animated, Easing, StyleShee } from 'react-native';
 // Interface removed, object used directly
 const Toggle = ({ onToggle, isOn }) => {
     const [animatedValue] = useState(new Animated.Value(isOn ? 1 : 0));
+    const [onOff, setOnOff] = useState(isOn)
 
     useEffect(() => {
         Animated.timing(animatedValue, {
@@ -14,7 +15,7 @@ const Toggle = ({ onToggle, isOn }) => {
             easing: Easing.linear,
             useNativeDriver: false,
         }).start();
-    }, [isOn, animatedValue]);
+    }, [onOff, animatedValue]);
 
     const translateX = animatedValue.interpolate({
         inputRange: [0, 1],
@@ -26,14 +27,15 @@ const Toggle = ({ onToggle, isOn }) => {
         // onToggle(onToggle,!isOn); // Assuming onToggle is a function passed from parent
         // console.log("onPress는 어디있지")
         // console.log(animatedValue)
-        console.log(animatedValue)
-        
-        console.log(typeof animatedValue)
-        animatedValue.setValue(animatedValue._value === 0 ? 1 : 0)
+        console.log("animatedValue",animatedValue)
+        console.log("isOn",onOff)
+        // console.log(typeof animatedValue)
+        animatedValue.setValue(animatedValue._value == 0 ? 1 : 0)
+        setOnOff(animatedValue._value == 0 ? 1 : 0)
     };
 
     return (
-        <ToggleContainer onPress={onPress} color={isOn? 'black':'#01162D'}>
+        <ToggleContainer onPress={onPress} color={animatedValue === 1 ? '#ddd':'#01162D'}>
         <ToggleWheel style={{ transform: [{ translateX }]}} />
         {/* { transform: [{ translateX }] } */}
         </ToggleContainer>
