@@ -6,6 +6,7 @@ import EditPng from '../../assets/images/edit.png'
 import UserImage from '../../assets/images/user.png'
 import CancelImage from '../../assets/images/cancel.png'
 import { useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native'
 import ApiConfig from '../../api/ApiConfig';
 import ApiUtil from '../../api/ApiUtil';
 
@@ -80,6 +81,7 @@ export default function HostPlaceList({navigation}) {
                 }
             }).then(async (res)=>{
                 const storeInfo = await getStoreInfo();
+                console.log(storeInfo)
                 setStoreInfo(storeInfo)
                 const placeList = res.map(place=>{
                     const dayArray = ['월', '화', '수', '목', '금', '토', '일']
@@ -89,7 +91,7 @@ export default function HostPlaceList({navigation}) {
                     const hostDay = hostingDateInfo.getDay()
                     const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
                     const hostDayNm = dayArray[hostDay]
-                    
+                    console.log(`${ApiConfig.IMAGE_SERVER_URL}/${storeInfo.business_no}/${place.hosting_id}/0`)
                     return {
                         ...place,
                         dayArray,
