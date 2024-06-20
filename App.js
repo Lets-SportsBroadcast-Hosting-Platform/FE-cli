@@ -35,7 +35,7 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="ChoosingGame">
+        <Stack.Navigator initialRouteName="Home">
           
           <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
           
