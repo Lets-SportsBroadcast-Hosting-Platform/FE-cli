@@ -24,7 +24,7 @@ export default function TermsOfService() {
     const [isModalVisible2, setIsModalVisible2] = useState(false);
     const arrowbuttonPress = () => {
         navigation.goBack()
-        console.log("arrowbuttonPressed");
+        // console.log("arrowbuttonPressed");
     };
     const handleCancelModal = () => {
         setIsModalVisible(false);
@@ -65,7 +65,7 @@ export default function TermsOfService() {
             })
             navigation.navigate('PlaceList')
         }).catch(e=>{
-            console.log(e)
+            // console.log(e)
             // console.log(JSON.stringify(e))
         })
     }
@@ -227,9 +227,14 @@ export default function TermsOfService() {
             <Text style={{fontSize: 17, color: '#000', lineHeight: 41, marginRight: 20,fontFamily:'BlackHanSans-Regular',fontWeight:'800'}}> 알림 </Text>
             <Toggle
                 isOn={isChecked}
-                onToggle={(value)=>{}}
+                onToggle={(value)=>{
+                    // setIsChecked(!value)
+                    // console.log("di!!!!", isChecked)
+                    // console.log("isChecked : ", isChecked)
+                }}
             ></Toggle>
         </View>
+            
             <Text style={styles.explainText}>호스팅이나 예약이 취소된 경우 알림 드립니다</Text>
             <Button mode="contained"  style={styles.typeButton} onPress={submitSignUpForm}>
             동의
