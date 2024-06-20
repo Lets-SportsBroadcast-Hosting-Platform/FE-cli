@@ -15,8 +15,9 @@ export default function MyPlaceEdit() {
     const route = useRoute();
     const { getStoreInfo, saveStoreInfo } = useAuth();
 
-    // const { business_no } = route.params || {};
-    const business_no = "4543101350"
+    const { business_no } = route.params;
+
+    // const business_no = "4543101350"
     const arrowbuttonPress = () => {
         navigation.navigate('MyHome')
         console.log("Business number:", business_no);
@@ -33,6 +34,7 @@ export default function MyPlaceEdit() {
         })
         .catch((error)=>console.log(error.config))
     },[route.params?.business_no]);
+
 //가게 이름을 입력하세요
     const [store, setStore] = React.useState(getStore.store_name);
     const onChangeText = (inputText) => {
@@ -67,12 +69,6 @@ export default function MyPlaceEdit() {
         // console.log(phone, store, storeAddress,business_no)
         const storeInfo = await  getStoreInfo()
         ApiUtil.put(`${ApiConfig.SERVER_URL}/store/${business_no}`, {
-                
-                    
-                    // store_name: "H 2호점",
-                    // store_address: "서울 강북구 도봉로 375-1",
-                    // store_road_address: "서울 강북구 도봉로 375-1",
-                    // store_number: "02-991-1440",
                     store_name: store || getStore.store_name,
                     store_address: storeAddress || getStore.store_road_address,
                     store_road_address: storeAddress || getStore.store_road_address,
@@ -80,22 +76,22 @@ export default function MyPlaceEdit() {
                 
             
             })
-        .then(async (res)=>{
+        .then((res)=>{
             saveStoreInfo({
                 ...storeInfo,
                 store_name: store || getStore.store_name,
                 store_address: storeAddress || getStore.store_road_address,
                 store_road_address: storeAddress || getStore.store_road_address,
                 store_number: phone || getStore.store_number,
-            }).then(()=>{
-                navigation.navigate('PlaceList');
             })
+                
             // console.log("phone :",phone || getStore.store_number, "store :",store || getStore.store_name,"storeAddress :",storeAddress || getStore.store_road_address,business_no )
             console.log("Store updated successfully:", res)
             Toast.show({
                 type: 'success',
                 text1: '가게 정보가 성공적으로 수정되었습니다.',
             });
+            navigation.navigate('PlaceList');
         })
         .catch((error)=>{
             // console.log("phone :",phone || getStore.store_number, "store :",store || getStore.store_name,"storeAddress :",storeAddress || getStore.store_road_address )

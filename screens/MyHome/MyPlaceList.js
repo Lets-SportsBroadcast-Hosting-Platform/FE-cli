@@ -1,31 +1,38 @@
 import { StyleSheet, Text, View,Image,TouchableOpacity, Alert, FlatList } from 'react-native';
-import arrowToLeft from '../../assets/images/location.png';
-import raspberries from '../../assets/images/raspberries.jpg';
 import MyHomePng from '../../assets/images/myhome.png';
 import EditPng from '../../assets/images/edit.png'
 import UserImage from '../../assets/images/user.png'
 import CancelImage from '../../assets/images/cancel.png'
 import { useEffect, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native'
 import ApiConfig from '../../api/ApiConfig';
 import ApiUtil from '../../api/ApiUtil';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // auth
 import { useAuth } from '../../contexts/AuthContext.js';
 
 export default function HostPlaceList({navigation}) {
     const {getUserToken, getStoreInfo} = useAuth()
-    const [store, setStoreInfo] = useState({})
+    const [storeName, setStoreName] = useState('')
+    const [storeNo, setStoreNo] = useState('')
+    const [storeAddress, setStoreAddress] = useState('')
+    const [my_business_no, set_business_no] = useState('')
     const onClickItem = (item)=>{
         navigation.navigate('HostPlaceDetail', {...item})
     }
 
     const onClickEdit = ()=>{
-        navigation.navigate('MyHomeEdit', {business_no: store.business_no})
+        navigation.navigate('MyHomeEdit', {business_no: my_business_no})
     }
 
     const onClickHostBtn = ()=>{
         navigation.navigate('ChoosingGame')
+    }
+
+    const logout = ()=>{
+        AsyncStorage.clear()
+        navigation.navigate('Home')
     }
 
     const clickING = ()=>{
@@ -72,6 +79,7 @@ export default function HostPlaceList({navigation}) {
 
     const searchHostings = ()=>{
         getUserToken().then((token)=>{
+            console.log(status, token)
             ApiUtil.get(`${ApiConfig.SERVER_URL}/party`, {
                 params: {
                     status: status
@@ -80,9 +88,12 @@ export default function HostPlaceList({navigation}) {
                     jwToken: token
                 }
             }).then(async (res)=>{
+                console.log(res)
                 const storeInfo = await getStoreInfo();
-                console.log(storeInfo)
-                setStoreInfo(storeInfo)
+                setStoreName(storeInfo.store_name)
+                setStoreNo(storeInfo.store_number)
+                setStoreAddress(storeInfo.store_road_address)
+                set_business_no(storeInfo.business_no)
                 const placeList = res.map(place=>{
                     const dayArray = ['월', '화', '수', '목', '금', '토', '일']
                     const hostingDateInfo = new Date(place.hosting_date)
@@ -187,9 +198,13 @@ export default function HostPlaceList({navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.userInfoContainer}>
-                <Text style={{fontSize: 28, color: 'black', fontWeight: 'blod', fontFamily:'BlackHanSans-Regular',}} >{store?.store_name}</Text>
-                <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold'}}>{store?.store_number}</Text>
-                <Text style={{fontSize: 15, color: 'black'}}>{store?.store_road_address}</Text>
+                <Text style={{fontSize: 28, color: 'black', fontWeight: 'blod', fontFamily:'BlackHanSans-Regular',}} >{storeName}</Text>
+                <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold'}}>{storeNo}</Text>
+                <Text style={{fontSize: 15, color: 'black'}}>{storeAddress}</Text>
+                <TouchableOpacity onPress={logout} style={styles.logoutBtn}>
+                    <Text>로그아웃</Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity onPress={onClickEdit} style={styles.editBtn}>
                     <Image style={{transform: [{scale: 1.3}]}} source={EditPng}></Image>
                 </TouchableOpacity>
@@ -310,6 +325,11 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 32,
         right: 10
+      },
+      logoutBtn: {
+        position: 'absolute',
+        bottom: 32,
+        left: 10
       },
       buttonContainer: {
         flexDirection: 'row',

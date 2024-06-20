@@ -63,7 +63,7 @@ export default function HostPlaceList() {
                         }}
                         status={ selectedGame === gameData.games[index] ? 'checked' : 'unchecked' }
                         />
-                        <Text style={{ fontFamily: 'BalooDa2-Medium', fontSize: 18, color: 'black',marginLeft: 20, marginRight: 20  }}>{game.time.slice(0, 2)}:{game.time.slice(2)}             {game.homeTeamName}     <Image source={{ uri: game.homeTeamEmblemUrl }} style={{ height: 28, width: 28}} />
+                        <Text style={{ fontFamily: 'BalooDa2-Medium', fontSize: 16, color: 'black',marginLeft: 20, marginRight: 20  }}>{game.time.slice(0, 2)}:{game.time.slice(2)}             {game.homeTeamName}     <Image source={{ uri: game.homeTeamEmblemUrl }} style={{ height: 28, width: 28}} />
                             <Text style={{ fontFamily: 'BlackHanSans-Regular', fontSize: 10}}>     vs     </Text>
                             <Image source={{ uri: game.awayTeamEmblemUrl }} style={{ height: 28, width: 28}} />     {game.awayTeamName}
                         </Text>
