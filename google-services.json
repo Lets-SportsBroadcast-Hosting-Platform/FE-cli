@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:930843202131:android:befbd515e6d8f5f3896ca6",
         "android_client_info": {
-          "package_name": "java.com.letapp"
+          "package_name": "java.com.helloletsapp"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "930843202131-vljb5s57vmbq7vdmqash9k6ep5vikphc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "java.com.letapp",
+            "package_name": "java.com.helloletsapp",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
