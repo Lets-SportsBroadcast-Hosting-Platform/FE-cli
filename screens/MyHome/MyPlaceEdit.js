@@ -68,6 +68,17 @@ export default function MyPlaceEdit() {
     async function MyStoreEdit(phone, store, storeAddress){
         // console.log(phone, store, storeAddress,business_no)
         const storeInfo = await  getStoreInfo()
+    //     console.log({
+    //         store_name: store || getStore.store_name,
+    //         store_address: storeAddress || getStore.store_road_address,
+    //         store_road_address: storeAddress || getStore.store_road_address,
+    //         store_number: phone || getStore.store_number,
+        
+    
+    // })
+    console.log(phone)
+    console.log(getStore.store_number)
+    console.log(phone || getStore.store_number)
         ApiUtil.put(`${ApiConfig.SERVER_URL}/store/${business_no}`, {
                     store_name: store || getStore.store_name,
                     store_address: storeAddress || getStore.store_road_address,

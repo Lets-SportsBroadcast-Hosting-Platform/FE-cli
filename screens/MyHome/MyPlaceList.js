@@ -31,8 +31,26 @@ export default function HostPlaceList({navigation}) {
     }
 
     const logout = ()=>{
-        AsyncStorage.clear()
-        navigation.navigate('Home')
+        Alert.alert(
+            '로그아웃',
+            '로그아웃하시겠습니까?',
+            [
+              {
+                text: '취소',
+                style: 'cancel',
+              },
+              {
+                text: '확인',
+                onPress: () => {
+                    AsyncStorage.clear()
+                    navigation.navigate('Home')
+                },
+              },
+            ],
+            { cancelable: false }
+          );
+
+        
     }
 
     const clickING = ()=>{

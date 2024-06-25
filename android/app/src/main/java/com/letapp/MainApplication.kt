@@ -1,4 +1,4 @@
-package com.letapp
+package com.helloletsapp
 
 import android.app.Application
 import com.facebook.react.PackageList

@@ -101,7 +101,9 @@ function HostPlaceDetail(){
             })
         } else {
             const dayArray = ['월', '화', '수', '목', '금', '토', '일']
-            const hostingDateInfo = new Date()
+            const selectedDate = route.params.selectedGame.date
+            const selectedTime = route.params.selectedGame.time
+            const hostingDateInfo = parseDateTime(`${selectedDate}${selectedTime}`)
             const hostMonth = hostingDateInfo.getMonth() + 1
             const hostDate = hostingDateInfo.getDate()
             const hostDay = hostingDateInfo.getDay()
@@ -125,10 +127,22 @@ function HostPlaceDetail(){
         
     }, [])
 
-    
+    function parseDateTime(dateTimeString) {
+        // 연도, 월, 일, 시, 분을 추출합니다.
+        const year = parseInt(dateTimeString.slice(0, 4), 10);
+        const month = parseInt(dateTimeString.slice(4, 6), 10) - 1; // 월은 0부터 시작하므로 1을 뺍니다.
+        const day = parseInt(dateTimeString.slice(6, 8), 10);
+        const hour = parseInt(dateTimeString.slice(8, 10), 10);
+        const minute = parseInt(dateTimeString.slice(10, 12), 10);
+        
+        // Date 객체를 생성합니다.
+        return new Date(year, month, day, hour, minute);
+    }
 
     const postHosting = ()=>{
-
+        const selectedDate = route.params.selectedGame.date
+        const selectedTime = route.params.selectedGame.time
+        const hostingDateInfo = parseDateTime(`${selectedDate}${selectedTime}`)
         const formData = new FormData();
         
         const json_data = JSON.stringify({
@@ -142,7 +156,7 @@ function HostPlaceDetail(){
             max_personnel: parseInt(route.params.maxPeople),
             age_group_min: route.params.low,
             age_group_max: route.params.high,
-            hosting_date: new Date(),
+            hosting_date: hostingDateInfo,
             screen_size: route.params.screenSize
         }).replaceAll("\\r", "");
         console.log("json_data : ", json_data)

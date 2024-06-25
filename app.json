@@ -1,4 +1,11 @@
 {
   "name": "letApp",
-  "displayName": "letApp"
+  "displayName": "letApp",
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "90f4a47c-a3ee-4392-b895-47af9bd1ebfb"
+      }
+    }
+  }
 }

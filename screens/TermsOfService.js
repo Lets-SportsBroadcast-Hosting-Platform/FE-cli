@@ -66,7 +66,7 @@ export default function TermsOfService() {
             navigation.navigate('PlaceList')
         }).catch(e=>{
             // console.log(e)
-            // console.log(JSON.stringify(e))
+            console.log(JSON.stringify(e))
         })
     }
 

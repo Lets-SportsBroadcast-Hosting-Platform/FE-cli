@@ -167,7 +167,8 @@ export default function MakingHost() {
         high, 
         screenSize,
         selectedImageUris,
-        selectedImageAssets
+        selectedImageAssets,
+        ...(route.params)
     });
     };
 

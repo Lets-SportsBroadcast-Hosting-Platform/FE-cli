@@ -53,14 +53,16 @@ export default function HostPlaceList() {
                 
                 <Text style={{ fontFamily: 'BalooDa2-SemiBold', fontSize: 18, color: 'black',marginBottom:10 }}>{formatKoreanDate(gameData.date)} ({gameData.weekDay})</Text>
                     {gameData.games.map((game, index) => ( 
-                        <TouchableOpacity key={index} style={{flex:1, flexDirection:'row', marginLeft:9, marginBottom:8}}>
+                        <TouchableOpacity key={index} style={{flex:1, flexDirection:'row', marginLeft:9, marginBottom:8}}
+                        onPress={() => {
+                            console.log('press')
+                            setSelectedGame(game)
+                        }}
+                        >
                         <RadioButton
                         label=''
                         value={gameData.games}
                         selected={selectedGame === gameData.games[index]}
-                        onPress={() => {
-                            setSelectedGame(game)
-                        }}
                         status={ selectedGame === gameData.games[index] ? 'checked' : 'unchecked' }
                         />
                         <Text style={{ fontFamily: 'BalooDa2-Medium', fontSize: 16, color: 'black',marginLeft: 20, marginRight: 20  }}>{game.time.slice(0, 2)}:{game.time.slice(2)}             {game.homeTeamName}     <Image source={{ uri: game.homeTeamEmblemUrl }} style={{ height: 28, width: 28}} />
