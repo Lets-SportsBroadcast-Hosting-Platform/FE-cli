@@ -28,6 +28,9 @@ import MyHome from './screens/MyHome/MyPlaceList.js'
 import MyHomeEdit from './screens/MyHome/MyPlaceEdit.js'
 import EditStoreAddress from './screens/MyHome/EditStoreAddress.js';
 
+//유저 인증 절차
+import SelectUserLocation from './screens/User/SelectUserLocation.js';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -35,7 +38,7 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="ChooseUser">
           
           <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
           
@@ -62,6 +65,10 @@ export default function App() {
           {/*마이홈*/}
           <Stack.Screen name="MyHome" component={MyHome} options={{headerShown:false}}/>
           <Stack.Screen name="MyHomeEdit" component={MyHomeEdit} options={{headerShown:false}}/>
+
+          {/* 유저 인증 절차 */}
+          <Stack.Screen name="SelectUserLocation" component={SelectUserLocation} options={{headerShown:false}}/>
+
 
         </Stack.Navigator>
       </NavigationContainer>

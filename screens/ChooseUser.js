@@ -24,7 +24,7 @@ export default function LoginPage({navigation}) {
           </TouchableOpacity>
 
           <View style={styles.line}></View>
-          <TouchableOpacity onPress={()=>{console.log("호스트는 아직")}} style={styles.userContainer}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('SelectUserLocation', {type: 'user'})}} style={styles.userContainer}>
                 <Text style={styles.text}>사용자</Text>
                 <Text style={styles.subtext}>호스팅 된 모임에 참여해요.</Text>
           </TouchableOpacity>

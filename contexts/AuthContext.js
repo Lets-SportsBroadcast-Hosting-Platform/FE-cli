@@ -49,6 +49,15 @@ export const AuthProvider = ({ children }) => {
     return user
   }
 
+  const saveUserInfo = async (info)=>{
+    let userInfo = {}
+    if(!!user){
+      userInfo = await getUserInfo();
+    }
+    setUser({...userInfo, ...info})
+  }
+ 
+
   const getStoreInfo = async ()=>{
     if(store === null){
       const storeInfo = JSON.parse(await AsyncStorage.getItem('storeInfo'))
@@ -59,7 +68,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, getUserToken, saveLogin, clearLogin, getStoreInfo, saveStoreInfo, getUserInfo }}>
+    <AuthContext.Provider value={{ user, token, getUserToken, saveLogin, clearLogin, getStoreInfo, saveStoreInfo, getUserInfo, saveUserInfo }}>
       {children}
     </AuthContext.Provider>
   );

@@ -18,7 +18,7 @@ export default function TermsOfService() {
     const params = route.params;
 
     // context에서 userInfo 가져오기
-    const { getUserInfo, saveStoreInfo, getUserToken } = useAuth()
+    const { getUserInfo, saveUserInfo, saveStoreInfo, getUserToken } = useAuth()
     const [isChecked, setIsChecked] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible2, setIsModalVisible2] = useState(false);
@@ -42,32 +42,49 @@ export default function TermsOfService() {
     const submitSignUpForm = async ()=>{
         // const userInfo = await getUserInfo();
         const userToken = await getUserToken();
-        ApiUtil.post(`${ApiConfig.SERVER_URL}/store`, {
-            business_no: params.business_no,
-            store_name: params.place_name,
-            store_address: params.address_name,
-            store_road_address: params.road_address_name,
-            store_category: params.category_group_name,
-            store_number: params.phone,
-            alarm: true
-        }, {
-            headers: {
-                jwToken: userToken
-            }
-        }).then((res)=>{
-            saveStoreInfo({
+
+        if(params.type === 'host'){
+
+            ApiUtil.post(`${ApiConfig.SERVER_URL}/store`, {
+                business_no: params.business_no,
                 store_name: params.place_name,
                 store_address: params.address_name,
                 store_road_address: params.road_address_name,
                 store_category: params.category_group_name,
                 store_number: params.phone,
-                business_no: params.business_no,
+                alarm: true
+            }, {
+                headers: {
+                    jwToken: userToken
+                }
+            }).then((res)=>{
+                saveStoreInfo({
+                    store_name: params.place_name,
+                    store_address: params.address_name,
+                    store_road_address: params.road_address_name,
+                    store_category: params.category_group_name,
+                    store_number: params.phone,
+                    business_no: params.business_no,
+                })
+                navigation.navigate('PlaceList')
+            }).catch(e=>{
+                // console.log(e)
+                console.log(JSON.stringify(e))
             })
-            navigation.navigate('PlaceList')
-        }).catch(e=>{
-            // console.log(e)
-            console.log(JSON.stringify(e))
-        })
+        } else if (params.type === 'user') {
+            ApiUtil.post(`${ApiConfig.SERVER_URL}/user`, {
+                area: params.addr_name,
+                alarm: true
+            }, {
+                headers: {
+                    jwToken: userToken  
+                }
+            }).then((res)=>{ 
+                saveUserInfo({addr_name: params.addr_name})
+                navigation.navigate('PlaceList')
+             }).catch(err=>console.log(err))
+        }
+
     }
 
     return (
