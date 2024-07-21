@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput } from 'react
 import arrowToLeft from '../assets/images/arrowToLeft.png';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 // Toast
 import Toast from 'react-native-toast-message';
@@ -11,6 +12,7 @@ import Toast from 'react-native-toast-message';
 // api
 import ApiUtil from '../api/ApiUtil';
 import ApiConfig from '../api/ApiConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HostBusinessRegisNumber() {
     const navigation = useNavigation();
@@ -22,20 +24,39 @@ export default function HostBusinessRegisNumber() {
     const [isDisable, setIsDisable] = useState(true);
     const [authSuccessNo, setAuthSuccessNo] = useState('');
 
+    const [date, setDate] = useState(new Date());
+    const [formattedDate, setFormattedDate] = useState('사업자번호 등록일을 입력해주세요.')
+    const [show, setShow] = useState(false);
+
+    const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+
+        console.log(currentDate)
+        setShow(Platform.OS === 'ios'); // iOS의 경우, DatePicker를 계속 보여줍니다.
+        setDate(currentDate)
+        setFormattedDate(formatDate(currentDate, '/'))
+    }
+
+    const formatDate = (date, separator='') => {
+        if(date === null) return ''
+
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return `${year}${separator}${month}${separator}${day}`;
+    };
+
     const AuthenticateButton = async () => {
         console.log("인증 버튼 Pressed")
         checkNumber(number)
         // console.log(number)
     }
-    function checkNumber(number){
-        // console.log(number)
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/business_num`,{
-            params: {
-                business_no: number
-            },
-
+    async function checkNumber(number){
+        const storageToken = await AsyncStorage.getItem('jwtToken')
+        const start_dt = formatDate(date, '')
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/business_num?business_no=${number}&start_dt=${start_dt}`,{
             headers: {
-                bno: number
+                jwToken: storageToken
             }
         }).then((res)=>{
         const businessNo = res.result ?? ''
@@ -122,8 +143,9 @@ export default function HostBusinessRegisNumber() {
         <View style={styles.contentContainer}>
             {/* 클릭하면 다시 전 페이지로 가서 가게 이름 다시 찾기 */}
             <View style={styles.textInputContainer}>
+
                 <TextInput
-                value={params.place_name}
+                value={params?.place_name ?? '레츠'}
                 readOnly
                 onChangeText={onChangeText}
                 style={styles.storeAddressInputText}
@@ -132,7 +154,26 @@ export default function HostBusinessRegisNumber() {
                 // editable={false} // TextInput을 비활성화
                 
                 />
+               
+                {
+                    show && 
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode="date"
+                        display="default"
+                        onChange={onChangeDate}
+                    />
+                }
             </View>
+            <TouchableOpacity onPress={()=>{setShow(true)}} style={{width: '100%'}}>
+                <TextInput
+                    editable={false}
+                    value={formattedDate}
+                    style={styles.regisNumberTextInput2}
+                    mode='outlined'
+                />
+            </TouchableOpacity>
 
             {/* 스타일 수정, 다른 곳 클릭하면 키보드 다시 내려가기, 입력시 라벡 보이지 않게 */}
             <View style={styles.textInputContainer}>
@@ -234,8 +275,19 @@ const styles = StyleSheet.create({
         borderColor: '#C5C5C7', // Border color
         elevation: 3, 
         color:'#B7B7B7',
-        marginTop:47,
+        marginTop:22,
         marginBottom:47
+    },
+    regisNumberTextInput2: {
+        width: '100%',
+        backgroundColor: '#fff',
+        borderRadius:10,
+        paddingLeft:14,
+        borderWidth: 1, // Border width
+        borderColor: '#C5C5C7', // Border color
+        elevation: 3, 
+        color:'#B7B7B7',
+        marginTop:47,
     },
     HostBusinessNumberButton: {
         width: '100%',
