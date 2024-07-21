@@ -60,7 +60,7 @@ export default function LoginPage({navigation}) {
     const signInWithKakao = async ()=> {
       try {
         const {accessToken} = await login();
-        // console.log(accessToken)
+        console.log('kakao', accessToken)
         loginToServer(accessToken)
         
         // navigation.navigate('PlaceList')
@@ -99,20 +99,20 @@ export default function LoginPage({navigation}) {
         <Image source={icons} style={styles.image}/>
 
         <View style={styles.buttoncontainer}>
-            <Button  mode="contained" onPress={onPressGoogleBtn} style={styles.naverButton}>
+            {/* <Button  mode="contained" onPress={onPressGoogleBtn} style={styles.naverButton}>
                 <Image source={naverIcon} style={styles.naverLogo}/>
                 <Text style={styles.text1}>Google 로그인</Text>
-            </Button>
+            </Button> */}
 
             <Button mode="contained" onPress={signInWithKakao} style={styles.kakaoButton}>
                 <Image source={kakaoIcon} style={styles.naverLogo}/>
                 <Text style={styles.text1}>카카오톡 로그인</Text>
             </Button>
 
-            <Button  mode="contained" onPress={() => navigation.navigate('ChooseUser')} style={styles.AppleButton}>
+            {/* <Button  mode="contained" onPress={() => navigation.navigate('ChooseUser')} style={styles.AppleButton}>
                 <Image source={appleIcon} style={styles.appleLogo}/>
                 <Text style={styles.text1}>Apple 로그인</Text>
-            </Button>
+            </Button> */}
         </View>
         </View>
     );
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         backgroundColor:"#FEE500",
         marginBottom : 20,
         width: 300,
-        height: 42,
+        // height: 42,
         borderRadius: 7,
     },
     AppleButton :{

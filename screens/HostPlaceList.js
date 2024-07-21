@@ -3,9 +3,10 @@ import arrowToLeft from '../assets/images/location.png';
 import arrowRight from '../assets/images/arrow-right.png';
 import MyHomePng from '../assets/images/myhome.png';
 import UserImage from '../assets/images/user.png'
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ApiConfig from '../api/ApiConfig';
 import ApiUtil from '../api/ApiUtil';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function HostPlaceList({navigation}) {
     const onClickLocationChange = () => {
@@ -42,7 +43,8 @@ export default function HostPlaceList({navigation}) {
     }
 
     const [hostPlaceList, setHostPlaceList] = useState([]);
-    useEffect(()=>{
+    useFocusEffect(
+        useCallback(()=>{
         ApiUtil.get(`${ApiConfig.SERVER_URL}/mainpage/party`).then((res)=>{
             const placeList = res.map(place=>{
                 const dayArray = ['월', '화', '수', '목', '금', '토', '일']
@@ -67,7 +69,8 @@ export default function HostPlaceList({navigation}) {
 
             setHostPlaceList(placeList)  
         })
-    }, [])
+        }, [])
+    )
 
     const ListItem = ({ 
             hosting_id,

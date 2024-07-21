@@ -3,7 +3,7 @@ import MyHomePng from '../../assets/images/myhome.png';
 import EditPng from '../../assets/images/edit.png'
 import UserImage from '../../assets/images/user.png'
 import CancelImage from '../../assets/images/cancel.png'
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ApiConfig from '../../api/ApiConfig';
 import ApiUtil from '../../api/ApiUtil';
 
@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // auth
 import { useAuth } from '../../contexts/AuthContext.js';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function HostPlaceList({navigation}) {
     const {getUserToken, getStoreInfo} = useAuth()
@@ -91,9 +92,11 @@ export default function HostPlaceList({navigation}) {
     const [hostPlaceList, setHostPlaceList] = useState([]);
     // const [imageLink, setImageLink] = useState(uri:{"https://sitem.ssgcdn.com/86/60/02/item/1000385026086_i1_1100.jpg"});
 
-    useEffect(()=>{
-        searchHostings()
-    }, [status])
+    useFocusEffect(
+        useCallback(()=>{
+            searchHostings()
+        }, [status])
+    )
 
     const searchHostings = ()=>{
         getUserToken().then((token)=>{
@@ -108,6 +111,7 @@ export default function HostPlaceList({navigation}) {
             }).then(async (res)=>{
                 console.log(res)
                 const storeInfo = await getStoreInfo();
+                console.log('storeInfo::', storeInfo)
                 setStoreName(storeInfo.store_name)
                 setStoreNo(storeInfo.store_number)
                 setStoreAddress(storeInfo.store_road_address)

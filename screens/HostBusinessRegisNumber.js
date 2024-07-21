@@ -29,7 +29,11 @@ export default function HostBusinessRegisNumber() {
     }
     function checkNumber(number){
         // console.log(number)
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/business_num`,{ 
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/business_num`,{
+            params: {
+                business_no: number
+            },
+
             headers: {
                 bno: number
             }

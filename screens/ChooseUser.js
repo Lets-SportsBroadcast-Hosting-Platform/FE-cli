@@ -4,7 +4,7 @@ import arrowToLeft from '../assets/images/arrowToLeft.png';
 
 export default function LoginPage({navigation}) {
   const handleHostPress = () => {
-    navigation.navigate('HostAuthentication', {type: 'host'})
+    navigation.navigate('HostPhoneNumber', {type: 'host'})
   };
   const arrowbuttonPress = () => {
     navigation.goBack();
@@ -24,7 +24,7 @@ export default function LoginPage({navigation}) {
           </TouchableOpacity>
 
           <View style={styles.line}></View>
-          <TouchableOpacity onPress={()=>{navigation.navigate('SelectUserLocation', {type: 'user'})}} style={styles.userContainer}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('HostPhoneNumber', {type: 'user'})}} style={styles.userContainer}>
                 <Text style={styles.text}>사용자</Text>
                 <Text style={styles.subtext}>호스팅 된 모임에 참여해요.</Text>
           </TouchableOpacity>

@@ -81,7 +81,7 @@ function HostPlaceDetail(){
         if(!isNew){
             ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`).then(res=>{
                 const party = JSON.parse(JSON.stringify(res))
-
+                console.log(partyInfo)
                 const dayArray = ['월', '화', '수', '목', '금', '토', '일']
                 const hostingDateInfo = new Date(party.hosting_date)
                 const hostMonth = hostingDateInfo.getMonth() + 1
@@ -192,7 +192,14 @@ function HostPlaceDetail(){
     }
 
     const applyHosting = ()=>{
-
+        ApiUtil.post(`${ApiConfig.SERVER_URL}/user/party/${hosting_id}`, {}, {
+            headers: {
+                jwToken: token
+            }}
+        ).then((res)=>{
+            console.log(res)
+            navigation.navigate('PlaceList')
+        })
     }
     const editHosting = ()=>{
         // navigation.navigate('MakingHost', {...route.params, gameTitle: 'zzz'})

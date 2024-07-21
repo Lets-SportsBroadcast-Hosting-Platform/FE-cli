@@ -30,6 +30,7 @@ import EditStoreAddress from './screens/MyHome/EditStoreAddress.js';
 
 //유저 인증 절차
 import SelectUserLocation from './screens/User/SelectUserLocation.js';
+import HostPhoneNumber from './screens/HostPhoneNumber.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,7 +39,7 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="ChooseUser">
+        <Stack.Navigator initialRouteName="Home">
           
           <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
           
@@ -68,7 +69,8 @@ export default function App() {
 
           {/* 유저 인증 절차 */}
           <Stack.Screen name="SelectUserLocation" component={SelectUserLocation} options={{headerShown:false}}/>
-
+          <Stack.Screen name="HostPhoneNumber" component={HostPhoneNumber} options={{headerShown:false}}/>
+          
 
         </Stack.Navigator>
       </NavigationContainer>
