@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, ScrollView, Image,TouchableOpacity, Dimensions } from "react-native";
-import { useEffect, useState } from "react";
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from "react";
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 
 // auth
 import { useAuth } from '../contexts/AuthContext.js';
@@ -61,76 +61,85 @@ function HostPlaceDetail(){
         xhr.send(null)})}
 
     // const imageLink = route.params.selectedImageUris[0];
-    useEffect(()=>{
-        getUserToken().then(response_token=>setToken(response_token))
-        getStoreInfo().then((info)=>{
-            console.log(info)
-            setStoreInfo(info)
-        })
+    useFocusEffect(
+        useCallback(()=>{
+            // getUserToken().then(response_token=>setToken(response_token))
+            getUserToken().then((response_token)=>{
+                console.log("response_token",response_token) 
+                setToken(response_token)
 
-        // 현재 창의 너비와 높이 가져오기
-        const clientWidth = Dimensions.get('window').width;
-        const clientHeight = Dimensions.get('window').height;
-
-        setClientWidth(clientWidth)
-        setClientHeight(clientHeight)
-
-        
-
-        // console.log(hosting_name, introduce, max_personnel, age_group_min, age_group_max, screen_size, selectedImageUris[0])
-        if(!isNew){
-            console.log("사용자가 호스팅 세부 정보 확인",hosting_id, token)
-            ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`,{
-                headers:{
-                    jwToken: token
-                }
-            }).then(res=>{
-                const party = JSON.parse(JSON.stringify(res))
-                console.log(partyInfo)
+                // console.log(hosting_name, introduce, max_personnel, age_group_min, age_group_max, screen_size, selectedImageUris[0])
+            if(!isNew){
+                console.log("사용자가 호스팅 세부 정보 확인",hosting_id, response_token)
+                ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`,{
+                    headers:{
+                        jwToken: response_token
+                    }
+                }).then(res=>{
+                    const party = JSON.parse(JSON.stringify(res))
+                    console.log(partyInfo)
+                    const dayArray = ['월', '화', '수', '목', '금', '토', '일']
+                    const hostingDateInfo = new Date(party.hosting_date)
+                    const hostMonth = hostingDateInfo.getMonth() + 1
+                    const hostDate = hostingDateInfo.getDate()
+                    const hostDay = hostingDateInfo.getDay()
+                    const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
+                    const hostDayNm = dayArray[hostDay]
+                    
+                    party.imageLink = {uri: `${party.store_image_url}${party.hosting_id}/0`}
+    
+                    party.hostDateNm = `${hostMonth}.${hostDate}`
+                    party.hostHHMI = hostHHMI
+                    party.hostDayNm = hostDayNm
+                    setPartyInfo({
+                        ...party
+                    })
+                })
+            } else {
                 const dayArray = ['월', '화', '수', '목', '금', '토', '일']
-                const hostingDateInfo = new Date(party.hosting_date)
+                const selectedDate = route.params.selectedGame.date
+                const selectedTime = route.params.selectedGame.time
+                const hostingDateInfo = parseDateTime(`${selectedDate}${selectedTime}`)
                 const hostMonth = hostingDateInfo.getMonth() + 1
                 const hostDate = hostingDateInfo.getDate()
                 const hostDay = hostingDateInfo.getDay()
                 const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
                 const hostDayNm = dayArray[hostDay]
-                
-                party.imageLink = {uri: `${party.store_image_url}${party.hosting_id}/0`}
-
-                party.hostDateNm = `${hostMonth}.${hostDate}`
-                party.hostHHMI = hostHHMI
-                party.hostDayNm = hostDayNm
+    
                 setPartyInfo({
-                    ...party
+                    hostMonth, hostDate, hostDay, hostHHMI, hostDayNm, hostDateNm : `${hostMonth}.${hostDate}`, 
                 })
+                
+                Promise.all((selectedImageUris.map(uri => uriToBlob(uri)))).then((responsetList)=>{
+                    for(let i=0; i<responsetList.length; i++){
+                        const file = new File([responsetList[i]], responsetList[i].data.name)
+                    }
+    
+                    setImageBlobList(responsetList)
+                    // console.log('responsetList', responsetList)
+                })
+                
+            }
             })
-        } else {
-            const dayArray = ['월', '화', '수', '목', '금', '토', '일']
-            const selectedDate = route.params.selectedGame.date
-            const selectedTime = route.params.selectedGame.time
-            const hostingDateInfo = parseDateTime(`${selectedDate}${selectedTime}`)
-            const hostMonth = hostingDateInfo.getMonth() + 1
-            const hostDate = hostingDateInfo.getDate()
-            const hostDay = hostingDateInfo.getDay()
-            const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
-            const hostDayNm = dayArray[hostDay]
-
-            setPartyInfo({
-                hostMonth, hostDate, hostDay, hostHHMI, hostDayNm, hostDateNm : `${hostMonth}.${hostDate}`, 
+            getStoreInfo().then((info)=>{
+                console.log(info)
+                setStoreInfo(info)
             })
+    
+            // 현재 창의 너비와 높이 가져오기
+            const clientWidth = Dimensions.get('window').width;
+            const clientHeight = Dimensions.get('window').height;
+    
+            setClientWidth(clientWidth)
+            setClientHeight(clientHeight)
+    
             
-            Promise.all((selectedImageUris.map(uri => uriToBlob(uri)))).then((responsetList)=>{
-                for(let i=0; i<responsetList.length; i++){
-                    const file = new File([responsetList[i]], responsetList[i].data.name)
-                }
-
-                setImageBlobList(responsetList)
-                // console.log('responsetList', responsetList)
-            })
+    
             
-        }
-        
-    }, [])
+            
+        }, [])
+    )
+    
 
     function parseDateTime(dateTimeString) {
         // 연도, 월, 일, 시, 분을 추출합니다.
