@@ -159,12 +159,12 @@ export default function HostPlaceList({navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={onClickLocationChange} style={styles.touchable}>
+                {/* <TouchableOpacity onPress={onClickLocationChange} style={styles.touchable}>
                     <Text style={styles.headerText}>
                         {location}
                     </Text>
                     <Image source={arrowToLeft} style={styles.arrowIcon} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 
                 {
                     !isUser && <TouchableOpacity onPress={onClickHostBtn} style={styles.touchableRight}>
