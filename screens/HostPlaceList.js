@@ -52,8 +52,8 @@ export default function HostPlaceList({navigation}) {
         useCallback(()=>{
             getUserInfo().then(userInfo=>{
                 console.log('placeList userInfo', userInfo)
-                if(!!userInfo) {
-                    setLocation(userInfo.area)
+                setLocation(userInfo.area)
+                if(userInfo.type === 'user') {
                     setIsUser(true)
                 } else {
                     setIsUser(false)
