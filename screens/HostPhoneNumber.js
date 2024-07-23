@@ -183,7 +183,11 @@ export default function HostPhoneNumber() {
 
                 {/* 인증 완료되면 활성화 */}
                 <Button mode="contained" disabled={isDisable} onPress={() => {
-                    navigation.navigate('HostAuthentication', {...params})
+                    if(params.type === 'host'){
+                        navigation.navigate('HostAuthentication', {...params})
+                    } else if(params.type === 'user'){
+                        navigation.navigate('SelectUserLocation', {...params})
+                    }
                 }} style={styles.HostBusinessNumberButton}>
                 다음
                 </Button>

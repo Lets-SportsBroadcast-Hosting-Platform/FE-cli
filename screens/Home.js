@@ -14,7 +14,7 @@ import { useAuth } from '../contexts/AuthContext.js';
 import Toast from 'react-native-toast-message';
 
 export default function Home({navigation}) {
-    const { saveLogin, getUserInfo, getStoreInfo } = useAuth();
+    const { saveLogin, getUserInfo, getStoreInfo, saveStoreInfo } = useAuth();
     useFocusEffect(
         useCallback(() => {
             async function login(){
@@ -30,26 +30,34 @@ export default function Home({navigation}) {
                         jwToken: storageToken
                     }})
                     // throw new Error()
-                    if(tokenLoginResult === 'Success' && !!userInfo){
-                        if(!!storeInfo){ // 호스트인 경우
-                            navigation.navigate('PlaceList')
-                            console.log(userInfo)
-                            Toast.show(({
-                                type: 'success',
-                                text1: `${userInfo?.name ?? ''} 호스트님 안녕하세요👋`,
-                                text2: `경기 일정을 확인하고 새 호스팅을 해보세요!`
-                            }))
-                            
-                        } else {
-                            console.log('login success')
-                            saveLogin(userInfo, storageToken)
-                            navigation.navigate('ChooseUser')
-                        }
-    
+                    console.log('/login/token', tokenLoginResult)
+
+                    if(!!tokenLoginResult.business_no){
+                        saveStoreInfo({
+                            store_name: tokenLoginResult.store_name,
+                            store_address: tokenLoginResult.store_address ?? tokenLoginResult.store_road_address,
+                            store_road_address: tokenLoginResult.store_road_address,
+                            store_category: tokenLoginResult.store_category,
+                            store_number: tokenLoginResult.store_number,
+                            business_no: tokenLoginResult.business_no,
+                        })
+
+                        navigation.navigate('PlaceList')
+                        Toast.show(({
+                            type: 'success',
+                            text1: `${userInfo?.name ?? ''} 호스트님 안녕하세요👋`,
+                            text2: `경기 일정을 확인하고 새 호스팅을 해보세요!`
+                        }))
+                    } else if(!!tokenLoginResult.area) {
+                        navigation.navigate('PlaceList')
+                        Toast.show(({
+                            type: 'success',
+                            text1: `${userInfo?.name ?? ''} 사용자님 안녕하세요👋`,
+                            text2: `경기 일정을 확인하고 새 호스팅을 해보세요!`
+                        }))
                     } else {
                         throw new Error()
-                    }
-        
+                    }        
                 }catch(e){
                     // console.log(e)
                     console.log('move sso login page')

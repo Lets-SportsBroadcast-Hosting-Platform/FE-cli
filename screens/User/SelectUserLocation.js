@@ -40,7 +40,7 @@ export default function HostAuthentication() {
   //진진자라
   //res에 뜬 가게를 선책하면 사업자등록번호 페이지로 넘어감
   const goNextStep=(store)=>{
-    navigation.navigate('SelectUserLocation',{
+    navigation.navigate('TermsOfService',{
       ...store,
       ...params
     });

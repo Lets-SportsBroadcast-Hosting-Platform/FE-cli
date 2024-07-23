@@ -54,9 +54,9 @@ export default function HostBusinessRegisNumber() {
     async function checkNumber(number){
         const storageToken = await AsyncStorage.getItem('jwtToken')
         const start_dt = formatDate(date, '')
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/business_num?business_no=${number}&start_dt=${start_dt}`,{
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/store/business_num?start_dt=${start_dt}`,{
             headers: {
-                jwToken: storageToken
+                bno: number
             }
         }).then((res)=>{
         const businessNo = res.result ?? ''

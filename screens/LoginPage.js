@@ -81,12 +81,12 @@ export default function LoginPage({navigation}) {
 
         console.log(jwtToken)
 
-        AsyncStorage.setItem('jwtToken', jwtToken);
+        // AsyncStorage.setItem('jwtToken', jwtToken);
         AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
         console.log('/login Success' ,userInfo)
 
         saveLogin(userInfo, jwtToken)
-        navigation.navigate('ChooseUser')
+        navigation.navigate('ChooseUser', {userInfo, jwtToken})
 
       
       

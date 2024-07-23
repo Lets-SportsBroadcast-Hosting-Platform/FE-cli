@@ -43,8 +43,9 @@ export default function HostPlaceList({navigation}) {
               {
                 text: '확인',
                 onPress: () => {
-                    AsyncStorage.clear()
-                    navigation.navigate('Home')
+                    AsyncStorage.clear().then(()=>{
+                        navigation.navigate('Home')
+                    })
                 },
               },
             ],

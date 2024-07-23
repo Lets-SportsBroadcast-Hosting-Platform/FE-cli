@@ -1,14 +1,65 @@
 import { StyleSheet, Text, View,Image,TouchableOpacity  } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useState } from 'react';
 import { Button } from 'react-native-paper';
 import arrowToLeft from '../assets/images/arrowToLeft.png';
+import { useRoute } from '@react-navigation/native';
+// auth
+import { useAuth } from '../contexts/AuthContext.js';
+import Toast from 'react-native-toast-message';
+
+import ApiConfig from '../api/ApiConfig.js';
+import ApiUtil from '../api/ApiUtil.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginPage({navigation}) {
+  const {saveStoreInfo} = useAuth()
+  const [ loginInfo, setLoginInfo] = useState(null);
+  const route = useRoute()
+  const params = route.params
+
   const handleHostPress = () => {
-    navigation.navigate('HostPhoneNumber', {type: 'host'})
+    if(!!loginInfo && !!loginInfo.business_no){
+      AsyncStorage.setItem('jwToken', params.jwtToken).then(()=>navigation.navigate('PlaceList'))
+      saveStoreInfo({
+        store_name: loginInfo.store_name,
+        store_address: loginInfo.store_address ?? loginInfo.store_road_address,
+        store_road_address: loginInfo.store_road_address,
+        store_category: loginInfo.store_category,
+        store_number: loginInfo.store_number,
+        business_no: loginInfo.business_no,
+      })
+      
+      Toast.show(({
+        type: 'success',
+        text1: `호스트님 안녕하세요👋`,
+        text2: `경기 일정을 확인하고 새 호스팅을 해보세요!`
+      }))
+    } else {
+      navigation.navigate('HostPhoneNumber', {type: 'host'})
+    }
+
   };
+
+  const handleUserPress = () => {
+    navigation.navigate('HostPhoneNumber', {type: 'user'})
+  }
+
   const arrowbuttonPress = () => {
     navigation.goBack();
   };
+
+
+  useFocusEffect(
+    useCallback(()=>{
+        ApiUtil.get(`${ApiConfig.SERVER_URL}/login/token`,{headers: {
+          jwToken: params.jwtToken
+        }}).then(res=>{
+          console.log('login info:::', res)
+          setLoginInfo(res)
+        })
+    }, [])
+  )
     return (
         <View style={styles.container}>
 
@@ -24,7 +75,7 @@ export default function LoginPage({navigation}) {
           </TouchableOpacity>
 
           <View style={styles.line}></View>
-          <TouchableOpacity onPress={()=>{navigation.navigate('HostPhoneNumber', {type: 'user'})}} style={styles.userContainer}>
+          <TouchableOpacity onPress={handleUserPress} style={styles.userContainer}>
                 <Text style={styles.text}>사용자</Text>
                 <Text style={styles.subtext}>호스팅 된 모임에 참여해요.</Text>
           </TouchableOpacity>
