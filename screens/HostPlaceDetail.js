@@ -79,7 +79,12 @@ function HostPlaceDetail(){
 
         // console.log(hosting_name, introduce, max_personnel, age_group_min, age_group_max, screen_size, selectedImageUris[0])
         if(!isNew){
-            ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`).then(res=>{
+            console.log("사용자가 호스팅 세부 정보 확인",hosting_id, token)
+            ApiUtil.get(`${ApiConfig.SERVER_URL}/party/${hosting_id}`,{
+                headers:{
+                    jwToken: token
+                }
+            }).then(res=>{
                 const party = JSON.parse(JSON.stringify(res))
                 console.log(partyInfo)
                 const dayArray = ['월', '화', '수', '목', '금', '토', '일']
@@ -286,11 +291,11 @@ function HostPlaceDetail(){
                 <Image source={marker} />
                 <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>{storeInfo?.store_address ?? '가게주소'}</Text>
             </View>
-            <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={isNew ? postHosting : storeInfo.business_no !== partyInfo.business_no ? applyHosting : editHosting}>
+            <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={isNew ? postHosting : storeInfo?.business_no !== partyInfo.business_no ? applyHosting : editHosting}>
                 
                 {isNew && <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text>}
-                { !isNew && storeInfo.business_no !== partyInfo.business_no && (<Text style={[styles.p5, self.hostButton]}>신청하기</Text>)}
-                { !isNew && storeInfo.business_no === partyInfo.business_no && <Text style={[styles.p5, self.hostButton]}>수정하기</Text>}
+                { !isNew && storeInfo?.business_no !== partyInfo.business_no && (<Text style={[styles.p5, self.hostButton]}>신청하기</Text>)}
+                { !isNew && storeInfo?.business_no === partyInfo.business_no && <Text style={[styles.p5, self.hostButton]}>수정하기</Text>}
             </TouchableOpacity>
         </ScrollView>
     )

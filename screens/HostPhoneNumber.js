@@ -12,6 +12,7 @@ import Toast from 'react-native-toast-message';
 // api
 import ApiUtil from '../api/ApiUtil';
 import ApiConfig from '../api/ApiConfig';
+import StoreAddress from './StoreAddress';
 
 export default function HostPhoneNumber() {
     // 타이머
@@ -78,7 +79,8 @@ export default function HostPhoneNumber() {
         const storageToken = await AsyncStorage.getItem('jwtToken')
         const numberWithOutDash = number.trim().replaceAll('-', '')
         
-        ApiUtil.post(`${ApiConfig.SERVER_URL}/login/check-number?id=${authId}&certification_number=${authNumber}&phone_number=${number}`, {}, {
+        console.log(storageToken)
+        ApiUtil.post(`${ApiConfig.SERVER_URL}/login/check-number?id=${authId}&certification_number=${authNumber}&phone_number=${numberWithOutDash}`, {}, {
             headers: {
                 jwToken: storageToken
             }
