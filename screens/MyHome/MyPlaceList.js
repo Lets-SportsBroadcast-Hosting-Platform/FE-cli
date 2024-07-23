@@ -250,7 +250,9 @@ export default function HostPlaceList({navigation}) {
                 contentContainerStyle={styles.flatListContent}
             />
 
-            <TouchableOpacity style={styles.MyHomeBtn}>
+            <TouchableOpacity onPress={()=>{
+                navigation.navigate('PlaceList')
+            }} style={styles.MyHomeBtn}>
                 <Image source={MyHomePng}></Image>
             </TouchableOpacity>
         </View>

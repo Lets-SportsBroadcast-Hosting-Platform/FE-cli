@@ -303,8 +303,8 @@ function HostPlaceDetail(){
             <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={isNew ? postHosting : storeInfo?.business_no !== partyInfo.business_no ? applyHosting : editHosting}>
                 
                 {isNew && <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text>}
-                { !isNew && storeInfo?.business_no !== partyInfo.business_no && (<Text style={[styles.p5, self.hostButton]}>신청하기</Text>)}
-                { !isNew && storeInfo?.business_no === partyInfo.business_no && <Text style={[styles.p5, self.hostButton]}>수정하기</Text>}
+                { !isNew && storeInfo?.business_no !== partyInfo.business_no && storeInfo !== null && (<Text style={[styles.p5, self.hostButton]}>신청하기</Text>)}
+                {/* { !isNew && storeInfo?.business_no === partyInfo.business_no && storeInfo !== null && <Text style={[styles.p5, self.hostButton]}>수정하기</Text>} */}
             </TouchableOpacity>
         </ScrollView>
     )
