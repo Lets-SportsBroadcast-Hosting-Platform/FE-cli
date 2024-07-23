@@ -3,15 +3,19 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Alert,TextInput, FlatL
 import arrowToLeft from '../../assets/images/arrowToLeft.png';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
+import { useAuth } from '../../contexts/AuthContext';
 
 // api
 import ApiUtil from '../../api/ApiUtil';
 import ApiConfig from '../../api/ApiConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HostAuthentication() {
   const navigation = useNavigation();
   const route = useRoute()
   const params = route.params;
+  const {saveUserInfo} = useAuth()
+
 
   const arrowbuttonPress = () => {
     navigation.goBack();
@@ -39,11 +43,37 @@ export default function HostAuthentication() {
   }
   //진진자라
   //res에 뜬 가게를 선책하면 사업자등록번호 페이지로 넘어감
-  const goNextStep=(store)=>{
-    navigation.navigate('TermsOfService',{
-      ...store,
-      ...params
-    });
+  const goNextStep= async (store)=>{
+
+    if(params.action === 'relocate'){
+      const jwtToken = await AsyncStorage.getItem('jwtToken')
+      const userInfo = JSON.parse(await AsyncStorage.getItem('userInfo'))
+
+      ApiUtil.put(`${ApiConfig.SERVER_URL}/user`, {
+          name: userInfo.name,
+          age: parseInt(new Date().getFullYear()) - parseInt(userInfo.birthyear),
+          area: store.addr_name
+      }, {
+        headers: {
+          jwToken: jwtToken
+        }
+      })
+      .then(res=>{
+        console.log('성공', res)
+        navigation.navigate('PlaceList')
+        AsyncStorage.setItem('userInfo', JSON.stringify({...userInfo, area: addr_name}))
+        navigation.navigate('PlaceList')
+      })
+      .catch(err=>console.log(JSON.stringify(err)))
+
+    } else {
+      navigation.navigate('TermsOfService',{
+        ...store,
+        ...params
+      });
+    }
+
+
   }
 
 //   //res 가게를 출력

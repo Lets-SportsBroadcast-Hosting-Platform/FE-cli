@@ -41,12 +41,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const getUserInfo = async ()=>{
-    if(user === null){
       const userInfo = JSON.parse(await AsyncStorage.getItem('userInfo'))
-      setUser(userInfo)
       return userInfo
-    }
-    return user
   }
 
   const saveUserInfo = async (info)=>{

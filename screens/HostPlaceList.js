@@ -7,12 +7,14 @@ import { useCallback, useEffect, useState } from 'react';
 import ApiConfig from '../api/ApiConfig';
 import ApiUtil from '../api/ApiUtil';
 import { useFocusEffect } from '@react-navigation/native';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function HostPlaceList({navigation}) {
+    const {getUserInfo} = useAuth();
     const onClickLocationChange = () => {
         Alert.alert(
           '내 위치',
-          '현재 위치로 새로고침하시겠습니까?',
+          '위치를 바꾸시겠습니까?',
           [
             {
               text: '취소',
@@ -22,7 +24,7 @@ export default function HostPlaceList({navigation}) {
               text: '확인',
               onPress: () => {
                 // 확인 버튼을 눌렀을 때 실행할 작업을 여기에 추가하세요
-                console.log('확인 버튼이 눌렸습니다.');
+                navigation.navigate('SelectUserLocation', { action: 'relocate'})
               },
             },
           ],
@@ -42,33 +44,45 @@ export default function HostPlaceList({navigation}) {
         navigation.navigate('ChoosingGame')
     }
 
+    const [isUser, setIsUser] = useState(false)
+    const [location, setLocation] = useState('')
     const [hostPlaceList, setHostPlaceList] = useState([]);
     useFocusEffect(
         useCallback(()=>{
-        ApiUtil.get(`${ApiConfig.SERVER_URL}/mainpage/party`).then((res)=>{
-            const placeList = res.map(place=>{
-                const dayArray = ['월', '화', '수', '목', '금', '토', '일']
-                const hostingDateInfo = new Date(place.hosting_date)
-                const hostMonth = hostingDateInfo.getMonth() + 1
-                const hostDate = hostingDateInfo.getDate()
-                const hostDay = hostingDateInfo.getDay()
-                const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
-                const hostDayNm = dayArray[hostDay]
-                return {
-                    ...place,
-                    dayArray,
-                    hostingDateInfo,
-                    hostMonth,
-                    hostDate: `${hostMonth}.${hostDate}`,
-                    hostDay,
-                    hostHHMI,
-                    hostDayNm,
-                    imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.business_no}/${place.hosting_id}/0`},
+            getUserInfo().then(userInfo=>{
+                console.log('placeList userInfo', userInfo)
+                if(!!userInfo) {
+                    setLocation(userInfo.area)
+                    setIsUser(true)
+                } else {
+                    setIsUser(false)
                 }
             })
+            
+            ApiUtil.get(`${ApiConfig.SERVER_URL}/mainpage/party`).then((res)=>{
+                const placeList = res.map(place=>{
+                    const dayArray = ['월', '화', '수', '목', '금', '토', '일']
+                    const hostingDateInfo = new Date(place.hosting_date)
+                    const hostMonth = hostingDateInfo.getMonth() + 1
+                    const hostDate = hostingDateInfo.getDate()
+                    const hostDay = hostingDateInfo.getDay()
+                    const hostHHMI = `${hostingDateInfo.getHours()}:${hostingDateInfo.getMinutes()}`
+                    const hostDayNm = dayArray[hostDay]
+                    return {
+                        ...place,
+                        dayArray,
+                        hostingDateInfo,
+                        hostMonth,
+                        hostDate: `${hostMonth}.${hostDate}`,
+                        hostDay,
+                        hostHHMI,
+                        hostDayNm,
+                        imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.business_no}/${place.hosting_id}/0`},
+                    }
+                })
 
-            setHostPlaceList(placeList)  
-        })
+                setHostPlaceList(placeList)  
+            })
         }, [])
     )
 
@@ -146,17 +160,53 @@ export default function HostPlaceList({navigation}) {
             <View style={styles.header}>
                 <TouchableOpacity onPress={onClickLocationChange} style={styles.touchable}>
                     <Text style={styles.headerText}>
-                        서초동
+                        {location}
                     </Text>
                     <Image source={arrowToLeft} style={styles.arrowIcon} />
                 </TouchableOpacity>
                 
-                <TouchableOpacity onPress={onClickHostBtn} style={styles.touchableRight}>
+                {
+                    !isUser && <TouchableOpacity onPress={onClickHostBtn} style={styles.touchableRight}>
                     <Text style={styles.hostingText}>
                         호스팅하기
                     </Text>
                     <Image source={arrowRight} style={styles.arrowRightIcon} />
                 </TouchableOpacity>
+                }
+
+                {
+                    isUser && <TouchableOpacity
+                        style={{position: 'absolute', right: 25, top: 20}}
+                        onPress={()=>{
+                            Alert.alert(
+                                '로그아웃',
+                                '로그아웃하시겠습니까?',
+                                [
+                                  {
+                                    text: '취소',
+                                    style: 'cancel',
+                                  },
+                                  {
+                                    text: '확인',
+                                    onPress: () => {
+                                        AsyncStorage.clear().then(()=>{
+                                            navigation.navigate('Home')
+                                        })
+                                    },
+                                  },
+                                ],
+                                { cancelable: false }
+                              );
+                        }}
+                    >
+                        <Text style={{
+                                        fontSize: 20,
+                                        color:'black',
+                                        fontFamily:'BlackHanSans-Regular',
+                                        fontWeight:'200'}}
+                        >로그아웃</Text>
+                    </TouchableOpacity>
+                }
                 
             </View>
 
@@ -168,10 +218,12 @@ export default function HostPlaceList({navigation}) {
                 scrollIndicatorInsets={{ right: 1 }}
                 contentContainerStyle={styles.flatListContent}
             />
-
-            <TouchableOpacity onPress={goMyHome} style={styles.MyHomeBtn}>
-                <Image source={MyHomePng}></Image>
-            </TouchableOpacity>
+            {
+                !isUser && <TouchableOpacity onPress={goMyHome} style={styles.MyHomeBtn}>
+                    <Image source={MyHomePng}></Image>
+                </TouchableOpacity>
+            }
+            
         </View>
     );
 }
