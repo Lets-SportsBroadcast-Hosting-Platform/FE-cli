@@ -8,6 +8,7 @@ import ApiConfig from '../api/ApiConfig';
 import ApiUtil from '../api/ApiUtil';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../contexts/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HostPlaceList({navigation}) {
     const {getUserInfo} = useAuth();
