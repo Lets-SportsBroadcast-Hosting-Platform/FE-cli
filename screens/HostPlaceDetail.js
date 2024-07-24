@@ -222,7 +222,7 @@ function HostPlaceDetail(){
 
     const cancelHosting = ()=>{
         console.log("취소하기", hosting_id, token)
-        ApiUtil.delete(`${ApiConfig.SERVER_URL}/user/party/${hosting_id}`, {}, {
+        ApiUtil.delete(`${ApiConfig.SERVER_URL}/user/party/${hosting_id}`, {
             headers: {
                 jwToken: token
             }}
