@@ -36,7 +36,7 @@ import ApiConfig from '../api/ApiConfig';
 
 export default function LoginPage({navigation}) {
     const [userInfo, setUserInfo] = useState(null);
-    const { saveLogin } = useAuth();
+    const { saveLogin, saveUserInfo } = useAuth();
     // useEffect(() => {
     //     GoogleSignin.configure({
     //       // webClientId: '클라이언트 웹 아이디',///
@@ -82,7 +82,9 @@ export default function LoginPage({navigation}) {
         console.log(jwtToken)
 
         // AsyncStorage.setItem('jwtToken', jwtToken);
-        AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
+        // AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
+        saveUserInfo(userInfo)
+
         console.log('/login Success' ,userInfo)
 
         saveLogin(userInfo, jwtToken)

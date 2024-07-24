@@ -20,7 +20,7 @@ export default function LoginPage({navigation}) {
 
   const handleHostPress = () => {
     if(!!loginInfo && !!loginInfo.business_no){
-      AsyncStorage.setItem('jwtToken', params.jwtToken).then(()=>navigation.navigate('PlaceList'))
+      AsyncStorage.setItem('jwtToken', params.jwtToken).then(()=>navigation.navigate('PlaceList', {type: 'host'}))
       saveStoreInfo({
         store_name: loginInfo.store_name,
         store_address: loginInfo.store_address ?? loginInfo.store_road_address,

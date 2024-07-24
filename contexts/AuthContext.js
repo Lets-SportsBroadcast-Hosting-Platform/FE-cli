@@ -41,8 +41,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const getUserInfo = async ()=>{
-      const userInfo = JSON.parse(await AsyncStorage.getItem('userInfo'))
-      return userInfo
+    if(!!user){
+      return user
+    }
+    const userInfo = JSON.parse(await AsyncStorage.getItem('userInfo'))
+    return userInfo
   }
 
   const saveUserInfo = async (info)=>{
@@ -50,6 +53,7 @@ export const AuthProvider = ({ children }) => {
     if(!!user){
       userInfo = await getUserInfo();
     }
+    await AsyncStorage.setItem('userInfo', JSON.stringify({...userInfo, ...info}))
     setUser({...userInfo, ...info})
   }
  
