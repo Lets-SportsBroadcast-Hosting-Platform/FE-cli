@@ -80,7 +80,7 @@ export default function TermsOfService() {
                     jwToken: userToken  
                 }
             }).then((res)=>{ 
-                saveUserInfo({addr_name: params.addr_name})
+                saveUserInfo({addr_name: params.addr_name, type: params.type})
                 navigation.navigate('PlaceList')
              }).catch(err=>console.log(err))
         }
