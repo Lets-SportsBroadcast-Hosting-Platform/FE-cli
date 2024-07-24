@@ -76,6 +76,7 @@ function HostPlaceDetail(){
                         jwToken: response_token
                     }
                 }).then(res=>{
+                    console.log("application_status확인하기 위해 geta party", res)
                     const party = JSON.parse(JSON.stringify(res))
                     console.log('not new detail', partyInfo)
                     const dayArray = ['월', '화', '수', '목', '금', '토', '일']
