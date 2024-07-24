@@ -27,7 +27,8 @@ export default function HostPlaceList({navigation}) {
     }
 
     const onClickEdit = ()=>{
-        navigation.navigate('MyHomeEdit', {business_no: my_business_no})
+        // navigation.navigate('MyHomeEdit', {business_no: my_business_no})
+        navigation.navigate('EditMypage')
     }
 
     const onClickHostBtn = ()=>{
@@ -98,7 +99,7 @@ export default function HostPlaceList({navigation}) {
 
     useFocusEffect(
         useCallback(()=>{
-            searchHostings()
+            // searchHostings()
             // getUserInformation()
         }, [status])
     )
@@ -271,9 +272,9 @@ export default function HostPlaceList({navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.userInfoContainer}>
-                <Text style={{fontSize: 28, color: 'black', fontWeight: 'blod', fontFamily:'BlackHanSans-Regular',}} >윤영서</Text>
-                <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold'}}>만 23세</Text>
-                <Text style={{fontSize: 15, color: 'black'}}>서초동</Text>
+                <Text style={{fontSize: 23, color: 'black', fontWeight: 'blod', fontFamily:'BlackHanSans-Regular',}} >윤영서</Text>
+                <Text style={{fontSize: 19, color: 'black', fontWeight: 'bold'}}>만 23세</Text>
+                <Text style={{fontSize: 19, color: 'black'}}>서초동</Text>
                 <TouchableOpacity onPress={logout} style={styles.logoutBtn}>
                     <Text>로그아웃</Text>
                 </TouchableOpacity>
@@ -282,14 +283,15 @@ export default function HostPlaceList({navigation}) {
                     <Image style={{transform: [{scale: 1.3}]}} source={EditPng}></Image>
                 </TouchableOpacity>
             </View>
-            <View style={styles.buttonContainer}>
+            <Text style={{fontSize: 23, color: 'black', fontWeight: 'blod', fontFamily:'BlackHanSans-Regular',}}>예약내역</Text>
+            {/* <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={clickING} style={styles.statusBtn}>
                     <Text style={[styles.statusBtnText, styles.boxRight]}>진행중</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={clickCOMPLEDTED} style={styles.statusBtn}>
                     <Text style={styles.statusBtnText}>마감</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
 
             <FlatList
                 data={hostPlaceList}
@@ -299,7 +301,7 @@ export default function HostPlaceList({navigation}) {
                 scrollIndicatorInsets={{ right: 1 }}
                 contentContainerStyle={styles.flatListContent}
             />
-
+            
             <TouchableOpacity onPress={()=>{
                 navigation.navigate('PlaceList')
             }} style={styles.MyHomeBtn}>
@@ -392,7 +394,7 @@ const styles = StyleSheet.create({
     height: 200,
     borderBottomWidth: 2,
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center'
     },

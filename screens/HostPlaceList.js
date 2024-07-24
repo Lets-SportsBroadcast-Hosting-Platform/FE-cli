@@ -226,10 +226,6 @@ export default function HostPlaceList({navigation}) {
                 !isUser && <TouchableOpacity onPress={goMyHome} style={styles.MyHomeBtn}>
                     <Image source={MyHomePng}></Image>
                 </TouchableOpacity>
-            }{
-                isUser && <TouchableOpacity onPress={()=>{navigation.navigate('MyHome')}} style={styles.MyHomeBtn}>
-                    <Image source={MyHomePng}></Image>
-                </TouchableOpacity>
             }
             
         </View>

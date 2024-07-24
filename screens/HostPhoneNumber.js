@@ -77,6 +77,7 @@ export default function HostPhoneNumber() {
 
     const AuthenticateButton = async () => {
         const storageToken = await AsyncStorage.getItem('jwtToken')
+        console.log('storageToken', storageToken)
         const numberWithOutDash = number.trim().replaceAll('-', '')
         
         console.log(storageToken)
@@ -99,7 +100,7 @@ export default function HostPhoneNumber() {
                 }))
                 setIsDisable(true)
             }
-        })
+        }).catch(error=>console.log("error", JSON.stringify(error.config)))
 
     }
 

@@ -42,7 +42,8 @@ export default function LoginPage({navigation}) {
   };
 
   const handleUserPress = () => {
-    AsyncStorage.setItem('jwtToken', params.jwtToken).then(()=>navigation.navigate('HostPhoneNumber', {type: 'user'}))
+    AsyncStorage.setItem('jwtToken', params.jwtToken)
+    navigation.navigate('HostPhoneNumber', {type: 'user'})
   }
 
   const arrowbuttonPress = () => {
