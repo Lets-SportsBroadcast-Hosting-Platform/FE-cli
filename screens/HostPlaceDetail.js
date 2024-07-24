@@ -77,7 +77,7 @@ function HostPlaceDetail(){
                     }
                 }).then(res=>{
                     const party = JSON.parse(JSON.stringify(res))
-                    console.log(partyInfo)
+                    console.log('not new detail', partyInfo)
                     const dayArray = ['월', '화', '수', '목', '금', '토', '일']
                     const hostingDateInfo = new Date(party.hosting_date)
                     const hostMonth = hostingDateInfo.getMonth() + 1
@@ -219,6 +219,18 @@ function HostPlaceDetail(){
         // navigation.navigate('MakingHost', {...route.params, gameTitle: 'zzz'})
     }
 
+    const cancelHosting = ()=>{
+        console.log("취소하기", hosting_id, token)
+        ApiUtil.delete(`${ApiConfig.SERVER_URL}/user/party/${hosting_id}`, {}, {
+            headers: {
+                jwToken: token
+            }}
+        ).then((res)=>{
+            console.log(res)
+            navigation.navigate('PlaceList')
+        })
+    }
+
     return (
         <ScrollView
             scrollEnabled={true}
@@ -300,12 +312,30 @@ function HostPlaceDetail(){
                 <Image source={marker} />
                 <Text style={[styles.pl15, self.textDetailInfo, styles.ml10]}>{storeInfo?.store_address ?? '가게주소'}</Text>
             </View>
-            <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={isNew ? postHosting : storeInfo?.business_no !== partyInfo.business_no ? applyHosting : editHosting}>
                 
-                {isNew && <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text>}
-                { !isNew && storeInfo?.business_no !== partyInfo.business_no && storeInfo !== null && (<Text style={[styles.p5, self.hostButton]}>신청하기</Text>)}
-                {/* { !isNew && storeInfo?.business_no === partyInfo.business_no && storeInfo !== null && <Text style={[styles.p5, self.hostButton]}>수정하기</Text>} */}
+                {isNew && 
+            <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={isNew ? postHosting : storeInfo?.business_no !== partyInfo.business_no ? applyHosting : editHosting}>
+
+                <Text style={[styles.p5, self.hostButton]}>호스팅하기</Text>
             </TouchableOpacity>
+                
+                }
+                { !isNew && storeInfo?.business_no !== partyInfo.business_no && partyInfo.current_personnel < partyInfo.max_personnel && (
+            <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={isNew ? postHosting : storeInfo?.business_no !== partyInfo.business_no ? applyHosting : editHosting}>
+                    
+                    <Text style={[styles.p5, self.hostButton]}>신청하기</Text>
+                    
+            </TouchableOpacity>
+            )}
+                { !isNew && storeInfo?.business_no !== partyInfo.business_no && partyInfo.application_status === true && (
+            <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={cancelHosting}>
+                    
+                    <Text style={[styles.p5, self.hostButton]}>취소하기</Text>
+                    
+            </TouchableOpacity>
+                    )}
+
+                {/* { !isNew && storeInfo?.business_no === partyInfo.business_no && storeInfo !== null && <Text style={[styles.p5, self.hostButton]}>수정하기</Text>} */}
         </ScrollView>
     )
 }

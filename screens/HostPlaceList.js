@@ -81,7 +81,7 @@ export default function HostPlaceList({navigation}) {
                         imageLink: {uri: `${ApiConfig.IMAGE_SERVER_URL}/${place.business_no}/${place.hosting_id}/0`},
                     }
                 })
-
+                
                 setHostPlaceList(placeList)  
             })
         }, [])
@@ -221,6 +221,10 @@ export default function HostPlaceList({navigation}) {
             />
             {
                 !isUser && <TouchableOpacity onPress={goMyHome} style={styles.MyHomeBtn}>
+                    <Image source={MyHomePng}></Image>
+                </TouchableOpacity>
+            }{
+                isUser && <TouchableOpacity onPress={()=>{navigation.navigate('MyHome')}} style={styles.MyHomeBtn}>
                     <Image source={MyHomePng}></Image>
                 </TouchableOpacity>
             }

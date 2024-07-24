@@ -66,7 +66,7 @@ export default function TermsOfService() {
                     store_number: params.phone,
                     business_no: params.business_no,
                 })
-                navigation.navigate('PlaceList')
+                navigation.navigate('PlaceList', {type: 'host'})
             }).catch(e=>{
                 // console.log(e)
                 console.log(JSON.stringify(e))
@@ -81,7 +81,7 @@ export default function TermsOfService() {
                 }
             }).then((res)=>{ 
                 saveUserInfo({addr_name: params.addr_name, type: params.type})
-                navigation.navigate('PlaceList')
+                navigation.navigate('PlaceList', {type: 'user'})
              }).catch(err=>console.log(err))
         }
 
