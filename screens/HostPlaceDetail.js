@@ -213,7 +213,7 @@ function HostPlaceDetail(){
             }}
         ).then((res)=>{
             console.log(res)
-            navigation.navigate('PlaceList')
+            navigation.navigate('UserMyHome')
         })
     }
     const editHosting = ()=>{

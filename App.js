@@ -20,6 +20,8 @@ import { AuthProvider } from './contexts/AuthContext.js';
 //호스트 마이페이지
 import EditStoreMypage from './screens/HostUserMyPage/EditStoreMypage.js';
 import EditMypage from './screens/HostUserMyPage/EditMypage.js';
+//사용자 마이페이지
+import UserMyHome from './screens/User/UserMyHome.js';
 
 //테스트용
 import SliderScreen from './screens/Hosting/SliderScreen.js';
@@ -63,9 +65,12 @@ export default function App() {
           <Stack.Screen name="EditStoreAddress" component={EditStoreAddress} options={{headerShown:false}}/>
           <Stack.Screen name="SliderScreen" component={SliderScreen} options={{headerShown:false}}/>
 
-          {/*마이홈*/}
+          {/*사장님 마이홈*/}
           <Stack.Screen name="MyHome" component={MyHome} options={{headerShown:false}}/>
           <Stack.Screen name="MyHomeEdit" component={MyHomeEdit} options={{headerShown:false}}/>
+
+          {/* 사용자 마이홈 */}
+          <Stack.Screen name="UserMyHome" component={UserMyHome} options={{headerShown:false}}/>
 
           {/* 유저 인증 절차 */}
           <Stack.Screen name="SelectUserLocation" component={SelectUserLocation} options={{headerShown:false}}/>
