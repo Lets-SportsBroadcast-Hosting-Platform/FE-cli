@@ -99,7 +99,7 @@ export default function HostPlaceList({navigation}) {
     useFocusEffect(
         useCallback(()=>{
             searchHostings()
-            getUserInformation()
+            // getUserInformation()
         }, [status])
     )
     // const getUserInformation = ()=>{

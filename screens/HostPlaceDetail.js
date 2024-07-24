@@ -321,7 +321,7 @@ function HostPlaceDetail(){
             </TouchableOpacity>
                 
                 }
-                { !isNew && storeInfo?.business_no !== partyInfo.business_no && partyInfo.current_personnel < partyInfo.max_personnel && (
+                { !isNew && storeInfo?.business_no !== partyInfo.business_no && partyInfo.current_personnel < partyInfo.max_personnel && partyInfo.application_status !== true && (
             <TouchableOpacity style={[styles.pl15, styles.pr15, styles.mb20]} onPress={isNew ? postHosting : storeInfo?.business_no !== partyInfo.business_no ? applyHosting : editHosting}>
                     
                     <Text style={[styles.p5, self.hostButton]}>신청하기</Text>

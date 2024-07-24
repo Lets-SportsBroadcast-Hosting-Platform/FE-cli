@@ -60,7 +60,8 @@ export const AuthProvider = ({ children }) => {
 
   const getStoreInfo = async ()=>{
     if(store === null){
-      const storeInfo = JSON.parse(await AsyncStorage.getItem('storeInfo'))
+      const stringifiedStoreInfo = await AsyncStorage.getItem('storeInfo')
+      const storeInfo = JSON.parse(stringifiedStoreInfo)
       setStore(storeInfo)
       return storeInfo
     }

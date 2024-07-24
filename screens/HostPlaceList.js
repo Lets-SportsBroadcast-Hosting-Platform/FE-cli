@@ -9,8 +9,11 @@ import ApiUtil from '../api/ApiUtil';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRoute } from '@react-navigation/native';
 
 export default function HostPlaceList({navigation}) {
+    const route = useRoute()
+    const params = route.params
     const {getUserInfo} = useAuth();
     const onClickLocationChange = () => {
         Alert.alert(
@@ -53,7 +56,7 @@ export default function HostPlaceList({navigation}) {
             getUserInfo().then(userInfo=>{
                 console.log('placeList userInfo', userInfo)
                 setLocation(userInfo.area)
-                if(userInfo.type === 'user') {
+                if(userInfo.type === 'user' || params.type === 'user') {
                     setIsUser(true)
                 } else {
                     setIsUser(false)
